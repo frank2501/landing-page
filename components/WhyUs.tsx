@@ -13,25 +13,25 @@ const WhyUs: React.FC = () => {
           <div className="p-8 rounded-2xl bg-zinc-900/30 border border-white/5">
             <h3 className="text-xl font-bold mb-4 text-orange-400">Resultados reales</h3>
             <p className="text-gray-400 leading-relaxed">
-              No vendemos humo ni promesas exageradas. Te mostramos cómo los sistemas ahorran tiempo y dinero desde el primer día.
+              Funciona en negocios reales. Usamos estos sistemas todos los días. Ahorro de tiempo desde el primer día.
             </p>
           </div>
           <div className="p-8 rounded-2xl bg-zinc-900/30 border border-white/5">
             <h3 className="text-xl font-bold mb-4 text-orange-400">Sin tecnicismos</h3>
             <p className="text-gray-400 leading-relaxed">
-              Hablamos tu mismo idioma. No necesitás saber de programación ni de servidores para que tu tienda funcione sola.
+              Hablamos claro. No necesitás saber de programación ni de servidores para que tu tienda funcione sola.
             </p>
           </div>
           <div className="p-8 rounded-2xl bg-zinc-900/30 border border-white/5">
             <h3 className="text-xl font-bold mb-4 text-orange-400">Soporte local</h3>
             <p className="text-gray-400 leading-relaxed">
-              Estamos en Argentina, conocemos el mercado y estamos a un mensaje de WhatsApp de distancia ante cualquier duda.
+              Estamos en Argentina, respondemos por WhatsApp y resolvemos rápido.
             </p>
           </div>
           <div className="p-8 rounded-2xl bg-zinc-900/30 border border-white/5">
             <h3 className="text-xl font-bold mb-4 text-orange-400">Escalabilidad</h3>
             <p className="text-gray-400 leading-relaxed">
-              Nuestras soluciones crecen con vos. Si mañana tenés 10 proveedores nuevos, el sistema lo maneja sin problemas.
+              Nuestras soluciones crecen con vos. Sumás proveedores, productos o sucursales sin cambiar de sistema.
             </p>
           </div>
         </div>

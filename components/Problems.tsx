@@ -16,7 +16,7 @@ const Problems: React.FC = () => {
       desc: "Perdés horas copiando y pegando datos de planillas o proveedores a tu sistema."
     },
     {
-      title: "Esclavo del negocio",
+      title: "Dependencia total",
       desc: "Sentís que si no estás vos encima de cada detalle, las cosas no funcionan."
     }
   ];
@@ -26,7 +26,7 @@ const Problems: React.FC = () => {
       <div className="max-w-4xl mx-auto text-center">
         <h2 className="text-3xl md:text-5xl font-bold mb-10 md:mb-16 tracking-tight">
           Gestionar tu comercio <br />
-          <span className="text-gray-500">no debería ser un trabajo esclavo</span>
+          <span className="text-gray-500">no debería ser una carga constante</span>
         </h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 text-left">
