@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://yoursite.com</loc>
+    
+        <changefreq>daily</changefreq>
+        <priority>1</priority>
+  </url>
+  <url>
+    <loc>https://yoursite.com/blog</loc>
+    
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://yoursite.com/blog/vercel-web-analytics-getting-started</loc>
+        <lastmod>2025-01-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://yoursite.com/blog/sistemas-automatizacion-servicios</loc>
+        <lastmod>2025-01-05</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://yoursite.com/blog/digitalizacion-pymes</loc>
+        <lastmod>2025-01-10</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://yoursite.com/blog/automatizacion-para-comercios</loc>
+        <lastmod>2025-01-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+  </url>
+</urlset>
