@@ -5,6 +5,8 @@ import automatizacionParaComercios from '../content/automatizacion-para-comercio
 import digitalizacionPymes from '../content/digitalizacion-pymes.md?raw';
 // @ts-ignore
 import sistemasAutomatizacionServicios from '../content/sistemas-automatizacion-servicios.md?raw';
+// @ts-ignore
+import casoExitoTiendanube from '../content/caso-exito-tiendanube.md?raw';
 
 import { parseMarkdown } from './content';
 import { setArticles } from './articles';
@@ -14,6 +16,7 @@ const articleFiles: Record<string, string> = {
   'automatizacion-para-comercios': automatizacionParaComercios,
   'digitalizacion-pymes': digitalizacionPymes,
   'sistemas-automatizacion-servicios': sistemasAutomatizacionServicios,
+  'caso-exito-tiendanube': casoExitoTiendanube,
 };
 
 export const loadAllArticles = () => {
