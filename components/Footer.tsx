@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
   const handleWhatsApp = () => {
@@ -31,6 +32,16 @@ const Footer: React.FC = () => {
         </button>
         
         <div className="w-full pt-12 md:pt-16 border-t border-white/5 flex flex-col items-center gap-8 md:gap-10">
+          {/* Navigation Links */}
+          <nav className="flex flex-wrap items-center justify-center gap-6 text-sm md:text-base">
+            <Link to="/" className="text-gray-400 hover:text-white transition-colors">
+              Inicio
+            </Link>
+            <Link to="/blog" className="text-gray-400 hover:text-white transition-colors">
+              Blog
+            </Link>
+          </nav>
+          
           {/* Social Icons */}
           <div className="flex items-center justify-center gap-10">
             <button 

@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import StructuredData, { generateFAQSchema } from './SEO/StructuredData';
 
 interface FAQItemProps {
   question: string;
@@ -57,8 +58,11 @@ const FAQ: React.FC = () => {
     }
   ];
 
+  const faqSchema = generateFAQSchema(faqs);
+
   return (
     <section className="py-16 md:py-32 px-6">
+      <StructuredData data={faqSchema} />
       <div className="max-w-4xl mx-auto">
         <h2 className="text-4xl md:text-8xl font-bold mb-4">Preguntas</h2>
         <div className="flex items-center gap-2 text-gray-500 mb-10 md:mb-16">
