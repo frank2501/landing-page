@@ -30,9 +30,9 @@ const Solutions: React.FC = () => {
   ];
 
   return (
-    <section id="solutions" className="py-16 md:py-24 px-6 bg-transparent relative z-10 scroll-mt-20">
+    <section className="py-16 md:py-24 px-6 bg-transparent relative z-10">
       <div className="max-w-6xl mx-auto">
-        <div className="mb-10 md:mb-16">
+        <div id="solutions" className="mb-10 md:mb-16 scroll-mt-24">
           <h2 className="text-3xl md:text-6xl font-bold mb-4 md:mb-6 tracking-tight">
             Lo que hacemos por vos
           </h2>

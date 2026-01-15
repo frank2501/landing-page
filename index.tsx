@@ -11,6 +11,10 @@ if (typeof window !== 'undefined' && !(window as any).Buffer) {
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import { loadAllArticles } from './utils/articlesData';
+
+// Pre-load articles
+loadAllArticles();
 
 const rootElement = document.getElementById('root');
 if (!rootElement) throw new Error("Could not find root element");

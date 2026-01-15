@@ -3,7 +3,7 @@ import React from 'react';
 
 const FloatingWhatsApp: React.FC = () => {
   const handleWhatsApp = () => {
-    window.open('https://wa.me/your-number', '_blank');
+    window.open('https://wa.me/5491137758970?text=Hola%2C%20tengo%20un%20negocio%20y%20quiero%20saber%20c%C3%B3mo%20automatizar%20tareas%20para%20ahorrar%20tiempo%20y%20evitar%20errores.', '_blank');
   };
 
   return (

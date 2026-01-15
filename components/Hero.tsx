@@ -2,7 +2,7 @@ import React from 'react';
 
 const Hero: React.FC = () => {
   const handleWhatsApp = () => {
-    window.open('https://wa.me/your-number', '_blank');
+    window.open('https://wa.me/5491137758970?text=Hola%2C%20tengo%20un%20negocio%20y%20quiero%20saber%20c%C3%B3mo%20automatizar%20tareas%20para%20ahorrar%20tiempo%20y%20evitar%20errores.', '_blank');
   };
 
   const scrollToSolutions = () => {
@@ -65,22 +65,27 @@ const Hero: React.FC = () => {
             </div>
             {/* Mockup Content - Simplified grid for mobile */}
             <div className="p-4 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6 text-left">
-              <div className="p-4 md:p-6 rounded-xl bg-zinc-900/50 border border-white/5">
-                <div className="text-gray-500 text-[9px] mb-1 uppercase tracking-wider">Estado</div>
+              {/* Item 1 */}
+              <div className="p-4 md:p-6 rounded-xl bg-zinc-900/50 border border-white/5 transition-all duration-300 transform hover:-translate-y-1 hover:bg-zinc-800/80 hover:border-orange-500/30 hover:shadow-lg hover:shadow-orange-500/10 cursor-default">
+                <div className="text-gray-500 text-[9px] md:text-xs mb-1 uppercase tracking-wider">Estado</div>
                 <div className="text-lg md:text-2xl font-bold text-white tracking-tight">Activa 24/7</div>
                 <div className="mt-3 h-1 w-full bg-zinc-800 rounded-full overflow-hidden">
                   <div className="h-full w-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]" />
                 </div>
               </div>
-              <div className="hidden md:block p-6 rounded-xl bg-zinc-900/50 border border-white/5">
-                <div className="text-gray-500 text-xs mb-1 uppercase tracking-wider">Ahorro Mensual</div>
-                <div className="text-2xl font-bold text-white tracking-tight">45+ Horas</div>
-                <div className="text-green-400 text-xs mt-2 font-mono">+ 100% Eficiencia</div>
+
+              {/* Item 2 */}
+              <div className="hidden md:block p-4 md:p-6 rounded-xl bg-zinc-900/50 border border-white/5 transition-all duration-300 transform hover:-translate-y-1 hover:bg-zinc-800/80 hover:border-orange-500/30 hover:shadow-lg hover:shadow-orange-500/10 cursor-default">
+                <div className="text-gray-500 text-[9px] md:text-xs mb-1 uppercase tracking-wider">Ahorro Mensual</div>
+                <div className="text-lg md:text-2xl font-bold text-white tracking-tight">45+ Horas</div>
+                <div className="text-green-400 text-[9px] md:text-xs mt-2 font-mono uppercase tracking-tighter">+ 100% Eficiencia</div>
               </div>
-              <div className="p-4 md:p-6 rounded-xl bg-zinc-900/50 border border-white/5">
-                <div className="text-gray-500 text-[9px] mb-1 uppercase tracking-wider">Operación</div>
-                <div className="text-lg md:text-2xl font-bold text-white tracking-tight">Sin Errores</div>
-                <div className="text-orange-400 text-[9px] mt-1 font-mono uppercase tracking-tighter">Control total</div>
+
+              {/* Item 3 */}
+              <div className="p-4 md:p-6 rounded-xl bg-zinc-900/50 border border-white/5 transition-all duration-300 transform hover:-translate-y-1 hover:bg-zinc-800/80 hover:border-orange-500/30 hover:shadow-lg hover:shadow-orange-500/10 cursor-default">
+                <div className="text-gray-500 text-[9px] md:text-xs mb-1 uppercase tracking-wider">Operaciones</div>
+                <div className="text-lg md:text-2xl font-bold text-white tracking-tight">0 Errores</div>
+                <div className="text-green-400 text-[9px] md:text-xs mt-2 font-mono uppercase tracking-tighter">Ejecución segura</div>
               </div>
             </div>
           </div>

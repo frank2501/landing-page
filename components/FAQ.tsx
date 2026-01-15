@@ -17,12 +17,12 @@ const FAQItem: React.FC<FAQItemProps> = ({ question, answer }) => {
     >
       <div className="flex items-start gap-4">
         <div className={`mt-1.5 transition-transform duration-300 ${isOpen ? 'rotate-45' : ''}`}>
-          <svg className="w-4 h-4 md:w-5 md:h-5 text-gray-500 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className={`w-4 h-4 md:w-5 md:h-5 text-gray-500 group-hover:text-orange-500 transition-colors ${isOpen ? '!text-orange-500' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
           </svg>
         </div>
         <div className="flex-grow">
-          <h3 className="text-lg md:text-2xl font-bold text-gray-200 group-hover:text-white transition-colors">
+          <h3 className={`text-lg md:text-2xl font-bold text-gray-200 group-hover:text-orange-500 transition-colors ${isOpen ? '!text-orange-500' : ''}`}>
             {question}
           </h3>
           <div className={`grid transition-all duration-300 ${isOpen ? 'grid-rows-[1fr] mt-3 md:mt-4 opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
@@ -64,7 +64,7 @@ const FAQ: React.FC = () => {
     <section className="py-16 md:py-32 px-6">
       <StructuredData data={faqSchema} />
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-4xl md:text-8xl font-bold mb-4">Preguntas</h2>
+        <h2 className="text-4xl md:text-8xl font-bold mb-4">Preguntas Frecuentes</h2>
         <div className="flex items-center gap-2 text-gray-500 mb-10 md:mb-16">
           <svg className="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24">
             <path d="M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>

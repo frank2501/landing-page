@@ -8,8 +8,18 @@ const BackgroundStars: React.FC = () => {
     const handleScroll = () => {
       if (!containerRef.current) return;
       const scrollY = window.scrollY;
-      // Calculamos la opacidad: de 1 a 0.1 en 800px de scroll
-      const opacity = Math.max(0.1, 1 - scrollY / 800);
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+
+      // Opacidad superior: se desvanece al bajar
+      const topOpacity = Math.max(0, 1 - scrollY / 800);
+
+      // Opacidad inferior: aparece al llegar al fondo (últimos 800px)
+      const distanceToBottom = documentHeight - (scrollY + windowHeight);
+      const bottomOpacity = Math.max(0, 1 - distanceToBottom / 800);
+
+      // Usamos el valor máximo entre ambos extremos (mínimo 0.1)
+      const opacity = Math.max(0.1, topOpacity, bottomOpacity);
       containerRef.current.style.setProperty('--scroll-opacity', opacity.toString());
     };
 

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
   const handleWhatsApp = () => {
-    window.open('https://wa.me/your-number', '_blank');
+    window.open('https://wa.me/5491137758970?text=Hola%2C%20tengo%20un%20negocio%20y%20quiero%20saber%20c%C3%B3mo%20automatizar%20tareas%20para%20ahorrar%20tiempo%20y%20evitar%20errores.', '_blank');
   };
 
   const handleEmail = () => {
@@ -18,7 +18,7 @@ const Footer: React.FC = () => {
     <footer className="py-20 md:py-32 px-6 border-t border-white/5 relative overflow-hidden bg-transparent">
       <div className="max-w-4xl mx-auto text-center flex flex-col items-center">
         <h2 className="text-4xl md:text-8xl font-bold mb-4 md:mb-6 tracking-tight leading-tight">
-          Impulsá tu comercio
+          Impulsá tu <span className="bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent">comercio</span>
         </h2>
         <p className="text-base md:text-2xl text-gray-400 mb-10 md:mb-12 leading-relaxed max-w-2xl mx-auto text-center px-4">
           Contanos sobre tu negocio y te ofrecemos las soluciones para escalar hoy mismo.
@@ -30,14 +30,23 @@ const Footer: React.FC = () => {
         >
           Consultar WhatsApp
         </button>
+      </div>
         
-        <div className="w-full pt-12 md:pt-16 border-t border-white/5 flex flex-col items-center gap-8 md:gap-10">
+        <div className="w-full max-w-4xl mx-auto pt-12 md:pt-16 border-t border-white/5 flex flex-col items-center gap-8 md:gap-10">
           {/* Navigation Links */}
           <nav className="flex flex-wrap items-center justify-center gap-6 text-sm md:text-base">
-            <Link to="/" className="text-gray-400 hover:text-white transition-colors">
+            <Link 
+              to="/" 
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="text-gray-400 hover:text-white transition-colors"
+            >
               Inicio
             </Link>
-            <Link to="/blog" className="text-gray-400 hover:text-white transition-colors">
+            <Link 
+              to="/blog" 
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="text-gray-400 hover:text-white transition-colors"
+            >
               Blog
             </Link>
           </nav>
@@ -77,7 +86,6 @@ const Footer: React.FC = () => {
             © 2025 Argentina. Especialistas en Automatización.
           </div>
         </div>
-      </div>
     </footer>
   );
 };

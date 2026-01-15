@@ -1,18 +1,11 @@
-
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import BlogPage from './pages/BlogPage';
 import ArticlePage from './pages/ArticlePage';
 import NotFoundPage from './pages/NotFoundPage';
-import { loadAllArticles } from './utils/articlesData';
 
 const App: React.FC = () => {
-  useEffect(() => {
-    // Load articles after component mounts (Buffer should be available via polyfill)
-    loadAllArticles();
-  }, []);
-
   return (
     <BrowserRouter>
       <Routes>
