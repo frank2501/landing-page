@@ -15,7 +15,7 @@ import BackgroundStars from '../components/BackgroundStars';
 
 const HomePage: React.FC = () => {
   const siteUrl = typeof window !== 'undefined' ? window.location.origin : '';
-  const siteName = 'Teddy Automations';
+  const siteName = 'ArtechIA';
   const siteDescription = 'Soluciones de automatización y digitalización para comercios, pymes, servicios y alojamientos que buscan crecer sin tareas manuales.';
 
   const organizationSchema = generateOrganizationSchema(siteName, siteUrl);

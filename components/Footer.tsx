@@ -43,11 +43,11 @@ const Footer: React.FC = () => {
               Inicio
             </Link>
             <Link 
-              to="/blog" 
+              to="/implementaciones" 
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               className="text-gray-400 hover:text-white transition-colors"
             >
-              Blog
+              Implementaciones
             </Link>
           </nav>
           

@@ -3,7 +3,7 @@ title: "Digitalización para PyMEs: Pasos Esenciales"
 description: "Transformá tu PyME con estrategias de digitalización probadas. Aprende cómo competir con empresas más grandes usando tecnología."
 excerpt: "La digitalización es clave para el crecimiento de las PyMEs. Descubrí los pasos esenciales para transformar tu negocio."
 date: "2025-01-10"
-author: "Teddy Automations"
+author: "ArtechIA"
 category: "Digitalización"
 tags: ["digitalización", "pymes", "transformación digital", "tecnología"]
 image: "/og-image.jpg"

@@ -44,7 +44,7 @@ export const parseMarkdown = (content: string, slug: string): Article => {
     description: data.description || "",
     excerpt: data.excerpt || data.description || "",
     date: data.date || new Date().toISOString(),
-    author: data.author || "Teddy Automations",
+    author: data.author || "ArtechIA",
     authorUrl: data.authorUrl,
     category: data.category,
     tags: Array.isArray(data.tags) ? data.tags : [],

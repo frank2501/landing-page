@@ -1,4 +1,5 @@
 import React from 'react';
+import DashboardMockup from './DashboardMockup';
 
 const Hero: React.FC = () => {
   const handleWhatsApp = () => {
@@ -48,48 +49,7 @@ const Hero: React.FC = () => {
           </button>
         </div>
 
-        {/* Dashboard Mockup - Compacted for mobile */}
-        <div className="relative max-w-5xl mx-auto">
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-500/20 to-transparent rounded-2xl blur opacity-30" />
-          <div className="relative bg-[#0a0a0a]/80 backdrop-blur-md border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
-            {/* Mockup Header */}
-            <div className="flex items-center gap-2 px-4 py-2 md:py-3 border-b border-white/5 bg-white/5">
-              <div className="flex gap-1.5">
-                <div className="w-2 h-2 rounded-full bg-red-500/50" />
-                <div className="w-2 h-2 rounded-full bg-yellow-500/50" />
-                <div className="w-2 h-2 rounded-full bg-green-500/50" />
-              </div>
-              <div className="text-[8px] md:text-[10px] text-gray-500 ml-4 font-mono uppercase">
-                CONTROL_PANEL
-              </div>
-            </div>
-            {/* Mockup Content - Simplified grid for mobile */}
-            <div className="p-4 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6 text-left">
-              {/* Item 1 */}
-              <div className="p-4 md:p-6 rounded-xl bg-zinc-900/50 border border-white/5 transition-all duration-300 transform hover:-translate-y-1 hover:bg-zinc-800/80 hover:border-orange-500/30 hover:shadow-lg hover:shadow-orange-500/10 cursor-default">
-                <div className="text-gray-500 text-[9px] md:text-xs mb-1 uppercase tracking-wider">Estado</div>
-                <div className="text-lg md:text-2xl font-bold text-white tracking-tight">Activa 24/7</div>
-                <div className="mt-3 h-1 w-full bg-zinc-800 rounded-full overflow-hidden">
-                  <div className="h-full w-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]" />
-                </div>
-              </div>
-
-              {/* Item 2 */}
-              <div className="hidden md:block p-4 md:p-6 rounded-xl bg-zinc-900/50 border border-white/5 transition-all duration-300 transform hover:-translate-y-1 hover:bg-zinc-800/80 hover:border-orange-500/30 hover:shadow-lg hover:shadow-orange-500/10 cursor-default">
-                <div className="text-gray-500 text-[9px] md:text-xs mb-1 uppercase tracking-wider">Ahorro Mensual</div>
-                <div className="text-lg md:text-2xl font-bold text-white tracking-tight">45+ Horas</div>
-                <div className="text-green-400 text-[9px] md:text-xs mt-2 font-mono uppercase tracking-tighter">+ 100% Eficiencia</div>
-              </div>
-
-              {/* Item 3 */}
-              <div className="p-4 md:p-6 rounded-xl bg-zinc-900/50 border border-white/5 transition-all duration-300 transform hover:-translate-y-1 hover:bg-zinc-800/80 hover:border-orange-500/30 hover:shadow-lg hover:shadow-orange-500/10 cursor-default">
-                <div className="text-gray-500 text-[9px] md:text-xs mb-1 uppercase tracking-wider">Operaciones</div>
-                <div className="text-lg md:text-2xl font-bold text-white tracking-tight">0 Errores</div>
-                <div className="text-green-400 text-[9px] md:text-xs mt-2 font-mono uppercase tracking-tighter">Ejecución segura</div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <DashboardMockup />
       </div>
     </section>
   );

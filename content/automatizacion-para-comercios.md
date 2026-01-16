@@ -3,7 +3,7 @@ title: "Automatización para Comercios: Guía Completa 2025"
 description: "Descubrí cómo automatizar tu comercio y ahorrar horas de trabajo manual. Guía paso a paso con ejemplos prácticos."
 excerpt: "La automatización puede transformar tu comercio, liberando tiempo para enfocarte en lo que realmente importa: hacer crecer tu negocio."
 date: "2025-01-15"
-author: "Teddy Automations"
+author: "ArtechIA"
 category: "Automatización"
 tags: ["automatización", "comercios", "productividad", "negocios"]
 image: "/og-image.jpg"

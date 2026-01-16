@@ -50,7 +50,7 @@ const BlogPage: React.FC = () => {
   const paginatedArticles = articles.slice(startIndex, startIndex + articlesPerPage);
 
   const siteUrl = typeof window !== 'undefined' ? window.location.origin : '';
-  const siteName = 'Teddy Automations';
+  const siteName = 'ArtechIA';
 
   const websiteSchema = generateWebSiteSchema(siteName, siteUrl);
 
@@ -59,9 +59,9 @@ const BlogPage: React.FC = () => {
       <BackgroundStars />
       
       <MetaTags
-        title={`Blog | ${siteName}`}
-        description="Artículos sobre automatización, digitalización y crecimiento de negocios. Aprende cómo escalar tu negocio sin tareas manuales."
-        url={`${siteUrl}/blog`}
+        title={`Implementaciones | ${siteName}`}
+        description="Casos de éxito y guías sobre automatización, digitalización y crecimiento de negocios."
+        url={`${siteUrl}/implementaciones`}
       />
       <StructuredData data={websiteSchema} />
 
@@ -69,7 +69,7 @@ const BlogPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-6 py-16 md:py-24">
           <header className="text-center mb-12 md:mb-16">
             <h1 className="text-4xl md:text-7xl font-bold mb-4 md:mb-6">
-              Blog
+              Implementaciones
             </h1>
             <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto">
               Descubrí cómo automatizar tu negocio y crecer sin límites

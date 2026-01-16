@@ -112,7 +112,7 @@ Ejemplo:
 title: "Mi Nuevo Artículo"
 description: "Descripción para SEO"
 date: "2025-01-20"
-author: "Teddy Automations"
+author: "ArtechIA"
 category: "Automatización"
 tags: ["tag1", "tag2"]
 featured: true

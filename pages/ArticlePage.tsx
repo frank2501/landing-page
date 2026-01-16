@@ -74,8 +74,8 @@ const ArticlePage: React.FC = () => {
   }
 
   const siteUrl = typeof window !== 'undefined' ? window.location.origin : '';
-  const articleUrl = `${siteUrl}/blog/${article.slug}`;
-  const siteName = 'Teddy Automations';
+  const articleUrl = `${siteUrl}/implementaciones/${article.slug}`;
+  const siteName = 'ArtechIA';
   
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -88,8 +88,8 @@ const ArticlePage: React.FC = () => {
 
   const breadcrumbItems = [
     { name: 'Inicio', url: '/' },
-    { name: 'Blog', url: '/blog' },
-    { name: article.frontmatter.title, url: `/blog/${article.slug}` },
+    { name: 'Implementaciones', url: '/implementaciones' },
+    { name: article.frontmatter.title, url: `/implementaciones/${article.slug}` },
   ];
 
   const articleSchema = generateArticleSchema(

@@ -57,12 +57,12 @@ const CaseStudy: React.FC = () => {
                 
                 {/* Message Box 1 */}
                 <div className="bg-zinc-800/50 p-4 rounded-xl text-sm border-l-4 border-orange-500 mb-4 transition-all duration-300 hover:translate-x-2 hover:bg-zinc-800 hover:shadow-[0_0_15px_rgba(249,115,22,0.1)] cursor-default">
-                  Hola! Se detectó que el Alojamiento 4 fue reservado por otro medio. Ya pausé la fecha en tu web para evitar el doble alquiler.
+                  <span className="font-bold text-orange-400">Detección:</span> Hola! Se detectó que el Alojamiento 4 fue reservado por otro medio. Ya pausé la fecha en tu web para evitar el doble alquiler.
                 </div>
                 
                 {/* Message Box 2 */}
                 <div className="bg-zinc-800/50 p-4 rounded-xl text-sm border-l-4 border-green-500 mb-4 transition-all duration-300 hover:translate-x-2 hover:bg-zinc-800 hover:shadow-[0_0_15px_rgba(34,197,94,0.1)] cursor-default">
-                  Aviso: Tu proveedor actualizó la lista de precios de servicios. El sistema ya ajustó tus tarifas un 15% automáticamente.
+                  <span className="font-bold text-green-400">Aviso:</span> Tu proveedor actualizó la lista de precios de servicios. El sistema ya ajustó tus tarifas un 15% automáticamente.
                 </div>
 
                 {/* Message Box 3 */}

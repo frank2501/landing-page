@@ -34,7 +34,7 @@ const LatestArticles: React.FC = () => {
           </div>
           
           <Link
-            to="/blog"
+            to="/implementaciones"
             className="text-orange-400 hover:text-orange-300 font-medium inline-flex items-center gap-2 transition-colors px-6 py-3 rounded-xl bg-orange-500/5 border border-orange-500/10 hover:bg-orange-500/10 self-start md:self-auto"
           >
             Ver todos

@@ -3,7 +3,7 @@ title: "Automatizacion de stock: entre proveedor mayorista y TiendaNube"
 description: "Caso real de automatización de stock: control de proveedor mayorista y actualización automática en TiendaNube."
 excerpt: "Un comercio dejó de actualizar stock a mano y pasó a un sistema automático con control y alertas."
 date: "2025-01-15"
-author: "Teddy Automations"
+author: "ArtechIA"
 category: "Casos reales"
 tags: ["automatización", "stock", "tiendanube", "mayoristas"]
 image: "/images/caso-stock-tiendanube.jpg"

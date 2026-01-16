@@ -20,7 +20,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ slug, frontmatter, excerpt })
 
   return (
     <article className="premium-border rounded-2xl overflow-hidden bg-zinc-900/50 backdrop-blur-sm hover:border-orange-500/30 transition-all duration-300 group h-full">
-      <Link to={`/blog/${slug}`} className="flex flex-col h-full">
+      <Link to={`/implementaciones/${slug}`} className="flex flex-col h-full">
         <div className="relative h-48 md:h-64 overflow-hidden bg-gradient-to-br from-orange-500/10 via-zinc-800/50 to-zinc-900 shrink-0">
           {frontmatter.image && frontmatter.image !== '/og-image.jpg' ? (
             <img

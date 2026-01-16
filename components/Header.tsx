@@ -36,10 +36,10 @@ const Header: React.FC = () => {
         {/* Navigation - Only show section links if helpful generally, or handle redirect */}
         <div className="hidden md:flex items-center gap-6">
           <button 
-            onClick={() => scrollToSection('problems')} 
+            onClick={() => navigate('/implementaciones')} 
             className="text-sm font-medium text-zinc-400 hover:text-white transition-colors"
           >
-            Problemas
+            Implementaciones
           </button>
           <button 
             onClick={() => scrollToSection('solutions')} 

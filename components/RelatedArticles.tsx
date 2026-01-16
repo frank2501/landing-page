@@ -9,7 +9,7 @@ interface RelatedArticlesProps {
 const CompactArticleCard: React.FC<{ article: Article }> = ({ article }) => {
   return (
     <Link 
-      to={`/blog/${article.slug}`} 
+      to={`/implementaciones/${article.slug}`} 
       className="group flex flex-col h-full bg-zinc-900/40 border border-white/5 rounded-2xl overflow-hidden hover:border-orange-500/30 hover:bg-zinc-900/60 transition-all duration-300 shadow-sm hover:shadow-orange-500/5"
     >
       <div className="aspect-[16/9] overflow-hidden bg-zinc-800 relative">

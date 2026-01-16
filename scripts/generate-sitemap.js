@@ -27,7 +27,7 @@ urls.push({
 });
 
 urls.push({
-  loc: `${baseUrl}/blog`,
+  loc: `${baseUrl}/implementaciones`,
   changefreq: 'daily',
   priority: 0.9,
 });
@@ -42,7 +42,7 @@ markdownFiles.forEach((file) => {
   const lastmod = data.date ? new Date(data.date).toISOString().split('T')[0] : undefined;
 
   urls.push({
-    loc: `${baseUrl}/blog/${slug}`,
+    loc: `${baseUrl}/implementaciones/${slug}`,
     lastmod,
     changefreq: 'monthly',
     priority: 0.7,

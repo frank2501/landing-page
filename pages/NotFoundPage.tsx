@@ -6,7 +6,7 @@ import FloatingWhatsApp from '../components/FloatingWhatsApp';
 import BackgroundStars from '../components/BackgroundStars';
 
 const NotFoundPage: React.FC = () => {
-  const siteName = 'Teddy Automations';
+  const siteName = 'ArtechIA';
 
   return (
     <div className="min-h-screen bg-transparent selection:bg-orange-500/30">
@@ -32,10 +32,10 @@ const NotFoundPage: React.FC = () => {
               Ir al inicio
             </Link>
             <Link
-              to="/blog"
+              to="/implementaciones"
               className="px-8 py-3 bg-zinc-900/80 backdrop-blur-sm border border-white/10 text-white font-medium rounded-2xl hover:border-orange-500/50 transition-all"
             >
-              Ver blog
+              Ver implementaciones
             </Link>
           </div>
         </div>

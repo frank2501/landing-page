@@ -3,7 +3,7 @@ title: "Sistemas de Automatización para Servicios"
 description: "Optimizá tu negocio de servicios con sistemas de automatización. Gestión de turnos, presupuestos y seguimiento automático."
 excerpt: "Los negocios de servicios pueden beneficiarse enormemente de la automatización. Descubrí cómo optimizar tu operación."
 date: "2025-01-05"
-author: "Teddy Automations"
+author: "ArtechIA"
 category: "Servicios"
 tags: ["servicios", "automatización", "turnos", "presupuestos"]
 image: "/og-image.jpg"

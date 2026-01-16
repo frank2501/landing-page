@@ -12,8 +12,8 @@ title: "Título del Artículo"
 description: "Descripción breve para SEO (150-160 caracteres)"
 excerpt: "Resumen más largo que aparecerá en las tarjetas de artículos"
 date: "2025-01-15"
-author: "Teddy Automations"
-authorUrl: "https://teddyautomations.com" # Opcional
+author: "ArtechIA"
+authorUrl: "https://artechia.com" # Opcional
 category: "Categoría"
 tags: ["tag1", "tag2", "tag3"]
 image: "/og-image.jpg" # URL de la imagen destacada
@@ -75,7 +75,7 @@ title: "Cómo Automatizar tu Negocio en 5 Pasos"
 description: "Guía paso a paso para automatizar procesos y ahorrar tiempo en tu negocio."
 excerpt: "Descubre cómo implementar automatización en tu negocio siguiendo estos 5 pasos simples pero efectivos."
 date: "2025-01-20"
-author: "Teddy Automations"
+author: "ArtechIA"
 category: "Automatización"
 tags: ["automatización", "productividad", "negocios"]
 image: "/images/automatizacion.jpg"
