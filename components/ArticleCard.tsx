@@ -19,9 +19,9 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ slug, frontmatter, excerpt })
   };
 
   return (
-    <article className="premium-border rounded-2xl overflow-hidden bg-zinc-900/50 backdrop-blur-sm hover:border-orange-500/30 transition-all duration-300 group">
-      <Link to={`/blog/${slug}`} className="block">
-        <div className="relative h-48 md:h-64 overflow-hidden bg-gradient-to-br from-orange-500/10 via-zinc-800/50 to-zinc-900">
+    <article className="premium-border rounded-2xl overflow-hidden bg-zinc-900/50 backdrop-blur-sm hover:border-orange-500/30 transition-all duration-300 group h-full">
+      <Link to={`/blog/${slug}`} className="flex flex-col h-full">
+        <div className="relative h-48 md:h-64 overflow-hidden bg-gradient-to-br from-orange-500/10 via-zinc-800/50 to-zinc-900 shrink-0">
           {frontmatter.image && frontmatter.image !== '/og-image.jpg' ? (
             <img
               src={frontmatter.image}
@@ -52,7 +52,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ slug, frontmatter, excerpt })
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
         </div>
-        <div className="p-6 md:p-8">
+        <div className="p-6 md:p-8 flex-grow flex flex-col">
           <div className="flex items-center gap-3 mb-3 text-sm text-gray-400">
             {frontmatter.category && (
               <span className="px-3 py-1 rounded-full bg-orange-500/10 text-orange-400 border border-orange-500/20">
@@ -67,7 +67,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ slug, frontmatter, excerpt })
           <p className="text-gray-400 mb-4 leading-relaxed">
             {excerpt || frontmatter.excerpt || frontmatter.description}
           </p>
-          <span className="text-orange-400 font-medium group-hover:gap-2 transition-all inline-flex items-center gap-1">
+          <span className="mt-auto text-orange-400 font-medium group-hover:gap-2 transition-all inline-flex items-center gap-1">
             Leer más
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

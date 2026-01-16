@@ -5,32 +5,36 @@ const BackgroundStars: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
+    let ticking = false;
+    
+    const updateOpacity = () => {
       if (!containerRef.current) return;
       const scrollY = window.scrollY;
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
 
-      // Opacidad superior: se desvanece al bajar
       const topOpacity = Math.max(0, 1 - scrollY / 800);
-
-      // Opacidad inferior: aparece al llegar al fondo (últimos 800px)
       const distanceToBottom = documentHeight - (scrollY + windowHeight);
       const bottomOpacity = Math.max(0, 1 - distanceToBottom / 800);
 
-      // Usamos el valor máximo entre ambos extremos (mínimo 0.1)
       const opacity = Math.max(0.1, topOpacity, bottomOpacity);
       containerRef.current.style.setProperty('--scroll-opacity', opacity.toString());
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateOpacity);
+        ticking = true;
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Inicializar
+    updateOpacity();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Generar posiciones estáticas una sola vez fuera del render si fuera necesario, 
-  // pero aquí usamos un array fijo para evitar saltos en re-renders.
-  const starPositions = Array.from({ length: 50 }, () => ({
+  const starPositions = Array.from({ length: 30 }, () => ({
     top: Math.random() * 100 + '%',
     left: Math.random() * 100 + '%',
     delay: Math.random() * 5 + 's',
@@ -41,7 +45,7 @@ const BackgroundStars: React.FC = () => {
     <div 
       ref={containerRef}
       className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-[#020202]"
-      style={{ '--scroll-opacity': '1' } as any}
+      style={{ '--scroll-opacity': '1', willChange: 'opacity' } as any}
     >
       {/* Capa de estrellas con opacidad controlada por CSS Variable para fluidez total */}
       <div className="absolute inset-0 transition-opacity duration-300 ease-out" style={{ opacity: 'var(--scroll-opacity)' }}>
@@ -126,7 +130,7 @@ const BackgroundStars: React.FC = () => {
         }
 
         .twinkle-bright {
-          box-shadow: 0 0 4px white;
+          box-shadow: 0 0 2px white;
           animation: twinkle-anim infinite ease-in-out;
         }
 

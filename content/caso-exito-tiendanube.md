@@ -10,8 +10,6 @@ image: "/images/caso-stock-tiendanube.jpg"
 featured: true
 ---
 
-# Cómo automatizamos el stock de un proveedor mayorista y lo conectamos a TiendaNube
-
 Muchos comercios trabajan con proveedores mayoristas que publican su stock en una página web, pero no ofrecen una forma directa de conectarse.
 
 Eso obliga a revisar productos todo el tiempo y actualizar la tienda a mano, con el riesgo constante de vender sin stock o con precios desactualizados.

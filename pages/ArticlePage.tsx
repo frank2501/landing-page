@@ -17,6 +17,9 @@ const ArticlePage: React.FC = () => {
   const [article, setArticle] = useState<ReturnType<typeof getArticleBySlug> | null>(null);
   const [headings, setHeadings] = useState<Array<{ id: string; text: string; level: number }>>([]);
 
+
+
+
   useEffect(() => {
     if (!slug) {
       navigate('/404');
@@ -109,6 +112,9 @@ const ArticlePage: React.FC = () => {
     <div className="min-h-screen bg-transparent selection:bg-orange-500/30">
       <BackgroundStars />
       
+      {/* Reading Progress Bar removed */}
+
+      
       <MetaTags
         title={`${article.frontmatter.title} | ${siteName}`}
         description={article.frontmatter.description}
@@ -179,8 +185,8 @@ const ArticlePage: React.FC = () => {
                 .article-content h2 {
                   font-size: 2.25rem;
                   font-weight: 800;
-                  margin-top: 4.5rem;
-                  margin-bottom: 2rem;
+                  margin-top: 3.5rem;
+                  margin-bottom: 1.5rem;
                   color: #fff;
                   letter-spacing: -0.02em;
                   line-height: 1.2;
@@ -188,13 +194,13 @@ const ArticlePage: React.FC = () => {
                 .article-content h3 {
                   font-size: 1.75rem;
                   font-weight: 700;
-                  margin-top: 3.5rem;
-                  margin-bottom: 1.5rem;
+                  margin-top: 2.5rem;
+                  margin-bottom: 1.25rem;
                   color: #fff;
                   letter-spacing: -0.01em;
                 }
                 .article-content p {
-                  margin-bottom: 1.8rem;
+                  margin-bottom: 1.25rem;
                   line-height: 1.85;
                   color: #cbd5e1;
                   font-size: 1.125rem;
@@ -215,7 +221,7 @@ const ArticlePage: React.FC = () => {
                   list-style: none;
                 }
                 .article-content li {
-                  margin-bottom: 1rem;
+                  margin-bottom: 0.6rem;
                   color: #cbd5e1;
                   position: relative;
                   padding-left: 1.75rem;
@@ -274,8 +280,8 @@ const ArticlePage: React.FC = () => {
                 }
                 .article-content hr {
                   border: 0;
-                  height: 1px;
-                  background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+                  height: 2px;
+                  background: linear-gradient(to right, transparent, rgba(249, 115, 22, 0.6), transparent);
                   margin: 4rem 0;
                 }
               `}</style>
@@ -288,6 +294,10 @@ const ArticlePage: React.FC = () => {
 
           <RelatedArticles articles={relatedArticles} />
         </article>
+
+        <div className="max-w-4xl mx-auto px-6 mb-16">
+          <hr className="border-0 h-[2px] bg-gradient-to-r from-transparent via-orange-500/80 to-transparent" />
+        </div>
 
         <Footer />
         <FloatingWhatsApp />

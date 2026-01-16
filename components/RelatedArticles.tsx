@@ -50,7 +50,7 @@ const RelatedArticles: React.FC<RelatedArticlesProps> = ({ articles }) => {
   if (articles.length === 0) return null;
 
   return (
-    <section className="mt-16 md:mt-24 pt-12 md:pt-16 border-t border-white/5">
+    <section className="mt-8 md:mt-12 pt-8">
       <div className="flex items-center justify-between mb-8">
         <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white/90">Te puede interesar</h2>
         <div className="h-[1px] flex-grow bg-white/5 ml-6" />

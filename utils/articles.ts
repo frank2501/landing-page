@@ -27,7 +27,16 @@ export const getFeaturedArticles = (limit: number = 3): Article[] => {
 };
 
 export const getRecentArticles = (limit: number = 6): Article[] => {
-  return getAllArticles().slice(0, limit);
+  return [...articlesCache].sort((a, b) => {
+    // First priority: Featured articles
+    if (a.frontmatter.featured && !b.frontmatter.featured) return -1;
+    if (!a.frontmatter.featured && b.frontmatter.featured) return 1;
+    
+    // Second priority: Date (newest first)
+    const dateA = new Date(a.frontmatter.date).getTime();
+    const dateB = new Date(b.frontmatter.date).getTime();
+    return dateB - dateA;
+  }).slice(0, limit);
 };
 
 export const getArticlesByCategory = (category: string): Article[] => {

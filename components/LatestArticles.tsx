@@ -1,23 +1,41 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import ArticleCard from './ArticleCard';
 import { getRecentArticles } from '../utils/articles';
 
 const LatestArticles: React.FC = () => {
+  // Aumentamos la cantidad para que el slider tenga sentido
   const articles = getRecentArticles(6);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   if (articles.length === 0) {
     return null;
   }
 
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollContainerRef.current) {
+      const { current } = scrollContainerRef;
+      const scrollAmount = direction === 'left' ? -420 : 420;
+      current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
+
   return (
-    <section className="py-16 md:py-32 px-6">
+    <section className="py-16 md:py-32 px-6 overflow-hidden">
       <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-12 md:mb-16">
-          <h2 className="text-4xl md:text-7xl font-bold">Últimos artículos</h2>
+        
+        {/* CABECERA Y BOTÓN VER TODOS (INTACTOS, tal como tu original) */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 md:mb-16 gap-6">
+          <div>
+            <h2 className="text-4xl md:text-7xl font-bold mb-4">Últimos artículos</h2>
+            <p className="text-gray-400 text-lg md:text-xl max-w-2xl">
+              Explorá nuestras últimas guías y casos de éxito sobre automatización.
+            </p>
+          </div>
+          
           <Link
             to="/blog"
-            className="text-orange-400 hover:text-orange-300 font-medium inline-flex items-center gap-2 transition-colors"
+            className="text-orange-400 hover:text-orange-300 font-medium inline-flex items-center gap-2 transition-colors px-6 py-3 rounded-xl bg-orange-500/5 border border-orange-500/10 hover:bg-orange-500/10 self-start md:self-auto"
           >
             Ver todos
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -25,15 +43,54 @@ const LatestArticles: React.FC = () => {
             </svg>
           </Link>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {articles.map((article) => (
-            <ArticleCard
-              key={article.slug}
-              slug={article.slug}
-              frontmatter={article.frontmatter}
-              excerpt={article.frontmatter.excerpt}
-            />
-          ))}
+
+        {/* CARRUSEL CON FLECHAS LATERALES */}
+        <div className="relative group/slider">
+          
+          {/* Botón Izquierda (Gris por defecto, Naranja solo al hover sobre la flecha) */}
+          <button
+            onClick={() => scroll('left')}
+            className="absolute -left-4 md:-left-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-zinc-900/90 border border-white/10 text-gray-400 shadow-xl shadow-black/50 opacity-0 group-hover/slider:opacity-100 transition-all duration-300 hover:bg-orange-500 hover:text-white hover:border-orange-500 hover:scale-110 disabled:opacity-0"
+            aria-label="Anterior"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          {/* Contenedor Scrollable */}
+          <div
+            ref={scrollContainerRef}
+            className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-8 pt-2 scrollbar-hide items-stretch"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {articles.map((article) => (
+              <div 
+                key={article.slug} 
+                className="flex-none w-[85vw] md:w-[400px] snap-center h-auto"
+              >
+                <div className="h-full">
+                  <ArticleCard
+                    slug={article.slug}
+                    frontmatter={article.frontmatter}
+                    excerpt={article.frontmatter.excerpt}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Botón Derecha (Gris por defecto, Naranja solo al hover sobre la flecha) */}
+          <button
+            onClick={() => scroll('right')}
+            className="absolute -right-4 md:-right-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-zinc-900/90 border border-white/10 text-gray-400 shadow-xl shadow-black/50 opacity-0 group-hover/slider:opacity-100 transition-all duration-300 hover:bg-orange-500 hover:text-white hover:border-orange-500 hover:scale-110"
+            aria-label="Siguiente"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+
         </div>
       </div>
     </section>

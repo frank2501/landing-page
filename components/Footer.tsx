@@ -15,7 +15,7 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="py-20 md:py-32 px-6 border-t border-white/5 relative overflow-hidden bg-transparent">
+    <footer className="py-20 md:py-32 px-6 relative overflow-hidden bg-transparent">
       <div className="max-w-4xl mx-auto text-center flex flex-col items-center">
         <h2 className="text-4xl md:text-8xl font-bold mb-4 md:mb-6 tracking-tight leading-tight">
           Impulsá tu <span className="bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent">comercio</span>
@@ -32,7 +32,7 @@ const Footer: React.FC = () => {
         </button>
       </div>
         
-        <div className="w-full max-w-4xl mx-auto pt-12 md:pt-16 border-t border-white/5 flex flex-col items-center gap-8 md:gap-10">
+        <div className="w-full max-w-4xl mx-auto pt-12 md:pt-16 flex flex-col items-center gap-8 md:gap-10">
           {/* Navigation Links */}
           <nav className="flex flex-wrap items-center justify-center gap-6 text-sm md:text-base">
             <Link 
