@@ -2,74 +2,81 @@ import React from 'react';
 
 interface LogoProps {
   className?: string;
-  variant?: 1 | 2 | 3;
   showText?: boolean;
-  text?: string;
+  onClick?: () => void;
 }
 
 const Logo: React.FC<LogoProps> = ({ 
-  className = "w-8 h-8", 
-  variant = 1, 
+  className = "w-12 h-12", 
   showText = true,
-  text = "Artech"
+  onClick
 }) => {
-  
-  // Opción 1: "Split Diamond" (Corte Central)
-  // Dos triángulos isósceles que forman un rombo perfecto partido por la mitad.
-  // Sensación: Equilibrio y Dualidad.
-  const LogoVariant1 = () => (
-    <svg className={className} viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Triángulo Izquierdo (Blanco) */}
-      <path d="M4 20L20 4V36L4 20Z" className="fill-white" />
-      {/* Triángulo Derecho (Naranja) - Ligeramente separado */}
-      <path d="M36 20L20 36V4L36 20Z" className="fill-orange-500" />
-    </svg>
-  );
-
-  // Opción 2: "Diagonal Kinetic" (Movimiento Diagonal - RECOMENDADA)
-  // Dos triángulos enfrentados en diagonal. No se tocan.
-  // Forman la silueta de un rombo pero con tensión dinámica.
-  const LogoVariant2 = () => (
-    <svg className={className} viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Triángulo Inferior Izquierdo (Blanco) */}
-      <path d="M8 20L20 36H6L8 20Z" className="fill-white" />
-      {/* Triángulo Superior Derecho (Naranja) */}
-      <path d="M32 20L20 4H34L32 20Z" className="fill-orange-500" />
-    </svg>
-  );
-
-  // Opción 3: "Sharp Shards" (Agresivo/Tech)
-  // Dos triángulos rectángulos delgados que cortan el espacio.
-  // Es la opción más futurista.
-  const LogoVariant3 = () => (
-    <svg className={className} viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Triángulo Blanco (Abajo) */}
-      <path d="M10 34L28 34L12 18V34Z" className="fill-white" />
-      {/* Triángulo Naranja (Arriba) */}
-      <path d="M28 6L12 6L28 22V6Z" className="fill-orange-500" />
-    </svg>
-  );
 
   return (
-    <div className="flex items-center gap-3 select-none group">
-      {/* Icono (Sin rotación para mantener la diagonal firme) */}
-      <div className="transition-transform duration-300 group-hover:scale-110">
-        {variant === 1 && <LogoVariant1 />}
-        {variant === 2 && <LogoVariant2 />}
-        {variant === 3 && <LogoVariant3 />}
+    <div 
+      onClick={onClick}
+      className={`flex items-center gap-2 select-none group cursor-pointer w-fit p-1 rounded-xl hover:bg-white/5 transition-colors duration-300 ${onClick ? 'cursor-pointer' : ''}`}
+    >
+      
+      {/* ISOTIPO (El Gráfico) */}
+      <div className="relative flex items-center justify-center p-1">
+        
+        {/* Glow naranja detrás */}
+        <div className="absolute inset-0 bg-orange-500/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 scale-75" />
+
+        <svg 
+          className={`${className} overflow-visible`} 
+          viewBox="0 0 40 40" 
+          fill="none" 
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          {/* 
+             GRUPO DE ROTACIÓN
+             Aplicamos la inclinación de 45 grados a toda la figura alargada.
+          */}
+          <g className="origin-center rotate-45">
+            
+            {/* 
+               DEFINICIÓN DE LA FORMA (PRE-ROTACIÓN):
+               Hacemos un rombo "flaco" (Alto 38, Ancho 16).
+               Al rotarlo, se verá como una lanza diagonal.
+            */}
+
+            {/* Triángulo Superior (Blanco) */}
+            {/* Punta en Y=1, Base en Y=19. Ancho X=12 a X=28 (8px de cada lado del centro) */}
+            <path 
+              d="M20 1 L28 19 H12 L20 1 Z" 
+              className="fill-white transition-transform duration-500 ease-out group-hover:-translate-y-1" 
+            />
+            
+            {/* Triángulo Inferior (Naranja-500) */}
+            {/* Punta en Y=39, Base en Y=21. */}
+            <path 
+              d="M20 39 L28 21 H12 L20 39 Z" 
+              className="fill-orange-500 transition-transform duration-500 ease-out group-hover:translate-y-1" 
+            />
+            
+            {/* 
+               GAP (Corte):
+               Entre Y=19 y Y=21 hay 2 unidades de separación.
+               Al rotarse 45º, el corte queda diagonal perpendicular.
+            */}
+          </g>
+        </svg>
       </div>
       
+      {/* LOGOTIPO (El Texto) */}
       {showText && (
-        <div className="relative flex items-baseline">
+        <div className="flex items-start select-none">
           {/* Nombre Base */}
-          <span className="font-bold text-xl md:text-2xl tracking-tight text-white">
-            {text}
+          <span className="font-sans font-bold text-2xl text-white tracking-tight leading-none">
+            Artech
           </span>
           
-          {/* El "IA" como exponente (Estilo Opción 1 anterior) */}
-          <sup className="text-[10px] md:text-xs font-bold text-orange-500 tracking-widest ml-0.5 -top-2">
+          {/* IA chiquito arriba a la derecha */}
+          <span className="font-sans font-bold text-[10px] text-orange-500 ml-0.5 -mt-0.5 leading-none">
             IA
-          </sup>
+          </span>
         </div>
       )}
     </div>

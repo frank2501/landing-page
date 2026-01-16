@@ -1,5 +1,5 @@
 ---
-title: "Cómo automatizamos el stock de un proveedor mayorista y lo conectamos a TiendaNube"
+title: "Automatizacion de stock: entre proveedor mayorista y TiendaNube"
 description: "Caso real de automatización de stock: control de proveedor mayorista y actualización automática en TiendaNube."
 excerpt: "Un comercio dejó de actualizar stock a mano y pasó a un sistema automático con control y alertas."
 date: "2025-01-15"

@@ -13,7 +13,7 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section className="relative pt-16 pb-12 md:pt-32 md:pb-20 overflow-hidden px-6 bg-transparent">
+    <section className="relative pt-32 pb-12 md:pt-40 md:pb-20 overflow-hidden px-6 bg-transparent">
       {/* Background Glows */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[400px] md:h-[600px] glow-horizon opacity-40 pointer-events-none" />
       

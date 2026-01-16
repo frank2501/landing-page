@@ -58,8 +58,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ headings }) => {
   const activeIndex = headings.findIndex(h => h.id === activeId);
 
   return (
-    <div className="hidden lg:block">
-      <div className="premium-border rounded-2xl p-6 bg-zinc-900/40 backdrop-blur-md shadow-2xl border-white/5 overflow-hidden">
+    <div className="premium-border rounded-2xl p-6 bg-zinc-900/40 backdrop-blur-md shadow-2xl border-white/5 overflow-hidden">
         <h3 className="text-[10px] font-bold mb-6 text-gray-500 uppercase tracking-[0.2em]">Contenido</h3>
         
         <div className="relative">
@@ -109,7 +108,6 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ headings }) => {
           </nav>
         </div>
       </div>
-    </div>
   );
 };
 

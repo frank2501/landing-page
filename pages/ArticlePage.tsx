@@ -172,123 +172,129 @@ const ArticlePage: React.FC = () => {
             </div>
           )}
 
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 md:gap-12">
-            <main className="prose prose-invert prose-lg max-w-none">
-              <div
-                className="article-content"
-                dangerouslySetInnerHTML={{ __html: article.html }}
-                style={{
-                  color: '#e5e7eb',
-                }}
-              />
-              <style>{`
-                .article-content h2 {
-                  font-size: 2.25rem;
-                  font-weight: 800;
-                  margin-top: 3.5rem;
-                  margin-bottom: 1.5rem;
-                  color: #fff;
-                  letter-spacing: -0.02em;
-                  line-height: 1.2;
-                }
-                .article-content h3 {
-                  font-size: 1.75rem;
-                  font-weight: 700;
-                  margin-top: 2.5rem;
-                  margin-bottom: 1.25rem;
-                  color: #fff;
-                  letter-spacing: -0.01em;
-                }
-                .article-content p {
-                  margin-bottom: 1.25rem;
-                  line-height: 1.85;
-                  color: #cbd5e1;
-                  font-size: 1.125rem;
-                }
-                .article-content a {
-                  color: #fb923c;
-                  text-decoration: none;
-                  border-bottom: 1px solid rgba(251, 146, 60, 0.3);
-                  transition: all 0.2s;
-                }
-                .article-content a:hover {
-                  color: #f97316;
-                  border-bottom-color: #f97316;
-                }
-                .article-content ul, .article-content ol {
-                  margin-bottom: 2.5rem;
-                  padding-left: 0.5rem;
-                  list-style: none;
-                }
-                .article-content li {
-                  margin-bottom: 0.6rem;
-                  color: #cbd5e1;
-                  position: relative;
-                  padding-left: 1.75rem;
-                  line-height: 1.7;
-                }
-                .article-content ul li::before {
-                  content: "";
-                  position: absolute;
-                  left: 0;
-                  top: 0.65em;
-                  width: 6px;
-                  height: 6px;
-                  border-radius: 50%;
-                  background-color: #f97316;
-                  box-shadow: 0 0 8px rgba(249, 115, 22, 0.4);
-                }
-                .article-content code {
-                  background: rgba(255, 255, 255, 0.05);
-                  padding: 0.2rem 0.45rem;
-                  border-radius: 0.5rem;
-                  font-size: 0.9em;
-                  color: #fdba74;
-                  border: 1px solid rgba(255, 255, 255, 0.1);
-                }
-                .article-content pre {
-                  background: #09090b;
-                  padding: 1.5rem;
-                  border-radius: 1rem;
-                  overflow-x: auto;
-                  margin: 2.5rem 0;
-                  border: 1px solid rgba(255, 255, 255, 0.05);
-                }
-                .article-content pre code {
-                  background: none;
-                  padding: 0;
-                  color: #e2e8f0;
-                  border: none;
-                }
-                .article-content img {
-                  max-width: 100%;
-                  height: auto;
-                  border-radius: 1.5rem;
-                  margin: 3.5rem 0;
-                  box-shadow: 0 20px 40px -20px rgba(0,0,0,0.5);
-                }
-                .article-content blockquote {
-                  border-left: 4px solid #f97316;
-                  background: rgba(249, 115, 22, 0.03);
-                  padding: 2rem 2.5rem;
-                  border-radius: 0 1rem 1rem 0;
-                  margin: 3.5rem 0;
-                  color: #94a3b8;
-                  font-style: italic;
-                  font-size: 1.25rem;
-                  line-height: 1.6;
-                }
-                .article-content hr {
-                  border: 0;
-                  height: 2px;
-                  background: linear-gradient(to right, transparent, rgba(249, 115, 22, 0.6), transparent);
-                  margin: 4rem 0;
-                }
-              `}</style>
+          {/* Main Layout - Grid with Sticky TOC */}
+          <div className="relative grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-12 items-start">
+            
+            {/* Main Content */}
+            <main className="min-w-0">
+              <div className="prose prose-invert prose-lg max-w-none">
+                <style>{`
+                  /* Custom styles for the article content */
+                  .article-content h2 {
+                    font-size: 2.25rem;
+                    font-weight: 800;
+                    margin-top: 3.5rem;
+                    margin-bottom: 1.5rem;
+                    color: #fff;
+                    letter-spacing: -0.02em;
+                    line-height: 1.2;
+                  }
+                  .article-content h3 {
+                    font-size: 1.75rem;
+                    font-weight: 700;
+                    margin-top: 2.5rem;
+                    margin-bottom: 1.25rem;
+                    color: #fff;
+                    letter-spacing: -0.01em;
+                  }
+                  .article-content p {
+                    margin-bottom: 1.25rem;
+                    line-height: 1.85;
+                    color: #cbd5e1;
+                    font-size: 1.125rem;
+                  }
+                  .article-content a {
+                    color: #fb923c;
+                    text-decoration: none;
+                    border-bottom: 1px solid rgba(251, 146, 60, 0.3);
+                    transition: all 0.2s;
+                  }
+                  .article-content a:hover {
+                    color: #f97316;
+                    border-bottom-color: #f97316;
+                  }
+                  .article-content ul, .article-content ol {
+                    margin-bottom: 2.5rem;
+                    padding-left: 0.5rem;
+                    list-style: none;
+                  }
+                  .article-content li {
+                    margin-bottom: 0.6rem;
+                    color: #cbd5e1;
+                    position: relative;
+                    padding-left: 1.75rem;
+                    line-height: 1.7;
+                  }
+                  .article-content ul li::before {
+                    content: "";
+                    position: absolute;
+                    left: 0;
+                    top: 0.65em;
+                    width: 6px;
+                    height: 6px;
+                    border-radius: 50%;
+                    background-color: #f97316;
+                    box-shadow: 0 0 8px rgba(249, 115, 22, 0.4);
+                  }
+                  .article-content code {
+                    background: rgba(255, 255, 255, 0.05);
+                    padding: 0.2rem 0.45rem;
+                    border-radius: 0.5rem;
+                    font-size: 0.9em;
+                    color: #fdba74;
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                  }
+                  .article-content pre {
+                    background: #09090b;
+                    padding: 1.5rem;
+                    border-radius: 1rem;
+                    overflow-x: auto;
+                    margin: 2.5rem 0;
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                  }
+                  .article-content pre code {
+                    background: none;
+                    padding: 0;
+                    color: #e2e8f0;
+                    border: none;
+                  }
+                  .article-content img {
+                    max-width: 100%;
+                    height: auto;
+                    border-radius: 1.5rem;
+                    margin: 3.5rem 0;
+                    box-shadow: 0 20px 40px -20px rgba(0,0,0,0.5);
+                  }
+                  .article-content blockquote {
+                    border-left: 4px solid #f97316;
+                    background: rgba(249, 115, 22, 0.03);
+                    padding: 2rem 2.5rem;
+                    border-radius: 0 1rem 1rem 0;
+                    margin: 3.5rem 0;
+                    color: #94a3b8;
+                    font-style: italic;
+                    font-size: 1.25rem;
+                    line-height: 1.6;
+                  }
+                  .article-content hr {
+                    border: 0;
+                    height: 2px;
+                    background: linear-gradient(to right, transparent, rgba(249, 115, 22, 0.6), transparent);
+                    margin: 4rem 0;
+                  }
+                `}</style>
+                <div
+                  className="article-content"
+                  dangerouslySetInnerHTML={{ __html: article.html }}
+                />
+              </div>
             </main>
 
-            <aside>
+            {/* Sidebar with Sticky TOC */}
+            <aside className="hidden lg:block sticky top-24 self-start space-y-8">
               <TableOfContents headings={headings} />
+              
+              {/* Optional: Add more sidebar content here like newsletter, etc. */}
             </aside>
           </div>
 

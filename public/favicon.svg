@@ -1,0 +1,8 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g transform="rotate(45 20 20)">
+    <!-- Triángulo Superior (Blanco) -->
+    <path d="M20 1 L28 19 H12 L20 1 Z" fill="white" />
+    <!-- Triángulo Inferior (Naranja) -->
+    <path d="M20 39 L28 21 H12 L20 39 Z" fill="#eb5e28" />
+  </g>
+</svg>
