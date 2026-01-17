@@ -9,11 +9,11 @@ const FloatingWhatsApp: React.FC = () => {
   return (
     <button
       onClick={handleWhatsApp}
-      className="fixed bottom-8 right-8 z-50 p-4 bg-[#25D366] text-white rounded-full shadow-2xl transition-all duration-300 transform hover:scale-110 hover:shadow-[0_0_20px_rgba(37,211,102,0.5)] active:scale-90 group"
+      className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50 p-3 md:p-4 bg-[#25D366] text-white rounded-full shadow-2xl transition-all duration-300 transform hover:scale-110 hover:shadow-[0_0_20px_rgba(37,211,102,0.5)] active:scale-90 group"
       aria-label="Contactar por WhatsApp"
     >
       <svg
-        className="w-8 h-8 transition-transform duration-500 group-hover:rotate-[360deg]"
+        className="w-6 h-6 md:w-8 md:h-8 transition-transform duration-500 group-hover:rotate-[360deg]"
         fill="currentColor"
         viewBox="0 0 24 24"
       >

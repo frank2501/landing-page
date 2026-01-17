@@ -10,7 +10,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const baseUrl = process.env.SITE_URL || 'https://yoursite.com';
+const baseUrl = process.env.SITE_URL || 'https://www.artechia.com';
 const contentDir = path.join(__dirname, '../content');
 const outputPath = path.join(__dirname, '../public/sitemap.xml');
 

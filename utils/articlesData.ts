@@ -1,40 +1,38 @@
-// Explicit article imports - this ensures Vite bundles them correctly
-// @ts-ignore - Vite handles .md?raw imports
-import automatizacionParaComercios from '../content/automatizacion-para-comercios.md?raw';
-// @ts-ignore
-import digitalizacionPymes from '../content/digitalizacion-pymes.md?raw';
-// @ts-ignore
-import sistemasAutomatizacionServicios from '../content/sistemas-automatizacion-servicios.md?raw';
-// @ts-ignore
-import casoExitoTiendanube from '../content/caso-exito-tiendanube.md?raw';
-
 import { parseMarkdown } from './content';
 import { setArticles } from './articles';
 
-// Map of article files
-const articleFiles: Record<string, string> = {
-  'automatizacion-para-comercios': automatizacionParaComercios,
-  'digitalizacion-pymes': digitalizacionPymes,
-  'sistemas-automatizacion-servicios': sistemasAutomatizacionServicios,
-  'caso-exito-tiendanube': casoExitoTiendanube,
-};
+// Use Vite's import.meta.glob to load all markdown files from the content folder automatically
+// { query: '?raw', eager: true } ensures we get the raw content of the files at build time
+const articleModules = import.meta.glob('../content/*.md', { query: '?raw', eager: true });
 
 export const loadAllArticles = () => {
   try {
-    
-    const articles = Object.entries(articleFiles).map(([slug, content]) => {
+    const articles = Object.entries(articleModules).map(([path, module]) => {
       try {
-        const article = parseMarkdown(content, slug);
-        return article;
+        // Extract slug from filename (e.g., '../content/slug.md' -> 'slug')
+        const slug = path.split('/').pop()?.replace('.md', '') || '';
+        const content = (module as any).default;
+        
+        if (typeof content !== 'string') {
+          return null;
+        }
+
+        return parseMarkdown(content, slug);
       } catch (error) {
+        console.error(`Error loading article at ${path}:`, error);
         return null;
       }
     }).filter((article): article is NonNullable<typeof article> => article !== null);
     
+    // Sort articles by date descending
+    articles.sort((a, b) => new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime());
+    
     setArticles(articles);
     return articles;
   } catch (error) {
+    console.error('Error in loadAllArticles:', error);
     setArticles([]);
     return [];
   }
 };
+

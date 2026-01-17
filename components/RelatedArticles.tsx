@@ -29,10 +29,11 @@ const CompactArticleCard: React.FC<{ article: Article }> = ({ article }) => {
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
       </div>
       <div className="p-5 flex flex-col flex-grow">
-        <div className="text-[10px] uppercase tracking-[0.2em] text-orange-500/80 font-semibold mb-2.5">
+        <div className="block text-[10px] uppercase tracking-[0.2em] text-orange-500/80 font-semibold mb-3">
           {article.frontmatter.category}
+          <span className="sr-only">: </span>
         </div>
-        <h3 className="text-base md:text-lg font-bold text-gray-100 group-hover:text-white transition-colors line-clamp-2 leading-tight">
+        <h3 className="block text-base md:text-lg font-bold text-gray-100 group-hover:text-white transition-colors line-clamp-2 leading-tight">
           {article.frontmatter.title}
         </h3>
         <div className="mt-auto pt-4 flex items-center text-[11px] text-gray-500 font-medium">

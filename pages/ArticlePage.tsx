@@ -16,6 +16,7 @@ const ArticlePage: React.FC = () => {
   const navigate = useNavigate();
   const [article, setArticle] = useState<ReturnType<typeof getArticleBySlug> | null>(null);
   const [headings, setHeadings] = useState<Array<{ id: string; text: string; level: number }>>([]);
+  const [isMobileTocOpen, setIsMobileTocOpen] = useState(false);
 
 
 
@@ -138,10 +139,10 @@ const ArticlePage: React.FC = () => {
                 {article.frontmatter.category}
               </span>
             )}
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+            <h1 className="text-3xl md:text-6xl font-bold mb-6 leading-tight">
               {article.frontmatter.title}
             </h1>
-            <p className="text-xl md:text-2xl text-gray-400 mb-6 leading-relaxed">
+            <p className="text-lg md:text-2xl text-gray-400 mb-6 leading-relaxed">
               {article.frontmatter.description}
             </p>
             <div className="flex flex-wrap items-center gap-4 text-sm md:text-base text-gray-400">
@@ -162,13 +163,42 @@ const ArticlePage: React.FC = () => {
             </div>
           </header>
 
-          {article.frontmatter.image && (
-            <div className="mb-8 md:mb-12 rounded-2xl overflow-hidden premium-border">
+          {article.frontmatter.image && article.frontmatter.image !== '/og-image.jpg' && (
+            <div className="mb-8 md:mb-12 rounded-2xl overflow-hidden premium-border bg-zinc-900/50 aspect-video flex items-center justify-center">
               <img
                 src={article.frontmatter.image}
                 alt={article.frontmatter.title}
-                className="w-full h-auto"
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).parentElement?.classList.add('hidden');
+                }}
               />
+            </div>
+          )}
+
+          {/* Mobile Table of Contents */}
+          {headings.length > 0 && (
+            <div className="lg:hidden mb-12">
+              <button 
+                onClick={() => setIsMobileTocOpen(!isMobileTocOpen)}
+                className="w-full flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 text-white font-bold transition-all hover:bg-white/10"
+              >
+                <div className="flex items-center gap-3">
+                  <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
+                  </svg>
+                  <span>Tabla de Contenidos</span>
+                </div>
+                <svg className={`w-5 h-5 transition-transform duration-300 ${isMobileTocOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              
+              <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isMobileTocOpen ? 'max-h-[1000px] mt-4 opacity-100' : 'max-h-0 opacity-0'}`}>
+                <div className="p-4 rounded-xl bg-black/40 border border-white/5 shadow-inner">
+                   <TableOfContents headings={headings} compact />
+                </div>
+              </div>
             </div>
           )}
 
@@ -177,7 +207,7 @@ const ArticlePage: React.FC = () => {
             
             {/* Main Content */}
             <main className="min-w-0">
-              <div className="prose prose-invert prose-lg max-w-none">
+              <div className="prose prose-invert prose-base md:prose-lg max-w-none">
                 <style>{`
                   /* Custom styles for the article content */
                   .article-content h2 {

@@ -17,7 +17,7 @@ const DashboardMockup: React.FC = () => {
     <div className="relative max-w-4xl mx-auto transform hover:scale-[1.01] transition-transform duration-700">
       <div className="absolute -inset-1 bg-gradient-to-r from-violet-600/20 via-orange-500/20 to-blue-600/20 rounded-2xl blur-xl opacity-40" />
       
-      <div className="relative bg-[#0a0a0a]/90 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden shadow-2xl flex flex-col min-h-[450px]">
+      <div className="relative bg-[#0a0a0a]/90 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden shadow-2xl flex flex-col min-h-[400px] md:min-h-[450px]">
         {/* Header */}
         <div className="flex items-center gap-4 px-4 py-3 border-b border-white/5 bg-white/5 shrink-0">
           <div className="flex gap-2">
@@ -25,30 +25,30 @@ const DashboardMockup: React.FC = () => {
             <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/50" />
             <div className="w-2.5 h-2.5 rounded-full bg-green-500/50" />
           </div>
-          <div className="flex-1 text-center hidden md:block">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/40 border border-white/5 text-[10px] md:text-xs text-gray-500 font-mono">
-              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="flex-1 text-center">
+            <div className="inline-flex items-center gap-2 px-3 md:px-4 py-1 rounded-full bg-black/40 border border-white/5 text-[9px] md:text-xs text-gray-500 font-mono">
+              <svg className="w-2.5 h-2.5 md:w-3 md:h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
-              app.artechia.com/{activeTab}
+              <span className="truncate max-w-[120px] md:max-w-none">app.artechia.com/{activeTab}</span>
             </div>
           </div>
-          <div className="w-16 hidden md:block" /> 
+          <div className="w-10 md:w-16" /> 
         </div>
 
         <div className="flex flex-1 overflow-hidden">
           {/* Sidebar */}
-          <div className="w-16 md:w-56 border-r border-white/5 bg-zinc-950/50 flex flex-col py-6 shrink-0 transition-all duration-300">
+          <div className="w-12 md:w-56 border-r border-white/5 bg-zinc-950/50 flex flex-col py-4 md:py-6 shrink-0 transition-all duration-300">
             <div className="px-6 mb-8 hidden md:block">
               <div className="h-6 w-32 bg-gradient-to-r from-orange-500/20 to-transparent rounded-full" />
             </div>
             
-            <div className="space-y-1 px-2 md:px-4">
+            <div className="space-y-1 px-1.5 md:px-4">
               {tabs.map((tab) => (
                 <button 
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as Tab)}
-                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group ${
+                  className={`w-full flex items-center justify-center md:justify-start gap-3 px-2 md:px-3 py-2.5 rounded-lg transition-all duration-200 group ${
                     activeTab === tab.id
                       ? 'bg-gradient-to-r from-orange-500/10 to-transparent text-white border-l-2 border-orange-500' 
                       : 'text-gray-500 hover:bg-white/5 hover:text-gray-300'
@@ -64,93 +64,102 @@ const DashboardMockup: React.FC = () => {
           </div>
 
           {/* Content Area */}
-          <div className="flex-1 bg-black/40 p-6 md:p-8 overflow-y-auto relative">
+          <div className="flex-1 bg-black/40 p-3 md:p-8 overflow-y-auto relative custom-scrollbar">
             
             {/* Dashboard View */}
             {activeTab === 'dashboard' && (
-              <div className="animate-fade-in space-y-8">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h3 className="text-xl font-bold text-white mb-1">Centro de Automatización</h3>
-                    <p className="text-sm text-gray-500">Gestioná tus bots y flujos de trabajo en tiempo real.</p>
+              <div className="animate-fade-in space-y-3 md:space-y-8 pb-12 md:pb-0">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 md:gap-4">
+                   <div>
+                    <h3 className="text-base md:text-xl font-bold text-white mb-0.5">Centro de Automatización</h3>
+                    <p className="text-[10px] md:text-sm text-gray-500">Gestión en tiempo real.</p>
                   </div>
-                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/20">
-                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-xs font-bold text-green-500 uppercase tracking-wide">Sistema Activo</span>
+                  <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-green-500/10 border border-green-500/20 shadow-[0_0_15px_rgba(34,197,94,0.1)]">
+                    <div className="w-1 md:w-2 h-1 md:h-2 rounded-full bg-green-500 animate-pulse" />
+                    <span className="text-[8px] md:text-xs font-bold text-green-500 uppercase tracking-wide">Activo</span>
                   </div>
                 </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+ 
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
                   {/* Card 1 */}
-                  <div className=" group p-5 rounded-2xl bg-zinc-900/40 border border-white/5 hover:border-orange-500/30 transition-all duration-300 relative overflow-hidden">
+                  <div className="group p-3 md:p-5 rounded-xl md:rounded-2xl bg-zinc-900/40 border border-white/5 hover:border-orange-500/30 transition-all duration-300 relative overflow-hidden flex items-center justify-between">
                     <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <div className="flex justify-between items-start mb-4 relative z-10">
-                      <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center border border-purple-500/20">
-                        <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+                    <div className="flex items-center gap-3 relative z-10 min-w-0">
+                      <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-purple-500/10 flex items-center justify-center border border-purple-500/20 shrink-0">
+                        <svg className="w-4 h-4 md:w-5 md:h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
                       </div>
-                      <div className="h-6 w-11 rounded-full bg-green-500/20 flex items-center justify-end px-1"><div className="w-4 h-4 rounded-full bg-green-500" /></div>
+                      <div className="min-w-0">
+                        <h4 className="text-xs md:text-base font-bold text-white leading-tight truncate">Respuestas IA</h4>
+                        <p className="hidden md:block text-[9px] md:text-xs text-gray-400">Atención 24/7.</p>
+                      </div>
                     </div>
-                    <div className="relative z-10">
-                      <h4 className="text-base font-bold text-white mb-1">Respuestas IA</h4>
-                      <p className="text-xs text-gray-400">Atención al cliente 24/7.</p>
+                    <div className="relative z-10 shrink-0 ml-4">
+                      <div className="h-4 md:h-6 w-8 md:w-11 rounded-full bg-green-500/20 flex items-center justify-end px-1 border border-green-500/20"><div className="w-2.5 md:w-4 h-2.5 md:h-4 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" /></div>
                     </div>
                   </div>
                   {/* Card 2 */}
-                  <div className="group p-5 rounded-2xl bg-zinc-900/40 border border-white/5 hover:border-orange-500/30 transition-all duration-300 relative overflow-hidden">
+                  <div className="group p-3 md:p-5 rounded-xl md:rounded-2xl bg-zinc-900/40 border border-white/5 hover:border-orange-500/30 transition-all duration-300 relative overflow-hidden flex items-center justify-between">
                     <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <div className="flex justify-between items-start mb-4 relative z-10">
-                      <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center border border-orange-500/20">
-                        <svg className="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg>
+                    <div className="flex items-center gap-3 relative z-10 min-w-0">
+                      <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-orange-500/10 flex items-center justify-center border border-orange-500/20 shrink-0">
+                        <svg className="w-4 h-4 md:w-5 md:h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg>
                       </div>
-                      <div className="h-6 w-11 rounded-full bg-green-500/20 flex items-center justify-end px-1"><div className="w-4 h-4 rounded-full bg-green-500" /></div>
+                      <div className="min-w-0">
+                        <h4 className="text-xs md:text-base font-bold text-white leading-tight truncate">Sync de Stock</h4>
+                        <p className="hidden md:block text-[9px] md:text-xs text-gray-400">Automatizada.</p>
+                      </div>
                     </div>
-                    <div className="relative z-10">
-                      <h4 className="text-base font-bold text-white mb-1">Sync de Stock</h4>
-                      <p className="text-xs text-gray-400">Sincronización automática.</p>
+                    <div className="relative z-10 shrink-0 ml-4">
+                      <div className="h-4 md:h-6 w-8 md:w-11 rounded-full bg-green-500/20 flex items-center justify-end px-1 border border-green-500/20"><div className="w-2.5 md:w-4 h-2.5 md:h-4 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" /></div>
                     </div>
                   </div>
                   {/* Card 3 */}
-                  <div className="group p-5 rounded-2xl bg-zinc-900/40 border border-white/5 hover:border-orange-500/30 transition-all duration-300 relative overflow-hidden">
+                  <div className="group p-3 md:p-5 rounded-xl md:rounded-2xl bg-zinc-900/40 border border-white/5 hover:border-orange-500/30 transition-all duration-300 relative overflow-hidden flex items-center justify-between">
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <div className="flex justify-between items-start mb-4 relative z-10">
-                      <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
-                        <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                    <div className="flex items-center gap-3 relative z-10 min-w-0">
+                      <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20 shrink-0">
+                        <svg className="w-4 h-4 md:w-5 md:h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
                       </div>
-                      <div className="h-6 w-11 rounded-full bg-green-500/20 flex items-center justify-end px-1"><div className="w-4 h-4 rounded-full bg-green-500" /></div>
+                      <div className="min-w-0">
+                        <h4 className="text-xs md:text-base font-bold text-white leading-tight truncate">Recupero Carritos</h4>
+                        <p className="hidden md:block text-[9px] md:text-xs text-gray-400">Ventas perdidas.</p>
+                      </div>
                     </div>
-                    <div className="relative z-10">
-                      <h4 className="text-base font-bold text-white mb-1">Recupero de Carritos</h4>
-                      <p className="text-xs text-gray-400">Emails automáticos a clientes.</p>
+                    <div className="relative z-10 shrink-0 ml-4">
+                      <div className="h-4 md:h-6 w-8 md:w-11 rounded-full bg-green-500/20 flex items-center justify-end px-1 border border-green-500/20"><div className="w-2.5 md:w-4 h-2.5 md:h-4 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" /></div>
                     </div>
                   </div>
                   {/* Card 4 */}
-                  <div className="group p-5 rounded-2xl bg-zinc-900/40 border border-white/5 hover:border-orange-500/30 transition-all duration-300 relative overflow-hidden">
+                  <div className="group p-3 md:p-5 rounded-xl md:rounded-2xl bg-zinc-900/40 border border-white/5 hover:border-orange-500/30 transition-all duration-300 relative overflow-hidden flex items-center justify-between">
                     <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <div className="flex justify-between items-start mb-4 relative z-10">
-                      <div className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center border border-green-500/20">
-                        <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
+                    <div className="flex items-center gap-3 relative z-10 min-w-0">
+                      <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-green-500/10 flex items-center justify-center border border-green-500/20 shrink-0">
+                        <svg className="w-4 h-4 md:w-5 md:h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
                       </div>
-                      <div className="h-6 w-11 rounded-full bg-green-500/20 flex items-center justify-end px-1"><div className="w-4 h-4 rounded-full bg-green-500" /></div>
+                      <div className="min-w-0">
+                        <h4 className="text-xs md:text-base font-bold text-white leading-tight truncate">Alertas WhatsApp</h4>
+                        <p className="hidden md:block text-[9px] md:text-xs text-gray-400">Notificaciones hoy.</p>
+                      </div>
                     </div>
-                    <div className="relative z-10">
-                      <h4 className="text-base font-bold text-white mb-1">Alertas WhatsApp</h4>
-                      <p className="text-xs text-gray-400">Notificaciones instantáneas de negocio.</p>
+                    <div className="relative z-10 shrink-0 ml-4">
+                      <div className="h-4 md:h-6 w-8 md:w-11 rounded-full bg-green-500/20 flex items-center justify-end px-1 border border-green-500/20"><div className="w-2.5 md:w-4 h-2.5 md:h-4 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" /></div>
                     </div>
                   </div>
                 </div>
-
-                {/* Floating Notification */}
-                <div className="absolute bottom-6 right-6 bg-[#0F1115] border border-orange-500/30 shadow-2xl shadow-orange-500/5 px-4 py-3 rounded-xl flex items-center gap-3 z-20 backdrop-blur-md animate-bounce-custom max-w-xs">
-                  <div className="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center shrink-0">
-                    <svg className="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+ 
+                {/* Floating Notification - Adjusted for mobile position and size */}
+                <div className="absolute bottom-3 md:bottom-6 left-3 right-3 md:left-auto md:right-6 bg-[#0F1115]/90 border border-orange-500/30 shadow-2xl shadow-orange-500/5 px-3 py-2 md:px-4 md:py-3 rounded-xl flex items-center gap-2 md:gap-3 z-20 backdrop-blur-md animate-bounce-custom md:max-w-xs">
+                  <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-orange-500/20 flex items-center justify-center shrink-0">
+                    <svg className="w-3 h-3 md:w-4 md:h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                   </div>
-                  <div>
-                    <div className="text-[10px] text-gray-400 uppercase tracking-wider font-bold mb-0.5">Actividad Reciente</div>
-                    <div className="text-xs font-medium text-white">Bot "Sync de Stock" actualizó 45 artículos.</div>
+                  <div className="min-w-0">
+                    <div className="text-[8px] md:text-[10px] text-gray-400 uppercase tracking-wider font-bold mb-0.5">Actividad Reciente</div>
+                    <div className="text-[10px] md:text-xs font-medium text-white truncate text-ellipsis">Bot actualizó 45 artículos.</div>
                   </div>
                 </div>
               </div>
             )}
+
 
             {/* Ventas View */}
             {activeTab === 'ventas' && (
@@ -181,18 +190,18 @@ const DashboardMockup: React.FC = () => {
 
             {/* Stock View */}
              {activeTab === 'stock' && (
-               <div className="animate-fade-in space-y-6">
-                 <div className="flex justify-between items-center">
-                    <h3 className="text-xl font-bold text-white">Stock en Tiempo Real</h3>
-                    <span className="text-xs text-orange-400 animate-pulse">● Sincronizando</span>
+               <div className="animate-fade-in space-y-4 md:space-y-6 h-full flex flex-col">
+                 <div className="flex justify-between items-center shrink-0">
+                    <h3 className="text-base md:text-xl font-bold text-white">Stock en Tiempo Real</h3>
+                    <span className="text-[10px] md:text-xs text-orange-400 animate-pulse">● Sincronizando</span>
                   </div>
-                  <div className="overflow-hidden rounded-xl border border-white/5">
-                    <table className="w-full text-sm text-left">
+                  <div className="overflow-x-auto rounded-xl border border-white/5 bg-black/20">
+                    <table className="w-full text-xs md:text-sm text-left border-collapse">
                       <thead className="bg-white/5 text-gray-400 border-b border-white/5">
                         <tr>
-                          <th className="px-4 py-3 font-medium">Producto</th>
-                          <th className="px-4 py-3 font-medium text-right">Cant.</th>
-                          <th className="px-4 py-3 font-medium text-right">Estado</th>
+                          <th className="px-3 md:px-4 py-2.5 md:py-3 font-medium">Producto</th>
+                          <th className="px-3 md:px-4 py-2.5 md:py-3 font-medium text-right">Cant.</th>
+                          <th className="px-3 md:px-4 py-2.5 md:py-3 font-medium text-right">Estado</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-white/5">
@@ -203,10 +212,10 @@ const DashboardMockup: React.FC = () => {
                           { name: 'Mouse Gamer RGB', count: 0, status: 'Sin Stock' }
                         ].map((item, idx) => (
                           <tr key={idx} className="hover:bg-white/5 transition-colors">
-                            <td className="px-4 py-3 text-white">{item.name}</td>
-                            <td className="px-4 py-3 text-right text-gray-300 font-mono">{item.count}</td>
-                            <td className="px-4 py-3 text-right">
-                              <span className={`text-[10px] px-2 py-1 rounded-full ${item.count > 0 ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'}`}>
+                            <td className="px-3 md:px-4 py-2.5 md:py-3 text-white truncate max-w-[100px] md:max-w-none">{item.name}</td>
+                            <td className="px-3 md:px-4 py-2.5 md:py-3 text-right text-gray-300 font-mono">{item.count}</td>
+                            <td className="px-3 md:px-4 py-2.5 md:py-3 text-right">
+                              <span className={`text-[9px] md:text-[10px] px-1.5 md:px-2 py-0.5 md:py-1 rounded-full whitespace-nowrap ${item.count > 0 ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'}`}>
                                 {item.status === 'OK' ? 'Sincronizado' : item.status}
                               </span>
                             </td>

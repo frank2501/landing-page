@@ -12,11 +12,43 @@ const LatestArticles: React.FC = () => {
     return null;
   }
 
+  const [canScrollLeft, setCanScrollLeft] = React.useState(false);
+  const [canScrollRight, setCanScrollRight] = React.useState(true);
+
+  const checkScroll = () => {
+    if (scrollContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      setCanScrollLeft(scrollLeft > 5);
+      setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 5);
+    }
+  };
+
+  React.useEffect(() => {
+    checkScroll();
+    const current = scrollContainerRef.current;
+    if (current) {
+      current.addEventListener('scroll', checkScroll);
+      window.addEventListener('resize', checkScroll);
+    }
+    return () => {
+      if (current) {
+        current.removeEventListener('scroll', checkScroll);
+        window.removeEventListener('resize', checkScroll);
+      }
+    };
+  }, []);
+
   const scroll = (direction: 'left' | 'right') => {
     if (scrollContainerRef.current) {
       const { current } = scrollContainerRef;
-      const scrollAmount = direction === 'left' ? -420 : 420;
-      current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      const firstItem = current.firstElementChild as HTMLElement;
+      if (firstItem) {
+        const itemWidth = firstItem.offsetWidth;
+        const gap = 24; // gap-6 is 24px
+        const scrollAmount = direction === 'left' ? -(itemWidth + gap) : (itemWidth + gap);
+        current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        // checkScroll will be called by the scroll event listener
+      }
     }
   };
 
@@ -47,13 +79,14 @@ const LatestArticles: React.FC = () => {
         {/* CARRUSEL CON FLECHAS LATERALES */}
         <div className="relative group/slider">
           
-          {/* Botón Izquierda (Gris por defecto, Naranja solo al hover sobre la flecha) */}
+          {/* Botón Izquierda */}
           <button
             onClick={() => scroll('left')}
-            className="absolute -left-4 md:-left-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-zinc-900/90 border border-white/10 text-gray-400 shadow-xl shadow-black/50 opacity-0 group-hover/slider:opacity-100 transition-all duration-300 hover:bg-orange-500 hover:text-white hover:border-orange-500 hover:scale-110 disabled:opacity-0"
+            disabled={!canScrollLeft}
+            className={`absolute -left-2 md:-left-8 top-1/2 -translate-y-1/2 z-20 p-2 md:p-3 rounded-full bg-zinc-900/90 border border-white/10 text-gray-400 shadow-xl shadow-black/50 transition-all duration-300 hover:bg-orange-500 hover:text-white hover:border-orange-500 hover:scale-110 disabled:opacity-0 disabled:pointer-events-none ${canScrollLeft ? 'opacity-100 md:opacity-0 md:group-hover/slider:opacity-100' : 'opacity-0'}`}
             aria-label="Anterior"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
@@ -67,7 +100,7 @@ const LatestArticles: React.FC = () => {
             {articles.map((article) => (
               <div 
                 key={article.slug} 
-                className="flex-none w-[85vw] md:w-[400px] snap-center h-auto"
+                className="flex-none w-[80vw] md:w-[400px] snap-center h-auto"
               >
                 <div className="h-full">
                   <ArticleCard
@@ -80,13 +113,14 @@ const LatestArticles: React.FC = () => {
             ))}
           </div>
 
-          {/* Botón Derecha (Gris por defecto, Naranja solo al hover sobre la flecha) */}
+          {/* Botón Derecha */}
           <button
             onClick={() => scroll('right')}
-            className="absolute -right-4 md:-right-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-zinc-900/90 border border-white/10 text-gray-400 shadow-xl shadow-black/50 opacity-0 group-hover/slider:opacity-100 transition-all duration-300 hover:bg-orange-500 hover:text-white hover:border-orange-500 hover:scale-110"
+            disabled={!canScrollRight}
+            className={`absolute -right-2 md:-right-8 top-1/2 -translate-y-1/2 z-20 p-2 md:p-3 rounded-full bg-zinc-900/90 border border-white/10 text-gray-400 shadow-xl shadow-black/50 transition-all duration-300 hover:bg-orange-500 hover:text-white hover:border-orange-500 hover:scale-110 disabled:opacity-0 disabled:pointer-events-none ${canScrollRight ? 'opacity-100 md:opacity-0 md:group-hover/slider:opacity-100' : 'opacity-0'}`}
             aria-label="Siguiente"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </button>

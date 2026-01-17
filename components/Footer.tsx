@@ -83,7 +83,7 @@ const Footer: React.FC = () => {
           </div>
           
           <div className="text-[9px] md:text-sm opacity-30">
-            © 2025 Argentina. Especialistas en Automatización.
+            © 2026 Argentina. Especialistas en Automatización.
           </div>
         </div>
     </footer>
