@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 
@@ -22,6 +22,16 @@ const CheckoutPage: React.FC = () => {
   const [showSubInfo, setShowSubInfo] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
   const [subLoading, setSubLoading] = useState(false);
+  const [payerEmail, setPayerEmail] = useState('');
+  const [showSubPrompt, setShowSubPrompt] = useState(false);
+  const [searchParams] = useSearchParams();
+
+  // Auto-show subscription prompt after successful payment
+  useEffect(() => {
+    if (searchParams.get('status') === 'approved' || searchParams.get('status') === 'success') {
+      setShowSubPrompt(true);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     const fetchSale = async () => {
@@ -83,6 +93,10 @@ const CheckoutPage: React.FC = () => {
 
   const handleSubscription = async () => {
     if (!sale || !sale.subscriptionAmount) return;
+    if (!payerEmail || !payerEmail.includes('@')) {
+      alert('Por favor ingresá un email válido.');
+      return;
+    }
     setSubLoading(true);
 
     try {
@@ -93,13 +107,15 @@ const CheckoutPage: React.FC = () => {
           reason: `Suscripción mensual - ${sale.concept}`,
           transaction_amount: sale.subscriptionAmount,
           id: sale.id,
+          payer_email: payerEmail,
         }),
       });
 
       const data = await response.json();
+      const redirectUrl = data.init_point || data.sandbox_init_point;
 
-      if (data.init_point) {
-        window.location.href = data.init_point;
+      if (redirectUrl) {
+        window.location.href = redirectUrl;
       } else {
         alert('Error al generar la suscripción. Intenta de nuevo.');
       }
@@ -310,10 +326,17 @@ const CheckoutPage: React.FC = () => {
 
               {sale.hasSubscription && sale.subscriptionAmount && (
                 <div className="border-t border-white/5 pt-4 mt-4">
-                  <p className="text-xs text-gray-400 mb-3 text-center">Después de pagar el monto único, activá tu suscripción mensual:</p>
+                  <p className="text-xs text-gray-400 mb-3 text-center">Activá tu suscripción mensual:</p>
+                  <input
+                    type="email"
+                    value={payerEmail}
+                    onChange={(e) => setPayerEmail(e.target.value)}
+                    placeholder="Tu email para la suscripción"
+                    className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2.5 mb-3 text-sm focus:border-orange-500 outline-none transition-colors placeholder-gray-500"
+                  />
                   <button
                     onClick={handleSubscription}
-                    disabled={subLoading}
+                    disabled={subLoading || !payerEmail}
                     className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {subLoading ? (
@@ -326,7 +349,7 @@ const CheckoutPage: React.FC = () => {
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                         </svg>
-                        Activar Suscripción Mensual — ${sale.subscriptionAmount.toLocaleString('es-AR')}/mes
+                        Activar Suscripción — ${sale.subscriptionAmount.toLocaleString('es-AR')}/mes
                       </>
                     )}
                   </button>

@@ -9,7 +9,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const { reason, transaction_amount, id } = req.body;
+    const { reason, transaction_amount, id, payer_email } = req.body;
+
+    if (!payer_email) {
+      return res.status(400).json({ error: 'Email del pagador es requerido' });
+    }
 
     const preapproval = new PreApproval(client);
 
@@ -23,13 +27,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           currency_id: 'ARS',
         },
         back_url: `${req.headers.origin}/pago/${id}?subscription=active`,
-        payer_email: '',
+        payer_email: payer_email,
       },
     });
 
-    return res.status(200).json({ init_point: result.init_point });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: 'Error creating subscription' });
+    return res.status(200).json({ 
+      init_point: result.init_point,
+      sandbox_init_point: (result as any).sandbox_init_point 
+    });
+  } catch (error: any) {
+    console.error('Subscription error:', error?.message || error);
+    return res.status(500).json({ error: error?.message || 'Error creating subscription' });
   }
 }
