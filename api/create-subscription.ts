@@ -27,8 +27,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         frequency_type: 'months',
         transaction_amount: Number(transaction_amount),
         currency_id: 'ARS',
-        // Mercado Pago format: YYYY-MM-DDTHH:mm:ss.SSSZ
-        start_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+        // Use a fixed time to avoid precision issues
+        start_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('.')[0] + 'Z',
       },
       back_url: `${req.headers.origin}/pago/${id}?subscription=active`,
     };
