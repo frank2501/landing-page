@@ -197,7 +197,7 @@ const CheckoutPage: React.FC = () => {
         
         {sale.hasSubscription ? (
           <div className="text-center max-w-md w-full">
-            <h1 className="text-3xl font-bold mb-4">¡Monto Principal Pagado!</h1>
+            <h1 className="text-3xl font-bold mb-4">Pago Confirmado</h1>
             <p className="text-gray-400 mb-8">
               El pago único ha sido confirmado. Ahora, para finalizar, activá tu suscripción mensual para el mantenimiento y soporte de <strong>{sale.concept}</strong>.
             </p>
@@ -496,32 +496,17 @@ const CheckoutPage: React.FC = () => {
               </div>
 
               {sale.hasSubscription && sale.subscriptionAmount && isInfoComplete && (
-                <div className="border-t border-white/5 pt-4 mt-4">
-                  <p className="text-xs text-gray-400 mb-3 text-center text-balance">
-                    ¡Listo, <span className="text-white font-medium">{payerFirstName}</span>! Activá tu suscripción mensual para {sale.concept}:
-                  </p>
-                  <button
-                    onClick={handleSubscription}
-                    disabled={subLoading}
-                    className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed animate-pulse shadow-lg shadow-orange-500/20"
-                  >
-                    {subLoading ? (
-                      <>
-                        <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
-                        Procesando...
-                      </>
-                    ) : (
-                      <>
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                        </svg>
-                        Activar Suscripción Mensual
-                      </>
-                    )}
-                  </button>
-                  <p className="text-[10px] text-gray-500 text-center mt-2 px-4">
-                    Se cobrarán <span className="text-white">${sale.subscriptionAmount.toLocaleString('es-AR')}</span> cada mes con tu tarjeta.
-                  </p>
+                <div className="border-t border-white/5 pt-4 mt-4 bg-zinc-900/30 p-4 rounded-xl border-dashed border-zinc-700">
+                  <div className="flex items-start gap-3">
+                    <div className="mt-1 w-5 h-5 rounded-full bg-orange-500/20 text-orange-500 flex items-center justify-center flex-shrink-0">
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <p className="text-xs text-gray-400 leading-relaxed">
+                      Luego de realizar el pago único, deberás activar la <span className="text-white font-medium">suscripción mensual</span> para finalizar el proceso.
+                    </p>
+                  </div>
                 </div>
               )}
 
