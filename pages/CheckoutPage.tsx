@@ -37,31 +37,27 @@ const CheckoutPage: React.FC = () => {
 
 
   // Auto-show subscription prompt after successful payment
+  // Detect payment status and verify securely server-side
   useEffect(() => {
-    if (searchParams.get('status') === 'approved' || searchParams.get('status') === 'success') {
-      setShowSubPrompt(true);
-    }
-  }, [searchParams]);
-
-  // Detect payment status and update Firestore
-  useEffect(() => {
-    const status = searchParams.get('status');
-    if ((status === 'approved' || status === 'success') && sale && sale.payStatus !== 'paid') {
-      const updateStatus = async () => {
+    const paymentId = searchParams.get('payment_id');
+    if (paymentId && sale && sale.payStatus !== 'paid') {
+      const verifyPayment = async () => {
         try {
-          const nextDate = new Date();
-          nextDate.setMonth(nextDate.getMonth() + 1);
-          await updateDoc(doc(db, "sales", id!), {
-            payStatus: 'paid',
-            nextPaymentDate: sale.hasSubscription ? nextDate.toISOString() : null
+          const res = await fetch('/api/verify-payment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ payment_id: paymentId, sale_id: id })
           });
-          setSale(prev => prev ? { ...prev, payStatus: 'paid' } : null);
-          setShowSubPrompt(true);
+          const data = await res.json();
+          if (data.status === 'approved') {
+            setSale(prev => prev ? { ...prev, payStatus: 'paid' } : null);
+            setShowSubPrompt(true);
+          }
         } catch (error) {
-          console.error("Error updating status:", error);
+          console.error("Error verifying payment:", error);
         }
       };
-      updateStatus();
+      verifyPayment();
     }
     
     // Also handle subscription activation on return
