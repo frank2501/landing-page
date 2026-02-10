@@ -1,4 +1,3 @@
-import { MercadoPagoConfig, PreApproval } from 'mercadopago';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -8,28 +7,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
   if (!MP_ACCESS_TOKEN) {
-    return res.status(500).json({ error: 'CONFIG_ERROR', details: 'Missing MP_ACCESS_TOKEN' });
+    return res.status(500).json({ error: 'CONFIG_ERROR', details: 'Falta MP_ACCESS_TOKEN en el servidor' });
   }
 
   try {
-    // Phase 1: Init
-    const client = new MercadoPagoConfig({ accessToken: MP_ACCESS_TOKEN });
-    const preapproval = new PreApproval(client);
-    
     const { reason, transaction_amount, id, payer_email } = req.body;
+
     if (!payer_email) {
       return res.status(400).json({ error: 'BAD_REQUEST', details: 'Email del pagador es requerido' });
     }
 
-    // Phase 2: Date Calculation
-    // Use a fixed date format that is simpler
+    // Prepare start_date (30 days in the future, noon to be safe)
     const nextDate = new Date();
     nextDate.setDate(nextDate.getDate() + 30);
-    // Format: 2026-03-12T12:00:00.000Z
-    const startDate = nextDate.toISOString().replace(/\.\d+Z$/, '.000Z');
+    nextDate.setHours(12, 0, 0, 0);
+    const startDate = nextDate.toISOString().replace(/\.\d{3}Z$/, '.000Z');
 
     const body = {
-      reason: reason || 'Suscripción',
+      reason: reason || 'Suscripción mensual',
       payer_email: payer_email,
       auto_recurring: {
         frequency: 1,
@@ -41,32 +36,40 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       back_url: `${req.headers.origin}/pago/${id}?subscription=active`,
     };
 
-    console.log('[DEBUG] Calling MP PreApproval with:', JSON.stringify(body, null, 2));
+    console.log('[SUBS] Requesting MP API directly...', JSON.stringify(body, null, 2));
 
-    // Phase 3: The actual call
-    try {
-      const result = await preapproval.create({ body });
-      
+    const mpResponse = await fetch('https://api.mercadopago.com/preapproval', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${MP_ACCESS_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+
+    const data = await mpResponse.json();
+
+    if (mpResponse.ok) {
+      console.log('[SUBS] Success:', data.id);
       return res.status(200).json({ 
         status: 'SUCCESS',
-        init_point: result.init_point,
-        sandbox_init_point: (result as any).sandbox_init_point || result.init_point
+        init_point: data.init_point,
+        sandbox_init_point: data.sandbox_init_point || data.init_point
       });
-    } catch (mpError: any) {
-      console.error('[DEBUG] MP API Call failed:', mpError);
-      return res.status(500).json({ 
-        error: 'MP_API_REJECTION', 
-        details: mpError.message || 'Error en la llamada a MP',
-        mp_data: mpError?.response?.data || mpError?.cause || null
+    } else {
+      console.error('[SUBS] MP API Error:', data);
+      return res.status(mpResponse.status).json({ 
+        error: 'MP_API_ERROR', 
+        details: data.message || 'Error en la API de Mercado Pago',
+        mp_detail: data 
       });
     }
 
-  } catch (globalError: any) {
-    console.error('[DEBUG] Global crash:', globalError);
+  } catch (error: any) {
+    console.error('[SUBS] Fetch error:', error);
     return res.status(500).json({ 
-      error: 'LOGIC_CRASH', 
-      details: globalError.message, 
-      phase: 'DATA_PREP' 
+      error: 'FETCH_ERROR', 
+      details: error.message || 'Error de red o de proceso' 
     });
   }
 }
