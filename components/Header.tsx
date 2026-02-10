@@ -147,7 +147,7 @@ const Header: React.FC = () => {
           }`}>
              <span className="text-sm text-zinc-500 font-medium">© 2026 ArtechIA</span>
              <div className="flex gap-4">
-                <a href="#" className="hidden sm:block text-zinc-500 hover:text-white transition-colors">Instagram</a>
+                <a href="https://instagram.com/artech.ia" className="hidden sm:block text-zinc-500 hover:text-white transition-colors">Instagram</a>
                 <a href="#" className="hidden sm:block text-zinc-500 hover:text-white transition-colors">LinkedIn</a>
              </div>
           </div>

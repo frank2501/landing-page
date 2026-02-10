@@ -20,18 +20,18 @@ const Hero: React.FC = () => {
       
       <div className="relative max-w-6xl mx-auto text-center z-20">
         <div className="inline-flex items-center px-4 py-1.5 mb-6 md:mb-8 rounded-full border border-orange-500/20 bg-orange-500/5 text-orange-400 text-[10px] md:sm font-medium animate-pulse">
-          Sistemas inteligentes para tu negocio
+          Soluciones digitales integrales
         </div>
         
         <h1 className="text-4xl md:text-8xl font-bold mb-4 md:mb-6 tracking-tight leading-[1.1]">
-          Escalá tu negocio <br className="hidden md:block" />
+          Desarrollo Web y <br className="hidden md:block" />
           <span className="bg-gradient-to-r from-orange-400 via-orange-200 to-orange-500 bg-clip-text text-transparent">
-            sin tareas manuales
+            Automatización
           </span>
         </h1>
         
         <p className="max-w-2xl mx-auto text-base md:text-xl text-gray-400 mb-8 md:mb-10 leading-relaxed px-2">
-          Automatizá tus procesos, precios y atención. Dejá de pasar horas frente a la computadora y gestioná tu negocio de forma profesional.
+          Sitios web modernos, sistemas de gestión a medida y automatización de procesos. Transformamos tu negocio para que crezca sin límites.
         </p>
         
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-4 mb-12 md:mb-16 max-w-sm mx-auto sm:max-w-none">

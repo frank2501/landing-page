@@ -17,9 +17,9 @@ const WhyUs: React.FC = () => {
             </p>
           </div>
           <div className="p-8 rounded-2xl bg-zinc-900/30 border border-white/5">
-            <h3 className="text-xl font-bold mb-4 text-orange-400">Sin tecnicismos</h3>
+            <h3 className="text-xl font-bold mb-4 text-orange-400">Tecnología y Estrategia</h3>
             <p className="text-gray-400 leading-relaxed">
-              Hablamos claro. No necesitás saber de programación ni de servidores para que tu tienda funcione sola.
+              Nos ocupamos del código, los servidores y el diseño. Vos solo te enfocás en hacer crecer tu negocio.
             </p>
           </div>
           <div className="p-8 rounded-2xl bg-zinc-900/30 border border-white/5">

@@ -4,20 +4,20 @@ import React from 'react';
 const Problems: React.FC = () => {
   const pains = [
     {
+      title: "Invisible en internet",
+      desc: "Tus clientes te buscan en Google y no te encuentran. Si no tenés web, perdés ventas todos los días."
+    },
+    {
+      title: "Caos de reservas manuales",
+      desc: "Anotar turnos en papel o WhatsApp genera confusiones, olvidos y huecos en tu agenda."
+    },
+    {
       title: "Información desactualizada",
-      desc: "Tus precios cambian o tus fechas se ocupan, y seguís mostrando datos viejos."
+      desc: "Tus precios cambian o tu stock varía, y seguís mostrando datos viejos en redes sociales."
     },
     {
-      title: "Errores que cuestan plata",
-      desc: "Un precio mal cargado o una reserva doble le quitan seriedad a tu negocio."
-    },
-    {
-      title: "Carga manual infinita",
-      desc: "Perdés horas copiando y pegando datos de planillas o proveedores a tu sistema."
-    },
-    {
-      title: "Dependencia total",
-      desc: "Sentís que si no estás vos encima de cada detalle, las cosas no funcionan."
+      title: "Dependencia operativa",
+      desc: "Sentís que si no estás vos encima de cada detalle, el negocio no funciona. Te convertís en esclavo de tu emprendimiento."
     }
   ];
 

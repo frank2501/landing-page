@@ -7,11 +7,11 @@ const Footer: React.FC = () => {
   };
 
   const handleEmail = () => {
-    window.location.href = 'mailto:tuemail@ejemplo.com';
+    window.location.href = 'mailto:contacto@artechia.com';
   };
 
   const handleInstagram = () => {
-    window.open('https://instagram.com/tuusuario', '_blank');
+    window.open('https://instagram.com/artech.ia', '_blank');
   };
 
   return (

@@ -11,6 +11,12 @@ import ScrollToTop from './components/ScrollToTop';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 
+import DashboardPage from './pages/DashboardPage';
+import CheckoutPage from './pages/CheckoutPage';
+
+import LoginPage from './pages/LoginPage';
+import ProtectedRoute from './components/ProtectedRoute';
+
 const App: React.FC = () => {
   return (
     <>
@@ -21,6 +27,14 @@ const App: React.FC = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/implementaciones" element={<BlogPage />} />
           <Route path="/implementaciones/:slug" element={<ArticlePage />} />
+          
+          <Route path="/login" element={<LoginPage />} />
+          
+          <Route element={<ProtectedRoute />}>
+             <Route path="/dashboard" element={<DashboardPage />} />
+          </Route>
+
+          <Route path="/pago/:id" element={<CheckoutPage />} />
           <Route path="/404" element={<NotFoundPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

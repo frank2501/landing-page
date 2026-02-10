@@ -4,28 +4,28 @@ import React from 'react';
 const Solutions: React.FC = () => {
   const services = [
     {
-      title: "Automatización de stock",
-      desc: "Tus listas de precios y productos se mantienen al día sin que toques una sola tecla."
+      title: "Desarrollo Web Premium",
+      desc: "Sitios institucionales y Landing Pages de alto impacto visual, optimizados para captar clientes."
     },
     {
-      title: "Alertas automáticas",
-      desc: "Recibís un aviso directo ante cambios importantes, para que nunca se te escape nada."
+      title: "Sistemas de Gestión",
+      desc: "Plataformas a medida para gestionar turnos, reservas, clientes y bases de datos complejas."
     },
     {
-      title: "Digitalización total",
-      desc: "Pasamos tus procesos manuales a sistemas automáticos. Menos Excel, más resultados."
+      title: "Tiendas Online",
+      desc: "E-commerce completo, integrado con métodos de pago y envíos. Vendé 24/7 sin fronteras."
     },
     {
-      title: "Páginas web y tiendas",
-      desc: "Creamos tu presencia online profesional, optimizada para vender productos o servicios."
+      title: "Automatización de Stock",
+      desc: "Tus listas de precios y productos actualizados automáticamente. Olvidate de la carga manual."
     },
     {
-      title: "Control de proveedores",
-      desc: "Sincronizá tu negocio con la información de origen para proteger tus márgenes de ganancia."
+      title: "Integraciones Inteligentes",
+      desc: "Conectamos WhatsApp, Google Sheets y tus herramientas favoritas para que trabajen solas."
     },
     {
-      title: "Soporte continuo",
-      desc: "Estamos ahí para que todo siga funcionando. Vos vendés, nosotros cuidamos el sistema."
+      title: "Soporte Técnico Evolutivo",
+      desc: "No solo mantenemos tu sistema, lo mejoramos constantemente para acompañar tu crecimiento."
     }
   ];
 
