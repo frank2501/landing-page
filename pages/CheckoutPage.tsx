@@ -21,6 +21,7 @@ const CheckoutPage: React.FC = () => {
   const [activeMethod, setActiveMethod] = useState<string | null>('transfer');
   const [showSubInfo, setShowSubInfo] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
+  const [subLoading, setSubLoading] = useState(false);
 
   useEffect(() => {
     const fetchSale = async () => {
@@ -78,6 +79,36 @@ const CheckoutPage: React.FC = () => {
 
   const toggleMethod = (method: string) => {
     setActiveMethod(activeMethod === method ? null : method);
+  };
+
+  const handleSubscription = async () => {
+    if (!sale || !sale.subscriptionAmount) return;
+    setSubLoading(true);
+
+    try {
+      const response = await fetch('/api/create-subscription', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          reason: `Suscripción mensual - ${sale.concept}`,
+          transaction_amount: sale.subscriptionAmount,
+          id: sale.id,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.init_point) {
+        window.location.href = data.init_point;
+      } else {
+        alert('Error al generar la suscripción. Intenta de nuevo.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error de conexión. Intenta de nuevo.');
+    } finally {
+      setSubLoading(false);
+    }
   };
 
   if (loading) {
@@ -276,6 +307,31 @@ const CheckoutPage: React.FC = () => {
                   <span className="font-bold text-2xl text-orange-400">${sale.amount.toLocaleString('es-AR')}</span>
                 </div>
               </div>
+
+              {sale.hasSubscription && sale.subscriptionAmount && (
+                <div className="border-t border-white/5 pt-4 mt-4">
+                  <p className="text-xs text-gray-400 mb-3 text-center">Después de pagar el monto único, activá tu suscripción mensual:</p>
+                  <button
+                    onClick={handleSubscription}
+                    disabled={subLoading}
+                    className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {subLoading ? (
+                      <>
+                        <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
+                        Procesando...
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        Activar Suscripción Mensual — ${sale.subscriptionAmount.toLocaleString('es-AR')}/mes
+                      </>
+                    )}
+                  </button>
+                </div>
+              )}
 
               <p className="text-[10px] text-gray-600 text-center mt-6">
                 Pagos procesados de forma segura. Al pagar aceptás los{' '}
