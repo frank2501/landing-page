@@ -2,34 +2,38 @@ import { MercadoPagoConfig, PreApproval } from 'mercadopago';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
-  if (!MP_ACCESS_TOKEN) {
-    console.error('[SUBS] CRITICAL: MP_ACCESS_TOKEN is missing');
-    return res.status(500).json({ error: 'System configuration error: Access Token missing' });
-  }
-
-  const client = new MercadoPagoConfig({ accessToken: MP_ACCESS_TOKEN });
-  const preapproval = new PreApproval(client);
-
+  // Global try-catch for EVERYTHING
   try {
+    if (req.method !== 'POST') {
+      return res.status(405).json({ error: 'Method not allowed' });
+    }
+
+    const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
+    if (!MP_ACCESS_TOKEN) {
+      return res.status(500).json({ error: 'CONFIG_ERROR', details: 'MP_ACCESS_TOKEN is missing' });
+    }
+
+    let client, preapproval;
+    try {
+      client = new MercadoPagoConfig({ accessToken: MP_ACCESS_TOKEN });
+      preapproval = new PreApproval(client);
+    } catch (e: any) {
+      return res.status(500).json({ error: 'INIT_ERROR', details: e.message, stack: e.stack });
+    }
+
     const { reason, transaction_amount, id, payer_email } = req.body;
 
     if (!payer_email) {
-      return res.status(400).json({ error: 'Email del pagador es requerido' });
+      return res.status(400).json({ error: 'BAD_REQUEST', details: 'Email del pagador es requerido' });
     }
 
+    // Ultra-safe date generation
     const nextDate = new Date();
     nextDate.setDate(nextDate.getDate() + 30);
-    // Format: YYYY-MM-DDTHH:mm:ss.000-03:00 (Mercado Pago is very strict)
-    // Actually .000Z is usually safer for ISO
-    const startDate = nextDate.toISOString().replace(/\.\d{3}Z$/, '.000Z');
+    const startDate = nextDate.toISOString().split('.')[0] + '.000Z';
 
     const body = {
-      reason: reason,
+      reason: reason || 'Suscripción',
       payer_email: payer_email,
       auto_recurring: {
         frequency: 1,
@@ -41,27 +45,35 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       back_url: `${req.headers.origin}/pago/${id}?subscription=active`,
     };
 
-    console.log('[SUBS] Requesting MP with body:', JSON.stringify(body, null, 2));
+    try {
+      const result = await preapproval.create({ body });
+      
+      if (!result || !result.init_point) {
+        return res.status(500).json({ 
+          error: 'MP_EMPTY_RESPONSE', 
+          details: 'MP returned success but no init_point',
+          raw: JSON.stringify(result) 
+        });
+      }
 
-    const result = await preapproval.create({ body });
+      return res.status(200).json({ 
+        init_point: result.init_point,
+        sandbox_init_point: (result as any).sandbox_init_point || result.init_point
+      });
+    } catch (mpError: any) {
+      const mpData = mpError?.response?.data || mpError?.cause || null;
+      return res.status(500).json({ 
+        error: 'MP_API_ERROR', 
+        details: mpError.message || 'Error en la llamada a MP',
+        mp_detail: mpData 
+      });
+    }
 
-    console.log('[SUBS] MP Response success:', !!result.id);
-
-    return res.status(200).json({ 
-      init_point: result.init_point,
-      sandbox_init_point: (result as any).sandbox_init_point || result.init_point
-    });
-  } catch (error: any) {
-    console.error('[SUBS ERROR] Full catch info:', error);
-    
-    // Extracting MP specific error details if they exist
-    const mpError = error?.response?.data || error?.cause || null;
-    const errorMsg = mpError?.message || error?.message || 'Error desconocido en MP';
-
+  } catch (globalError: any) {
     return res.status(500).json({ 
-      error: 'Error en Mercado Pago',
-      details: errorMsg,
-      mp_detail: mpError
+      error: 'CRITICAL_GLOBAL_ERROR', 
+      details: globalError.message, 
+      stack: globalError.stack 
     });
   }
 }
