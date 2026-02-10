@@ -25,6 +25,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           frequency_type: 'months',
           transaction_amount: Number(transaction_amount),
           currency_id: 'ARS',
+          start_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
         },
         back_url: `${req.headers.origin}/pago/${id}?subscription=active`,
         payer_email: payer_email,

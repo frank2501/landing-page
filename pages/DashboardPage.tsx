@@ -248,6 +248,7 @@ const DashboardPage: React.FC = () => {
                         name="amount"
                         value={formData.amount}
                         onChange={handleInputChange}
+                        onWheel={(e) => (e.target as HTMLInputElement).blur()}
                         className="w-full bg-zinc-800/50 border border-white/5 rounded-xl pl-8 pr-4 py-3 focus:border-orange-500 outline-none transition-all focus:ring-4 focus:ring-orange-500/10"
                         placeholder="0.00"
                         required
@@ -281,6 +282,7 @@ const DashboardPage: React.FC = () => {
                           name="subscriptionAmount"
                           value={formData.subscriptionAmount}
                           onChange={handleInputChange}
+                          onWheel={(e) => (e.target as HTMLInputElement).blur()}
                           className="w-full bg-zinc-800/80 border border-white/5 rounded-xl pl-8 pr-4 py-3 focus:border-orange-500 outline-none transition-all"
                           placeholder="0.00"
                           required
@@ -294,7 +296,7 @@ const DashboardPage: React.FC = () => {
                   type="submit"
                   className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:scale-[1.02] active:scale-[0.98] text-black font-black py-4 rounded-xl transition-all mt-6 shadow-xl shadow-orange-500/20 uppercase tracking-widest text-sm"
                 >
-                  Crear Link Premium
+                  Crear Link
                 </button>
               </form>
             </div>
@@ -542,6 +544,7 @@ const DashboardPage: React.FC = () => {
                     name="amount"
                     value={editForm.amount}
                     onChange={handleEditInputChange}
+                    onWheel={(e) => (e.target as HTMLInputElement).blur()}
                     className="w-full bg-zinc-800/80 border border-white/5 rounded-xl px-4 py-3 focus:border-orange-500 outline-none transition-all"
                     required
                   />
@@ -570,6 +573,7 @@ const DashboardPage: React.FC = () => {
                     name="subscriptionAmount"
                     value={editForm.subscriptionAmount}
                     onChange={handleEditInputChange}
+                    onWheel={(e) => (e.target as HTMLInputElement).blur()}
                     className="w-full bg-zinc-800/80 border border-white/5 rounded-xl px-4 py-3 focus:border-orange-500 outline-none transition-all"
                     required
                   />
