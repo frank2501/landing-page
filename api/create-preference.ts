@@ -24,13 +24,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             currency_id: 'ARS',
           },
         ],
-        payer: {
-          email: payerEmail
-        },
         back_urls: {
           success: `${req.headers.origin}/pago/${id}?status=success`,
-          failure: `${req.headers.origin}/pago/${id}?status=failure`,
-          pending: `${req.headers.origin}/pago/${id}?status=pending`,
         },
         auto_return: 'approved',
       },
