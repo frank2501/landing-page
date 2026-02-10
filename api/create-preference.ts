@@ -29,6 +29,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         },
         auto_return: 'approved',
         binary_mode: true,
+        external_reference: id,
       },
     });
 

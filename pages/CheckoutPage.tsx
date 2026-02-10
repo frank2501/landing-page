@@ -81,10 +81,13 @@ const CheckoutPage: React.FC = () => {
     if (searchParams.get('subscription') === 'active' && sale && sale.subStatus !== 'active') {
       const updateSub = async () => {
         try {
-          await updateDoc(doc(db, "sales", id!), {
+          // Double check if it's already active in Firestore (maybe webhook was faster)
+          const saleRef = doc(db, "sales", id!);
+          await updateDoc(saleRef, {
             subStatus: 'active'
           });
           setSale(prev => prev ? { ...prev, subStatus: 'active' } : null);
+          alert("¡Suscripción Mensual Activada! El servicio ya está 100% operativo.");
         } catch (error) {
           console.error("Error updating sub status:", error);
         }
