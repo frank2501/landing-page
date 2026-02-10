@@ -11,6 +11,11 @@ interface Sale {
   hasSubscription: boolean;
   subscriptionAmount?: number;
   createdAt: string;
+  payerFirstName?: string;
+  payerLastName?: string;
+  payerEmail?: string;
+  payStatus?: 'pending' | 'paid';
+  nextPaymentDate?: string;
 }
 
 const DashboardPage: React.FC = () => {
@@ -76,7 +81,8 @@ const DashboardPage: React.FC = () => {
         amount: Number(formData.amount),
         hasSubscription: formData.hasSubscription,
         subscriptionAmount: formData.hasSubscription ? Number(formData.subscriptionAmount) : null,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        payStatus: 'pending'
       });
       
       setFormData({
@@ -122,6 +128,21 @@ const DashboardPage: React.FC = () => {
     }
   };
 
+  const togglePayStatus = async (id: string, currentStatus: string | undefined, hasSub: boolean) => {
+    const newStatus = currentStatus === 'paid' ? 'pending' : 'paid';
+    const nextDate = new Date();
+    nextDate.setMonth(nextDate.getMonth() + 1);
+    
+    try {
+      await updateDoc(doc(db, "sales", id), {
+        payStatus: newStatus,
+        nextPaymentDate: (newStatus === 'paid' && hasSub) ? nextDate.toISOString() : null
+      });
+    } catch (error) {
+      console.error("Error updating status: ", error);
+    }
+  };
+
   const copyLink = (id: string) => {
     const link = `${window.location.origin}/pago/${id}`;
     navigator.clipboard.writeText(link);
@@ -141,7 +162,9 @@ const DashboardPage: React.FC = () => {
   };
 
   const filteredSales = sales.filter(sale =>
-    sale.clientName.toLowerCase().includes(searchQuery.toLowerCase())
+    sale.clientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    sale.payerEmail?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    sale.payerFirstName?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -156,19 +179,19 @@ const DashboardPage: React.FC = () => {
               <h2 className="text-2xl font-bold mb-6">Generar Nuevo Link</h2>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1">Cliente</label>
+                  <label className="block text-sm font-medium text-gray-400 mb-1">Concepto Interno (Cliente)</label>
                   <input
                     type="text"
                     name="clientName"
                     value={formData.clientName}
                     onChange={handleInputChange}
                     className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 focus:border-orange-500 outline-none transition-colors"
-                    placeholder="Nombre del cliente"
+                    placeholder="Ej: Juan Pérez - Tiendanube"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1">Concepto</label>
+                  <label className="block text-sm font-medium text-gray-400 mb-1">Concepto en Factura</label>
                   <input
                     type="text"
                     name="concept"
@@ -244,25 +267,11 @@ const DashboardPage: React.FC = () => {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Buscar por cliente..."
+                  placeholder="Buscar por cliente o email..."
                   className="w-full bg-zinc-800/80 border border-zinc-700 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:border-orange-500 outline-none transition-colors placeholder-gray-500"
                 />
-                {searchQuery && (
-                  <button
-                    onClick={() => setSearchQuery('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
-                  >
-                    ×
-                  </button>
-                )}
               </div>
             </div>
-
-            {searchQuery && (
-              <p className="text-xs text-gray-500 mb-3">
-                {filteredSales.length} resultado{filteredSales.length !== 1 ? 's' : ''} para "{searchQuery}"
-              </p>
-            )}
 
             <div className="space-y-4">
               {filteredSales.length === 0 ? (
@@ -271,54 +280,91 @@ const DashboardPage: React.FC = () => {
                 </p>
               ) : (
                 filteredSales.map(sale => (
-                  <div key={sale.id} className="premium-border p-6 rounded-2xl bg-zinc-900/30 hover:bg-zinc-900/50 transition-colors flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                    <div>
-                      <h3 className="font-bold text-lg text-white">{sale.concept}</h3>
-                      <p className="text-gray-400 text-sm mb-1">Cliente: <span className="text-white">{sale.clientName}</span></p>
-                      <div className="flex gap-3 text-sm">
-                        <span className="text-orange-400 font-medium">
-                          ${sale.amount.toLocaleString('es-AR')}
-                        </span>
-                        {sale.hasSubscription && (
-                          <span className="text-zinc-400 bg-zinc-800 px-2 rounded text-xs flex items-center">
-                            + ${sale.subscriptionAmount?.toLocaleString('es-AR')}/mes
+                  <div key={sale.id} className="premium-border p-6 rounded-2xl bg-zinc-900/30 hover:bg-zinc-900/50 transition-colors">
+                    <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-4">
+                      <div>
+                        <div className="flex items-center gap-3 mb-1">
+                          <h3 className="font-bold text-lg text-white">{sale.concept}</h3>
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                            sale.payStatus === 'paid' ? 'bg-green-500/20 text-green-400' : 'bg-orange-500/20 text-orange-400'
+                          }`}>
+                            {sale.payStatus === 'paid' ? 'Pagado' : 'Pendiente'}
                           </span>
+                        </div>
+                        <p className="text-gray-400 text-sm">Ref: <span className="text-gray-300">{sale.clientName}</span></p>
+                        
+                        {sale.payerEmail && (
+                          <div className="mt-2 text-xs text-gray-400 space-y-0.5 border-l border-zinc-700 pl-3">
+                            <p>Cliente: <span className="text-white font-medium">{sale.payerFirstName} {sale.payerLastName}</span></p>
+                            <p>Email: <span className="text-orange-400/80 italic">{sale.payerEmail}</span></p>
+                          </div>
                         )}
+                        
+                        <div className="flex flex-wrap gap-3 text-sm mt-3">
+                          <span className="text-white font-medium">
+                            ${sale.amount.toLocaleString('es-AR')}
+                          </span>
+                          {sale.hasSubscription && (
+                            <div className="flex flex-col">
+                              <span className="text-zinc-500 text-xs">
+                                + ${sale.subscriptionAmount?.toLocaleString('es-AR')}/mes
+                              </span>
+                              {sale.payStatus === 'paid' && sale.nextPaymentDate && (
+                                <span className="text-[10px] text-green-500 font-medium">
+                                  Próximo cobro: {new Date(sale.nextPaymentDate).toLocaleDateString()}
+                                </span>
+                              )}
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <p className="text-gray-600 text-xs mt-2">
-                        Creado: {new Date(sale.createdAt).toLocaleDateString()}
-                      </p>
-                    </div>
-                    
-                    <div className="flex gap-2 w-full sm:w-auto">
-                      <button
-                        onClick={() => copyLink(sale.id)}
-                        className={`flex-1 sm:flex-none px-4 py-2 rounded-lg font-medium transition-all ${
-                          copiedId === sale.id 
-                            ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
-                            : 'bg-white text-black hover:bg-gray-200'
-                        }`}
-                      >
-                        {copiedId === sale.id ? 'Copiado!' : 'Copiar Link'}
-                      </button>
-                      <button
-                        onClick={() => openEdit(sale)}
-                        className="px-3 py-2 rounded-lg border border-orange-500/30 text-orange-400 hover:bg-orange-500/10 transition-colors"
-                        title="Editar"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
-                      </button>
-                      <button
-                        onClick={() => deleteSale(sale.id)}
-                        className="px-3 py-2 rounded-lg border border-red-500/30 text-red-400 hover:bg-red-500/10 transition-colors"
-                        title="Eliminar"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                      </button>
+                      
+                      <div className="flex gap-2 w-full sm:w-auto self-end sm:self-auto">
+                        <button
+                          onClick={() => togglePayStatus(sale.id, sale.payStatus, sale.hasSubscription)}
+                          className={`p-2 rounded-lg border transition-colors ${
+                            sale.payStatus === 'paid' 
+                              ? 'border-green-500/30 text-green-400 hover:bg-green-500/10' 
+                              : 'border-white/10 text-gray-400 hover:bg-white/10'
+                          }`}
+                          title={sale.payStatus === 'paid' ? 'Marcar como pendiente' : 'Marcar como pagado'}
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                        </button>
+                        <button
+                          onClick={() => copyLink(sale.id)}
+                          className={`p-2 rounded-lg border transition-all ${
+                            copiedId === sale.id 
+                              ? 'bg-green-500/20 border-green-500/30 text-green-400' 
+                              : 'bg-white border-white text-black hover:bg-gray-200'
+                          }`}
+                          title="Copiar link"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                          </svg>
+                        </button>
+                        <button
+                          onClick={() => openEdit(sale)}
+                          className="p-2 rounded-lg border border-white/10 text-gray-400 hover:bg-white/10 transition-colors"
+                          title="Editar"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                          </svg>
+                        </button>
+                        <button
+                          onClick={() => deleteSale(sale.id)}
+                          className="p-2 rounded-lg border border-red-500/30 text-red-400 hover:bg-red-500/10 transition-colors"
+                          title="Eliminar"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))
@@ -338,7 +384,7 @@ const DashboardPage: React.FC = () => {
             </div>
             <form onSubmit={handleEditSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1">Cliente</label>
+                <label className="block text-sm font-medium text-gray-400 mb-1">Concepto Interno</label>
                 <input
                   type="text"
                   name="clientName"
@@ -349,7 +395,7 @@ const DashboardPage: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1">Concepto</label>
+                <label className="block text-sm font-medium text-gray-400 mb-1">Concepto en Factura</label>
                 <input
                   type="text"
                   name="concept"

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useSearchParams } from 'react-router-dom';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 
 interface Sale {
@@ -11,6 +11,11 @@ interface Sale {
   hasSubscription: boolean;
   subscriptionAmount?: number;
   createdAt: string;
+  payerFirstName?: string;
+  payerLastName?: string;
+  payerEmail?: string;
+  payStatus?: 'pending' | 'paid';
+  nextPaymentDate?: string;
 }
 
 const CheckoutPage: React.FC = () => {
@@ -36,6 +41,29 @@ const CheckoutPage: React.FC = () => {
     }
   }, [searchParams]);
 
+  // Detect payment status and update Firestore
+  useEffect(() => {
+    const status = searchParams.get('status');
+    if ((status === 'approved' || status === 'success') && sale && sale.payStatus !== 'paid') {
+      const updateStatus = async () => {
+        try {
+          const nextDate = new Date();
+          nextDate.setMonth(nextDate.getMonth() + 1);
+          await updateDoc(doc(db, "sales", id!), {
+            payStatus: 'paid',
+            nextPaymentDate: sale.hasSubscription ? nextDate.toISOString() : null
+          });
+          // Refresh local state
+          setSale(prev => prev ? { ...prev, payStatus: 'paid' } : null);
+          setShowSubPrompt(true);
+        } catch (error) {
+          console.error("Error updating status:", error);
+        }
+      };
+      updateStatus();
+    }
+  }, [searchParams, sale, id]);
+
   useEffect(() => {
     const fetchSale = async () => {
       if (!id) return;
@@ -45,7 +73,15 @@ const CheckoutPage: React.FC = () => {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          setSale({ id: docSnap.id, ...docSnap.data() } as Sale);
+          const data = docSnap.data() as Sale;
+          setSale({ ...data, id: docSnap.id });
+          // If we already have info in DB, pre-fill and skip form
+          if (data.payerEmail) {
+            setPayerEmail(data.payerEmail);
+            setPayerFirstName(data.payerFirstName || '');
+            setPayerLastName(data.payerLastName || '');
+            setIsInfoComplete(true);
+          }
         } else {
           setSale(null);
         }
@@ -150,6 +186,30 @@ const CheckoutPage: React.FC = () => {
     );
   }
 
+  if (sale.payStatus === 'paid' && !showSubPrompt) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-black text-white px-6">
+        <div className="w-20 h-20 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mb-6">
+          <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h1 className="text-3xl font-bold mb-4">¡Pago Confirmado!</h1>
+        <p className="text-gray-400 text-center max-w-md mb-8">
+          Hemos recibido tu pago para <strong>{sale.concept}</strong>. En breve nos pondremos en contacto con vos para continuar.
+        </p>
+        {sale.hasSubscription && (
+          <button 
+            onClick={() => setShowSubPrompt(true)}
+            className="px-8 py-4 bg-orange-500 text-white rounded-full font-bold hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20"
+          >
+            Configurar Suscripción Mensual
+          </button>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen pt-28 pb-20 px-6 bg-black text-white font-sans">
       <div className="max-w-5xl mx-auto">
@@ -166,7 +226,21 @@ const CheckoutPage: React.FC = () => {
               <div className="premium-border p-8 rounded-2xl bg-zinc-900/50 backdrop-blur-sm">
                 <h2 className="text-xl font-bold mb-6">Tus datos de contacto</h2>
                 <form 
-                  onSubmit={(e) => { e.preventDefault(); setIsInfoComplete(true); }}
+                  onSubmit={async (e) => { 
+                    e.preventDefault(); 
+                    if (!id) return;
+                    try {
+                      await updateDoc(doc(db, "sales", id), {
+                        payerFirstName,
+                        payerLastName,
+                        payerEmail,
+                      });
+                      setIsInfoComplete(true); 
+                    } catch (error) {
+                      console.error("Error saving info:", error);
+                      alert("Error al guardar tus datos. Intenta de nuevo.");
+                    }
+                  }}
                   className="space-y-4"
                 >
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
