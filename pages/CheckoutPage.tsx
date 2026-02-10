@@ -201,9 +201,8 @@ const CheckoutPage: React.FC = () => {
       if (response.ok && redirectUrl) {
         window.location.href = redirectUrl;
       } else {
-        const errorMsg = data?.details || data?.error || 'Error de servidor (500)';
-        const mpExtra = data?.mp_detail ? `\n\nDetalle técnico: ${JSON.stringify(data.mp_detail)}` : '';
-        alert(`Error al generar la suscripción: ${errorMsg}${mpExtra}`);
+        const errorMsg = data?.details || data?.error || 'No se pudo generar la suscripción. Intenta de nuevo.';
+        alert(errorMsg);
       }
     } catch (error) {
       console.error('Error:', error);

@@ -64,8 +64,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       console.error('[MP_ERROR]', data);
       return res.status(response.status).json({
         error: 'MP_REJECTION',
-        details: data.message || 'Error en validación de Mercado Pago',
-        mp_detail: data
+        details: 'Error en la validación de Mercado Pago. Por favor, revisá los datos o intenta con otro medio.'
       });
     }
 

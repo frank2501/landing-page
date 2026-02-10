@@ -26,15 +26,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const { payment_id, sale_id } = req.body;
-    console.log(`[DEBUG] Verifying: ${payment_id} for sale: ${sale_id}`);
 
     if (!payment_id || !sale_id) {
-      return res.status(400).json({ error: 'Faltan datos: payment_id o sale_id' });
+      return res.status(400).json({ error: 'Datos de verificación incompletos' });
     }
 
     // 1. Verify with Mercado Pago
     const mpResponse = await payment.get({ id: payment_id });
-    console.log(`[DEBUG] MP Status: ${mpResponse.status}`);
     
     if (mpResponse.status === 'approved') {
       // 2. Update Firestore securely
@@ -42,7 +40,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const saleSnap = await getDoc(saleRef);
       
       if (!saleSnap.exists()) {
-        return res.status(404).json({ error: 'Venta no encontrada en la base de datos' });
+        return res.status(404).json({ error: 'La referencia del pago no es válida o ya expiró' });
       }
 
       const saleData = saleSnap.data();
@@ -56,16 +54,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         updatedAt: new Date().toISOString()
       });
 
-      return res.status(200).json({ status: 'approved', message: 'Pago verificado y registrado' });
+      return res.status(200).json({ status: 'approved', message: 'Pago verificado correctamente' });
     } else {
-      return res.status(400).json({ status: mpResponse.status, message: `El pago tiene estado: ${mpResponse.status}` });
+      return res.status(400).json({ status: mpResponse.status, error: 'El pago aún no ha sido aprobado por Mercado Pago' });
     }
 
   } catch (error: any) {
-    console.error('[ERROR] Verification error details:', error);
+    console.error('[DATABASE_ERROR]', error);
     return res.status(500).json({ 
-      error: 'Error interno en la verificación', 
-      details: error.message || 'Error desconocido'
+      error: 'Error al procesar la verificación del pago', 
+      details: 'Ocurrió un error interno. Si el problema persiste, contactanos.'
     });
   }
 }
