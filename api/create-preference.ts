@@ -9,7 +9,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const { title, unit_price, quantity, id } = req.body;
+    const { title, unit_price, quantity, id, payerEmail } = req.body;
 
     const preference = new Preference(client);
     
@@ -24,6 +24,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             currency_id: 'ARS',
           },
         ],
+        payer: {
+          email: payerEmail
+        },
         back_urls: {
           success: `${req.headers.origin}/pago/${id}?status=success`,
           failure: `${req.headers.origin}/pago/${id}?status=failure`,
