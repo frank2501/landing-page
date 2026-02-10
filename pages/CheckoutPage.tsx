@@ -186,7 +186,7 @@ const CheckoutPage: React.FC = () => {
     );
   }
 
-  if (sale.payStatus === 'paid' && !showSubPrompt) {
+  if (sale.payStatus === 'paid') {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-black text-white px-6">
         <div className="w-20 h-20 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mb-6">
@@ -194,17 +194,50 @@ const CheckoutPage: React.FC = () => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h1 className="text-3xl font-bold mb-4">¡Pago Confirmado!</h1>
-        <p className="text-gray-400 text-center max-w-md mb-8">
-          Hemos recibido tu pago para <strong>{sale.concept}</strong>. En breve nos pondremos en contacto con vos para continuar.
-        </p>
-        {sale.hasSubscription && (
-          <button 
-            onClick={() => setShowSubPrompt(true)}
-            className="px-8 py-4 bg-orange-500 text-white rounded-full font-bold hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20"
-          >
-            Configurar Suscripción Mensual
-          </button>
+        
+        {sale.hasSubscription ? (
+          <div className="text-center max-w-md w-full">
+            <h1 className="text-3xl font-bold mb-4">¡Monto Principal Pagado!</h1>
+            <p className="text-gray-400 mb-8">
+              El pago único ha sido confirmado. Ahora, para finalizar, activá tu suscripción mensual para el mantenimiento y soporte de <strong>{sale.concept}</strong>.
+            </p>
+            
+            <div className="premium-border p-8 rounded-2xl bg-zinc-900/50 backdrop-blur-sm shadow-xl shadow-orange-500/10 mb-8">
+              <p className="text-sm text-gray-400 mb-4">Paso final: Activación automática</p>
+              <button
+                onClick={handleSubscription}
+                disabled={subLoading}
+                className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 animate-pulse shadow-lg shadow-orange-500/20"
+              >
+                {subLoading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
+                    Procesando...
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    Activar Suscripción Mensual
+                  </>
+                )}
+              </button>
+              <p className="text-xs text-gray-500 mt-4 px-4 leading-relaxed">
+                Se cobrarán <span className="text-white">${sale.subscriptionAmount?.toLocaleString('es-AR')}</span> cada mes con tu tarjeta de forma automática. Podés cancelar cuando quieras.
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className="text-center max-w-md w-full">
+            <h1 className="text-3xl font-bold mb-4">¡Pago Confirmado!</h1>
+            <p className="text-gray-400 mb-8">
+              Hemos recibido tu pago para <strong>{sale.concept}</strong>. En breve nos pondremos en contacto con vos para continuar con la entrega.
+            </p>
+            <Link to="/" className="inline-block px-8 py-3 border border-orange-500/30 text-orange-400 rounded-full font-bold hover:bg-orange-500/10 transition-colors">
+              Volver al inicio
+            </Link>
+          </div>
         )}
       </div>
     );
