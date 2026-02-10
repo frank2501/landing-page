@@ -38,7 +38,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     return res.status(200).json({ 
       init_point: result.init_point,
-      sandbox_init_point: (result as any).sandbox_init_point || result.init_point
+      sandbox_init_point: (result as any).sandbox_init_point || result.init_point,
+      token_type: process.env.MP_ACCESS_TOKEN?.startsWith('TEST-') ? 'TEST' : 'PROD'
     });
   } catch (error) {
     console.error(error);
