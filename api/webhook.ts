@@ -2,6 +2,7 @@ import { MercadoPagoConfig, Payment, PreApproval } from 'mercadopago';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, doc, getDoc, updateDoc } from 'firebase/firestore';
+import crypto from 'crypto';
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -24,6 +25,37 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
+    // --- SIGNATURE VERIFICATION ---
+    const secret = process.env.MP_WEBHOOK_SECRET;
+    const xSignature = req.headers['x-signature'] as string;
+    const xRequestId = req.headers['x-request-id'] as string;
+
+    if (secret && xSignature && xRequestId) {
+      const parts = xSignature.split(',');
+      let ts = '';
+      let hash = '';
+      
+      parts.forEach(p => {
+        const [key, value] = p.split('=');
+        if (key === 'ts') ts = value;
+        if (key === 'v1') hash = value;
+      });
+
+      const { data, id } = req.body;
+      const resourceId = (data && data.id) || id || req.query.id;
+      
+      const manifest = `id:${resourceId};request-id:${xRequestId};ts:${ts};`;
+      const hmac = crypto.createHmac('sha256', secret);
+      const sha = hmac.update(manifest).digest('hex');
+
+      if (sha !== hash) {
+        console.error('[WEBHOOK] Invalid signature detected');
+        return res.status(401).send('Invalid Signature');
+      }
+      console.log('[WEBHOOK] Signature verified successfully');
+    }
+    // ------------------------------
+
     const { type, data, topic, id } = req.body;
     
     // MP sends notifications in different formats (Webhooks vs IPN)
