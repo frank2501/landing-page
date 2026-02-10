@@ -23,6 +23,9 @@ const CheckoutPage: React.FC = () => {
   const [showTerms, setShowTerms] = useState(false);
   const [subLoading, setSubLoading] = useState(false);
   const [payerEmail, setPayerEmail] = useState('');
+  const [payerFirstName, setPayerFirstName] = useState('');
+  const [payerLastName, setPayerLastName] = useState('');
+  const [isInfoComplete, setIsInfoComplete] = useState(false);
   const [showSubPrompt, setShowSubPrompt] = useState(false);
   const [searchParams] = useSearchParams();
 
@@ -157,105 +160,166 @@ const CheckoutPage: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-          {/* LEFT: Payment Methods */}
+          {/* LEFT: Information Form or Payment Methods */}
           <div className="lg:col-span-3 space-y-3">
-            <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-4">Método de Pago</h2>
-
-            {/* Transfer */}
-            <div className="rounded-2xl border border-white/10 overflow-hidden transition-all">
-              <button
-                onClick={() => toggleMethod('transfer')}
-                className={`w-full flex items-center justify-between p-5 transition-colors ${
-                  activeMethod === 'transfer' ? 'bg-zinc-900/80' : 'bg-zinc-900/30 hover:bg-zinc-900/50'
-                }`}
-              >
-                <div className="flex items-center gap-4">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    activeMethod === 'transfer' ? 'bg-green-500/20 text-green-400' : 'bg-zinc-800 text-gray-400'
-                  }`}>
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                    </svg>
-                  </div>
-                  <div className="text-left">
-                    <span className="font-bold text-white block">Transferencia Bancaria</span>
-                    <span className="text-xs text-green-400 font-medium">Inmediata</span>
-                  </div>
-                </div>
-                <svg className={`w-5 h-5 text-gray-400 transition-transform ${activeMethod === 'transfer' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-
-              {activeMethod === 'transfer' && (
-                <div className="p-5 border-t border-white/5 bg-zinc-900/40 space-y-4">
-                  <div className="bg-zinc-800/60 p-4 rounded-xl space-y-3 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Banco</span>
-                      <span className="font-medium text-white">Santander Río</span>
+            {!isInfoComplete ? (
+              <div className="premium-border p-8 rounded-2xl bg-zinc-900/50 backdrop-blur-sm">
+                <h2 className="text-xl font-bold mb-6">Tus datos de contacto</h2>
+                <form 
+                  onSubmit={(e) => { e.preventDefault(); setIsInfoComplete(true); }}
+                  className="space-y-4"
+                >
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-400 mb-1">Nombre</label>
+                      <input
+                        type="text"
+                        value={payerFirstName}
+                        onChange={(e) => setPayerFirstName(e.target.value)}
+                        placeholder="Juan"
+                        className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2.5 text-sm focus:border-orange-500 outline-none transition-colors placeholder-gray-500"
+                        required
+                      />
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Alias</span>
-                      <span className="font-medium text-white select-all cursor-pointer">ARTECHIA.TRANSFER</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">CBU</span>
-                      <span className="font-medium text-white select-all cursor-pointer">0000000001234567890</span>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-400 mb-1">Apellido</label>
+                      <input
+                        type="text"
+                        value={payerLastName}
+                        onChange={(e) => setPayerLastName(e.target.value)}
+                        placeholder="Pérez"
+                        className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2.5 text-sm focus:border-orange-500 outline-none transition-colors placeholder-gray-500"
+                        required
+                      />
                     </div>
                   </div>
-                  <p className="text-xs text-gray-500 text-center">
-                    Una vez realizada la transferencia, enviá el comprobante por <a href="https://wa.me/5491137758970" target="_blank" rel="noopener noreferrer" className="text-orange-400 hover:underline">WhatsApp</a>.
-                  </p>
-                </div>
-              )}
-            </div>
-
-            {/* MercadoPago */}
-            <div className="rounded-2xl border border-white/10 overflow-hidden transition-all">
-              <button
-                onClick={() => toggleMethod('mp')}
-                className={`w-full flex items-center justify-between p-5 transition-colors ${
-                  activeMethod === 'mp' ? 'bg-zinc-900/80' : 'bg-zinc-900/30 hover:bg-zinc-900/50'
-                }`}
-              >
-                <div className="flex items-center gap-4">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    activeMethod === 'mp' ? 'bg-[#009EE3]/20 text-[#009EE3]' : 'bg-zinc-800 text-gray-400'
-                  }`}>
-                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M15.54 12.01l-1.67-.5c-.86-.26-1.18-.47-1.18-.94 0-.48.51-.77 1.34-.77.94 0 1.5.37 2.14 1.14l1.4-1.4c-.95-1.1-2.06-1.57-3.54-1.57v-2h-2v2c-1.8 0-3.23 1.13-3.23 2.76 0 1.8 1.48 2.37 2.65 2.73 1.05.32 1.33.56 1.33 1.05 0 .58-.69.87-1.53.87-1.03 0-1.74-.48-2.45-1.3l-1.42 1.4c1.1 1.25 2.45 1.76 3.87 1.76v2h2v-2c1.9 0 3.33-1.18 3.33-2.83 0-1.6-1.1-2.4-2.28-2.73zM12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm0 22c-5.52 0-10-4.48-10-10S6.48 2 12 2s10 4.48 10 10-4.48 10-10 10z"/>
-                    </svg>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-400 mb-1">Email</label>
+                    <input
+                      type="email"
+                      value={payerEmail}
+                      onChange={(e) => setPayerEmail(e.target.value)}
+                      placeholder="juan@ejemplo.com"
+                      className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2.5 text-sm focus:border-orange-500 outline-none transition-colors placeholder-gray-500"
+                      required
+                    />
                   </div>
-                  <div className="text-left">
-                    <span className="font-bold text-white block">Tarjeta de Crédito / Débito</span>
-                    <span className="text-xs text-gray-500">Procesado por MercadoPago</span>
-                  </div>
-                </div>
-                <svg className={`w-5 h-5 text-gray-400 transition-transform ${activeMethod === 'mp' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-
-              {activeMethod === 'mp' && (
-                <div className="p-5 border-t border-white/5 bg-zinc-900/40 space-y-4">
-                  <p className="text-sm text-gray-400 text-center">Serás redirigido a MercadoPago para completar el pago de forma segura.</p>
                   <button
-                    onClick={handleMercadoPago}
-                    disabled={payLoading}
-                    className="w-full bg-[#009EE3] hover:bg-[#008ED0] text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-[#009EE3]/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    type="submit"
+                    className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-orange-500/20 mt-4"
                   >
-                    {payLoading ? (
-                      <>
-                        <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
-                        Procesando...
-                      </>
-                    ) : (
-                      'Pagar con MercadoPago'
-                    )}
+                    Continuar al pago
+                  </button>
+                </form>
+              </div>
+            ) : (
+              <>
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider">Método de Pago</h2>
+                  <button 
+                    onClick={() => setIsInfoComplete(false)}
+                    className="text-xs text-orange-400 hover:text-orange-300 transition-colors"
+                  >
+                    Editar mis datos
                   </button>
                 </div>
-              )}
-            </div>
+                {/* Transfer */}
+                <div className="rounded-2xl border border-white/10 overflow-hidden transition-all">
+                  <button
+                    onClick={() => toggleMethod('transfer')}
+                    className={`w-full flex items-center justify-between p-5 transition-colors ${
+                      activeMethod === 'transfer' ? 'bg-zinc-900/80' : 'bg-zinc-900/30 hover:bg-zinc-900/50'
+                    }`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                        activeMethod === 'transfer' ? 'bg-green-500/20 text-green-400' : 'bg-zinc-800 text-gray-400'
+                      }`}>
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                        </svg>
+                      </div>
+                      <div className="text-left">
+                        <span className="font-bold text-white block">Transferencia Bancaria</span>
+                        <span className="text-xs text-green-400 font-medium">Inmediata</span>
+                      </div>
+                    </div>
+                    <svg className={`w-5 h-5 text-gray-400 transition-transform ${activeMethod === 'transfer' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  {activeMethod === 'transfer' && (
+                    <div className="p-5 border-t border-white/5 bg-zinc-900/40 space-y-4">
+                      <div className="bg-zinc-800/60 p-4 rounded-xl space-y-3 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-400">Banco</span>
+                          <span className="font-medium text-white">Santander Río</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-400">Alias</span>
+                          <span className="font-medium text-white select-all cursor-pointer">ARTECHIA.TRANSFER</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-400">CBU</span>
+                          <span className="font-medium text-white select-all cursor-pointer">0000000001234567890</span>
+                        </div>
+                      </div>
+                      <p className="text-xs text-gray-500 text-center">
+                        Una vez realizada la transferencia, enviá el comprobante por <a href="https://wa.me/5491137758970" target="_blank" rel="noopener noreferrer" className="text-orange-400 hover:underline">WhatsApp</a>.
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* MercadoPago */}
+                <div className="rounded-2xl border border-white/10 overflow-hidden transition-all">
+                  <button
+                    onClick={() => toggleMethod('mp')}
+                    className={`w-full flex items-center justify-between p-5 transition-colors ${
+                      activeMethod === 'mp' ? 'bg-zinc-900/80' : 'bg-zinc-900/30 hover:bg-zinc-900/50'
+                    }`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                        activeMethod === 'mp' ? 'bg-[#009EE3]/20 text-[#009EE3]' : 'bg-zinc-800 text-gray-400'
+                      }`}>
+                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M15.54 12.01l-1.67-.5c-.86-.26-1.18-.47-1.18-.94 0-.48.51-.77 1.34-.77.94 0 1.5.37 2.14 1.14l1.4-1.4c-.95-1.1-2.06-1.57-3.54-1.57v-2h-2v2c-1.8 0-3.23 1.13-3.23 2.76 0 1.8 1.48 2.37 2.65 2.73 1.05.32 1.33.56 1.33 1.05 0 .58-.69.87-1.53.87-1.03 0-1.74-.48-2.45-1.3l-1.42 1.4c1.1 1.25 2.45 1.76 3.87 1.76v2h2v-2c1.9 0 3.33-1.18 3.33-2.83 0-1.6-1.1-2.4-2.28-2.73zM12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm0 22c-5.52 0-10-4.48-10-10S6.48 2 12 2s10 4.48 10 10-4.48 10-10 10z"/>
+                        </svg>
+                      </div>
+                      <div className="text-left">
+                        <span className="font-bold text-white block">Tarjeta de Crédito / Débito</span>
+                        <span className="text-xs text-gray-500">Procesado por MercadoPago</span>
+                      </div>
+                    </div>
+                    <svg className={`w-5 h-5 text-gray-400 transition-transform ${activeMethod === 'mp' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  {activeMethod === 'mp' && (
+                    <div className="p-5 border-t border-white/5 bg-zinc-900/40 space-y-4">
+                      <p className="text-sm text-gray-400 text-center">Serás redirigido a MercadoPago para completar el pago de forma segura.</p>
+                      <button
+                        onClick={handleMercadoPago}
+                        disabled={payLoading}
+                        className="w-full bg-[#009EE3] hover:bg-[#008ED0] text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-[#009EE3]/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {payLoading ? (
+                          <>
+                            <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
+                            Procesando...
+                          </>
+                        ) : (
+                          'Pagar con MercadoPago'
+                        )}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
           </div>
 
           {/* RIGHT: Order Summary */}
@@ -324,20 +388,15 @@ const CheckoutPage: React.FC = () => {
                 </div>
               </div>
 
-              {sale.hasSubscription && sale.subscriptionAmount && (
+              {sale.hasSubscription && sale.subscriptionAmount && isInfoComplete && (
                 <div className="border-t border-white/5 pt-4 mt-4">
-                  <p className="text-xs text-gray-400 mb-3 text-center">Activá tu suscripción mensual:</p>
-                  <input
-                    type="email"
-                    value={payerEmail}
-                    onChange={(e) => setPayerEmail(e.target.value)}
-                    placeholder="Tu email para la suscripción"
-                    className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2.5 mb-3 text-sm focus:border-orange-500 outline-none transition-colors placeholder-gray-500"
-                  />
+                  <p className="text-xs text-gray-400 mb-3 text-center text-balance">
+                    ¡Listo, <span className="text-white font-medium">{payerFirstName}</span>! Activá tu suscripción mensual para {sale.concept}:
+                  </p>
                   <button
                     onClick={handleSubscription}
-                    disabled={subLoading || !payerEmail}
-                    className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={subLoading}
+                    className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed animate-pulse shadow-lg shadow-orange-500/20"
                   >
                     {subLoading ? (
                       <>
@@ -349,10 +408,13 @@ const CheckoutPage: React.FC = () => {
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                         </svg>
-                        Activar Suscripción — ${sale.subscriptionAmount.toLocaleString('es-AR')}/mes
+                        Activar Suscripción Mensual
                       </>
                     )}
                   </button>
+                  <p className="text-[10px] text-gray-500 text-center mt-2 px-4">
+                    Se cobrarán <span className="text-white">${sale.subscriptionAmount.toLocaleString('es-AR')}</span> cada mes con tu tarjeta.
+                  </p>
                 </div>
               )}
 
