@@ -36,7 +36,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       },
     });
 
-    return res.status(200).json({ init_point: result.init_point });
+    return res.status(200).json({ 
+      init_point: result.init_point,
+      sandbox_init_point: (result as any).sandbox_init_point || result.init_point
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Error creating preference' });

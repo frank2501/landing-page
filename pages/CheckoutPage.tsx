@@ -54,7 +54,6 @@ const CheckoutPage: React.FC = () => {
             payStatus: 'paid',
             nextPaymentDate: sale.hasSubscription ? nextDate.toISOString() : null
           });
-          // Refresh local state
           setSale(prev => prev ? { ...prev, payStatus: 'paid' } : null);
           setShowSubPrompt(true);
         } catch (error) {
@@ -62,6 +61,21 @@ const CheckoutPage: React.FC = () => {
         }
       };
       updateStatus();
+    }
+    
+    // Also handle subscription activation on return
+    if (searchParams.get('subscription') === 'active' && sale && sale.subStatus !== 'active') {
+      const updateSub = async () => {
+        try {
+          await updateDoc(doc(db, "sales", id!), {
+            subStatus: 'active'
+          });
+          setSale(prev => prev ? { ...prev, subStatus: 'active' } : null);
+        } catch (error) {
+          console.error("Error updating sub status:", error);
+        }
+      };
+      updateSub();
     }
   }, [searchParams, sale, id]);
 
@@ -114,16 +128,12 @@ const CheckoutPage: React.FC = () => {
       });
 
       const data = await response.json();
+      const checkoutUrl = (import.meta.env.DEV && data.sandbox_init_point) 
+        ? data.sandbox_init_point 
+        : data.init_point;
 
-      if (data.init_point) {
-        // Save subscription info to Firestore
-      await updateDoc(doc(db, "sales", id!), {
-        subStatus: 'active',
-        // Next payment date is already set by the one-time payment detector, 
-        // but we can ensure it here if needed.
-      });
-
-      window.location.href = data.init_point;
+      if (checkoutUrl) {
+        window.location.href = checkoutUrl;
       } else {
         alert('Error al generar el pago. Intenta de nuevo.');
       }
@@ -160,7 +170,9 @@ const CheckoutPage: React.FC = () => {
       });
 
       const data = await response.json();
-      const redirectUrl = data.init_point || data.sandbox_init_point;
+      const redirectUrl = (import.meta.env.DEV && data.sandbox_init_point)
+        ? data.sandbox_init_point
+        : (data.init_point || data.sandbox_init_point);
 
       if (redirectUrl) {
         window.location.href = redirectUrl;
