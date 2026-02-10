@@ -34,27 +34,44 @@ const CheckoutPage: React.FC = () => {
   const [isInfoComplete, setIsInfoComplete] = useState(false);
   const [showSubPrompt, setShowSubPrompt] = useState(false);
   const [searchParams] = useSearchParams();
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [verificationError, setVerificationError] = useState<string | null>(null);
 
 
   // Auto-show subscription prompt after successful payment
   // Detect payment status and verify securely server-side
   useEffect(() => {
     const paymentId = searchParams.get('payment_id');
-    if (paymentId && sale && sale.payStatus !== 'paid') {
+    const isReturning = searchParams.get('status') === 'success' || searchParams.get('status') === 'approved';
+    
+    if ((paymentId || isReturning) && sale && sale.payStatus !== 'paid') {
       const verifyPayment = async () => {
+        setIsVerifying(true);
+        setVerificationError(null);
         try {
+          console.log(`Starting verification for paymentId: ${paymentId || 'not-provided-in-url'}`);
           const res = await fetch('/api/verify-payment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ payment_id: paymentId, sale_id: id })
+            body: JSON.stringify({ 
+              payment_id: paymentId || searchParams.get('collection_id'), 
+              sale_id: id 
+            })
           });
           const data = await res.json();
           if (data.status === 'approved') {
+            console.log("Payment verified successfully!");
             setSale(prev => prev ? { ...prev, payStatus: 'paid' } : null);
             setShowSubPrompt(true);
+          } else {
+            console.warn("Verification failed:", data.message || data.error);
+            setVerificationError(data.message || data.error || 'No se pudo verificar el pago');
           }
-        } catch (error) {
+        } catch (error: any) {
           console.error("Error verifying payment:", error);
+          setVerificationError('Error de conexión al verificar el pago');
+        } finally {
+          setIsVerifying(false);
         }
       };
       verifyPayment();
@@ -295,6 +312,28 @@ const CheckoutPage: React.FC = () => {
     <div className="min-h-screen pt-28 pb-20 px-6 bg-black text-white font-sans">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
+        {isVerifying && (
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center">
+            <div className="bg-gray-900/50 p-8 rounded-3xl border border-white/10 text-center max-w-sm">
+              <div className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+              <h3 className="text-xl font-bold mb-2">Verificando Pago</h3>
+              <p className="text-gray-400 text-sm">Estamos confirmando tu transacción con Mercado Pago...</p>
+            </div>
+          </div>
+        )}
+
+        {verificationError && (
+          <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-center">
+            <p className="text-red-500 text-sm mb-2">{verificationError}</p>
+            <button 
+              onClick={() => window.location.reload()}
+              className="text-xs font-bold text-white uppercase tracking-widest hover:underline"
+            >
+              Reintentar verificación
+            </button>
+          </div>
+        )}
+
         <div className="text-center mb-10">
           <div className="flex items-center justify-center gap-3 mb-2">
             <h1 className="text-3xl md:text-4xl font-bold">Finalizar Pago</h1>
