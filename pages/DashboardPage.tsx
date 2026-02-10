@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc } from 'firebase/firestore';
+import { collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 
 interface Sale {
@@ -23,9 +23,17 @@ const DashboardPage: React.FC = () => {
     subscriptionAmount: ''
   });
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [editingSale, setEditingSale] = useState<Sale | null>(null);
+  const [editForm, setEditForm] = useState({
+    clientName: '',
+    concept: '',
+    amount: '',
+    hasSubscription: false,
+    subscriptionAmount: ''
+  });
 
   useEffect(() => {
-    // Escuchar cambios en tiempo real desde Firestore
     const q = query(collection(db, "sales"), orderBy("createdAt", "desc"));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const salesData = snapshot.docs.map(doc => ({
@@ -48,6 +56,16 @@ const DashboardPage: React.FC = () => {
     }));
   };
 
+  const handleEditInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
+    
+    setEditForm(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -61,7 +79,6 @@ const DashboardPage: React.FC = () => {
         createdAt: new Date().toISOString()
       });
       
-      // Reset form
       setFormData({
         clientName: '',
         concept: '',
@@ -72,6 +89,36 @@ const DashboardPage: React.FC = () => {
     } catch (error) {
       console.error("Error adding document: ", error);
       alert("Error al crear el link. Verifica tu conexión.");
+    }
+  };
+
+  const openEdit = (sale: Sale) => {
+    setEditingSale(sale);
+    setEditForm({
+      clientName: sale.clientName,
+      concept: sale.concept,
+      amount: String(sale.amount),
+      hasSubscription: sale.hasSubscription,
+      subscriptionAmount: sale.subscriptionAmount ? String(sale.subscriptionAmount) : ''
+    });
+  };
+
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingSale) return;
+
+    try {
+      await updateDoc(doc(db, "sales", editingSale.id), {
+        clientName: editForm.clientName,
+        concept: editForm.concept,
+        amount: Number(editForm.amount),
+        hasSubscription: editForm.hasSubscription,
+        subscriptionAmount: editForm.hasSubscription ? Number(editForm.subscriptionAmount) : null,
+      });
+      setEditingSale(null);
+    } catch (error) {
+      console.error("Error updating document: ", error);
+      alert("Error al actualizar. Verifica tu conexión.");
     }
   };
 
@@ -92,6 +139,10 @@ const DashboardPage: React.FC = () => {
       }
     }
   };
+
+  const filteredSales = sales.filter(sale =>
+    sale.clientName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="min-h-screen pt-32 pb-20 px-6 bg-black text-white font-sans">
@@ -182,12 +233,44 @@ const DashboardPage: React.FC = () => {
 
           {/* Lista de Ventas */}
           <div className="lg:col-span-2">
-            <h2 className="text-2xl font-bold mb-6">Links Generados</h2>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+              <h2 className="text-2xl font-bold">Links Generados</h2>
+              {/* Search Bar */}
+              <div className="relative w-full sm:w-72">
+                <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Buscar por cliente..."
+                  className="w-full bg-zinc-800/80 border border-zinc-700 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:border-orange-500 outline-none transition-colors placeholder-gray-500"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {searchQuery && (
+              <p className="text-xs text-gray-500 mb-3">
+                {filteredSales.length} resultado{filteredSales.length !== 1 ? 's' : ''} para "{searchQuery}"
+              </p>
+            )}
+
             <div className="space-y-4">
-              {sales.length === 0 ? (
-                <p className="text-gray-500 text-center py-10">No hay links generados todavía.</p>
+              {filteredSales.length === 0 ? (
+                <p className="text-gray-500 text-center py-10">
+                  {searchQuery ? 'No se encontraron resultados.' : 'No hay links generados todavía.'}
+                </p>
               ) : (
-                sales.map(sale => (
+                filteredSales.map(sale => (
                   <div key={sale.id} className="premium-border p-6 rounded-2xl bg-zinc-900/30 hover:bg-zinc-900/50 transition-colors flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
                       <h3 className="font-bold text-lg text-white">{sale.concept}</h3>
@@ -219,6 +302,15 @@ const DashboardPage: React.FC = () => {
                         {copiedId === sale.id ? 'Copiado!' : 'Copiar Link'}
                       </button>
                       <button
+                        onClick={() => openEdit(sale)}
+                        className="px-3 py-2 rounded-lg border border-orange-500/30 text-orange-400 hover:bg-orange-500/10 transition-colors"
+                        title="Editar"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                      </button>
+                      <button
                         onClick={() => deleteSale(sale.id)}
                         className="px-3 py-2 rounded-lg border border-red-500/30 text-red-400 hover:bg-red-500/10 transition-colors"
                         title="Eliminar"
@@ -235,6 +327,97 @@ const DashboardPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Edit Modal */}
+      {editingSale && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm" onClick={() => setEditingSale(null)}>
+          <div className="bg-zinc-900 border border-white/10 rounded-2xl max-w-md w-full p-6" onClick={(e) => e.stopPropagation()}>
+            <div className="flex justify-between items-center mb-5">
+              <h3 className="text-lg font-bold text-white">Editar Link de Pago</h3>
+              <button onClick={() => setEditingSale(null)} className="text-gray-400 hover:text-white transition-colors text-2xl leading-none">&times;</button>
+            </div>
+            <form onSubmit={handleEditSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-1">Cliente</label>
+                <input
+                  type="text"
+                  name="clientName"
+                  value={editForm.clientName}
+                  onChange={handleEditInputChange}
+                  className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 focus:border-orange-500 outline-none transition-colors"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-1">Concepto</label>
+                <input
+                  type="text"
+                  name="concept"
+                  value={editForm.concept}
+                  onChange={handleEditInputChange}
+                  className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 focus:border-orange-500 outline-none transition-colors"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-1">Monto Total (ARS)</label>
+                <input
+                  type="number"
+                  name="amount"
+                  value={editForm.amount}
+                  onChange={handleEditInputChange}
+                  className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 focus:border-orange-500 outline-none transition-colors"
+                  required
+                />
+              </div>
+
+              <div className="flex items-center gap-2 pt-2">
+                <input
+                  type="checkbox"
+                  id="editHasSubscription"
+                  name="hasSubscription"
+                  checked={editForm.hasSubscription}
+                  onChange={handleEditInputChange}
+                  className="w-4 h-4 rounded border-gray-600 text-orange-500 focus:ring-orange-500 bg-zinc-800"
+                />
+                <label htmlFor="editHasSubscription" className="text-sm select-none cursor-pointer">
+                  Incluir suscripción mensual
+                </label>
+              </div>
+
+              {editForm.hasSubscription && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-400 mb-1">Monto Mensual (ARS)</label>
+                  <input
+                    type="number"
+                    name="subscriptionAmount"
+                    value={editForm.subscriptionAmount}
+                    onChange={handleEditInputChange}
+                    className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 focus:border-orange-500 outline-none transition-colors"
+                    required
+                  />
+                </div>
+              )}
+
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setEditingSale(null)}
+                  className="flex-1 py-3 border border-zinc-700 text-gray-300 rounded-xl hover:bg-zinc-800 transition-colors font-medium"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl transition-colors"
+                >
+                  Guardar Cambios
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

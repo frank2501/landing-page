@@ -20,6 +20,7 @@ const CheckoutPage: React.FC = () => {
   const [payLoading, setPayLoading] = useState(false);
   const [activeMethod, setActiveMethod] = useState<string | null>('transfer');
   const [showSubInfo, setShowSubInfo] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
 
   useEffect(() => {
     const fetchSale = async () => {
@@ -277,12 +278,58 @@ const CheckoutPage: React.FC = () => {
               </div>
 
               <p className="text-[10px] text-gray-600 text-center mt-6">
-                Pagos procesados de forma segura. Al pagar aceptás los términos del servicio.
+                Pagos procesados de forma segura. Al pagar aceptás los{' '}
+                <button onClick={() => setShowTerms(true)} className="underline hover:text-gray-400 transition-colors">términos del servicio</button>.
               </p>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Terms Modal */}
+      {showTerms && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm" onClick={() => setShowTerms(false)}>
+          <div className="bg-zinc-900 border border-white/10 rounded-2xl max-w-lg w-full max-h-[80vh] overflow-y-auto p-6" onClick={(e) => e.stopPropagation()}>
+            <div className="flex justify-between items-center mb-5">
+              <h3 className="text-lg font-bold text-white">Términos y Condiciones</h3>
+              <button onClick={() => setShowTerms(false)} className="text-gray-400 hover:text-white transition-colors text-2xl leading-none">&times;</button>
+            </div>
+            <div className="text-sm text-gray-300 space-y-4">
+              <div>
+                <h4 className="font-semibold text-white mb-1">1. Servicios</h4>
+                <p>ArtechIA provee servicios de automatización e inteligencia artificial para negocios. El alcance del servicio contratado se detalla en la propuesta enviada al cliente.</p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-white mb-1">2. Pagos</h4>
+                <p>El pago único se realiza al confirmar el servicio. Si el servicio incluye suscripción mensual, ésta se cobra mensualmente a partir del mes siguiente a la entrega.</p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-white mb-1">3. Suscripciones</h4>
+                <p>Las suscripciones mensuales incluyen mantenimiento, soporte técnico y actualizaciones. No tienen permanencia mínima y pueden cancelarse en cualquier momento notificando por WhatsApp.</p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-white mb-1">4. Reembolsos</h4>
+                <p>Los pagos únicos no son reembolsables una vez iniciado el desarrollo. Las suscripciones no generan reembolso por el mes en curso al cancelar.</p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-white mb-1">5. Propiedad Intelectual</h4>
+                <p>El cliente recibe los derechos de uso del producto entregado. ArtechIA se reserva el derecho de utilizar el caso como referencia comercial salvo acuerdo en contrario.</p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-white mb-1">6. Confidencialidad</h4>
+                <p>ArtechIA se compromete a no divulgar información sensible del cliente. Los datos procesados por las automatizaciones se tratan con estricta confidencialidad.</p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-white mb-1">7. Contacto</h4>
+                <p>Para consultas sobre estos términos: <a href="mailto:contacto@artechia.com" className="text-orange-400 hover:underline">contacto@artechia.com</a></p>
+              </div>
+            </div>
+            <button onClick={() => setShowTerms(false)} className="w-full mt-6 py-3 bg-white text-black font-bold rounded-xl hover:bg-orange-500 hover:text-white transition-colors">
+              Entendido
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
