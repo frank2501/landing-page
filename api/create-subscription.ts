@@ -7,7 +7,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   };
 
   try {
-    addLog("Baseline Test Started");
+    addLog("Restoring Final Logic with 30-day delay");
     
     if (req.method !== 'POST') {
       return res.status(405).json({ error: 'Method not allowed' });
@@ -20,38 +20,42 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(500).json({ error: 'Config error: Token missing' });
     }
 
-    // Diagnostic: Check token type
-    const isProdToken = MP_ACCESS_TOKEN.startsWith('APP_USR-');
-    const isTestEmail = payer_email?.includes('test_user') || payer_email?.includes('TESTUSER');
+    // Prepare specialized date (30 days from now)
+    const nextDate = new Date();
+    nextDate.setDate(nextDate.getDate() + 30);
+    nextDate.setHours(12, 0, 0, 0); // Noon to be safe
     
-    addLog(`Token Type: ${isProdToken ? 'PRODUCTION (APP_USR)' : 'TEST (TEST-)'}`);
-    addLog(`Email Type: ${isTestEmail ? 'TEST USER' : 'REAL USER'}`);
+    // Format: YYYY-MM-DDTHH:mm:ss.SSS-03:00
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    const dateStr = `${nextDate.getFullYear()}-${pad(nextDate.getMonth() + 1)}-${pad(nextDate.getDate())}`;
+    const timeStr = `${pad(nextDate.getHours())}:${pad(nextDate.getMinutes())}:${pad(nextDate.getSeconds())}`;
+    const startDate = `${dateStr}T${timeStr}.000-03:00`;
+    
+    addLog(`Calculated Start Date (30 days delay): ${startDate}`);
 
-    if (isProdToken && isTestEmail) {
-      addLog("WARNING: Token/User mismatch detected. Production tokens cannot use Test Buyers.");
-    }
-
-    // ABSOLUTE MINIMAL BODY
-    // No start_date, no external_reference, no status
     const body = {
-      reason: reason || 'Suscripción',
+      reason: reason || 'Suscripción mensual',
       payer_email: payer_email,
+      external_reference: id,
       auto_recurring: {
         frequency: 1,
         frequency_type: 'months',
         transaction_amount: Number(transaction_amount),
-        currency_id: 'ARS'
+        currency_id: 'ARS',
+        start_date: startDate
       },
-      back_url: `${req.headers.origin}/pago/${id}?subscription=active`
+      back_url: `${req.headers.origin}/pago/${id}?subscription=active`,
+      status: 'pending'
     };
 
-    addLog("Sending MINIMAL body to MP...");
+    addLog("Sending body to MP...");
 
     const response = await fetch('https://api.mercadopago.com/preapproval', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${MP_ACCESS_TOKEN}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-Idempotency-Key': `sub_final_${id}_${Date.now()}`
       },
       body: JSON.stringify(body)
     });
@@ -60,7 +64,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     addLog(`MP API Status: ${response.status}`);
 
     if (response.ok) {
-      addLog("Success with minimal body!");
+      addLog("SUCCESS! Redirecting to Subscription...");
       return res.status(200).json({
         status: 'SUCCESS',
         init_point: data.init_point,
@@ -68,17 +72,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         log: executionLog
       });
     } else {
-      addLog(`MP REJECTION: ${JSON.stringify(data)}`);
-      
-      // If still 500, we provide a specific tip
-      let extraHint = '';
-      if (response.status === 500) {
-        extraHint = "MP sigue dando 500. Esto suele pasar si el token APP_USR se usa con un mail de prueba, o si la cuenta no tiene activas las suscripciones.";
-      }
-
+      addLog(`MP REJECTION Detail: ${JSON.stringify(data)}`);
       return res.status(response.status).json({
-        error: 'MP_BASELINE_FAILURE',
-        details: data.message || extraHint || 'Rechazo en Baseline',
+        error: 'MP_FINAL_REJECTION',
+        details: data.message || 'Error en validación de MP',
         mp_detail: data,
         log: executionLog
       });
@@ -87,7 +84,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   } catch (error: any) {
     addLog(`CRITICAL ERROR: ${error.message}`);
     return res.status(500).json({ 
-      error: 'BASELINE_LOGIC_ERROR', 
+      error: 'FINAL_LOGIC_ERROR', 
       details: error.message,
       log: executionLog 
     });
