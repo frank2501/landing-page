@@ -129,8 +129,6 @@ const CheckoutPage: React.FC = () => {
       });
 
       const data = await response.json();
-      if (data.token_type) setMpTokenType(data.token_type);
-      if (data.token_hint) setMpTokenHint(data.token_hint);
       
       const isTestMode = import.meta.env.DEV || searchParams.get('test') === 'true';
       // Use init_point for LIVE_TEST (APP_USR- from test users), sandbox for TEST-
@@ -176,8 +174,6 @@ const CheckoutPage: React.FC = () => {
       });
 
       const data = await response.json();
-      if (data.token_type) setMpTokenType(data.token_type);
-      if (data.token_hint) setMpTokenHint(data.token_hint);
       
       const isTestMode = import.meta.env.DEV || searchParams.get('test') === 'true';
       // Use init_point for LIVE_TEST (APP_USR- from test users), sandbox for TEST-
