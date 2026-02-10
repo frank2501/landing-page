@@ -15,6 +15,7 @@ interface Sale {
   payerLastName?: string;
   payerEmail?: string;
   payStatus?: 'pending' | 'paid';
+  subStatus?: 'inactive' | 'active' | 'cancelled';
   nextPaymentDate?: string;
 }
 
@@ -114,7 +115,14 @@ const CheckoutPage: React.FC = () => {
       const data = await response.json();
 
       if (data.init_point) {
-        window.location.href = data.init_point;
+        // Save subscription info to Firestore
+      await updateDoc(doc(db, "sales", id!), {
+        subStatus: 'active',
+        // Next payment date is already set by the one-time payment detector, 
+        // but we can ensure it here if needed.
+      });
+
+      window.location.href = data.init_point;
       } else {
         alert('Error al generar el pago. Intenta de nuevo.');
       }
