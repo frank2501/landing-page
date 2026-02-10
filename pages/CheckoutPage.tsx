@@ -186,19 +186,23 @@ const CheckoutPage: React.FC = () => {
         }),
       });
 
-      const data = await response.json();
+      let data: any = null;
+      try {
+        data = await response.json();
+      } catch (e) {
+        console.error("Non-JSON response from server");
+      }
       
       const isTestMode = import.meta.env.DEV || searchParams.get('test') === 'true';
-      // Use init_point for LIVE_TEST (APP_USR- from test users), sandbox for TEST-
-      const redirectUrl = (isTestMode && data.token_type === 'TEST' && data.sandbox_init_point)
+      const redirectUrl = data ? ((isTestMode && data.token_type === 'TEST' && data.sandbox_init_point)
         ? data.sandbox_init_point
-        : (data.init_point || data.sandbox_init_point);
+        : (data.init_point || data.sandbox_init_point)) : null;
 
       if (response.ok && redirectUrl) {
         window.location.href = redirectUrl;
       } else {
-        const errorData = !response.ok ? await response.json() : null;
-        alert(`Error al generar la suscripción: ${errorData?.error || 'Intenta de nuevo'}`);
+        const errorMsg = data?.error || data?.details || 'Error de servidor (500)';
+        alert(`Error al generar la suscripción: ${errorMsg}`);
       }
     } catch (error) {
       console.error('Error:', error);
