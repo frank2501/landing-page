@@ -128,7 +128,8 @@ const CheckoutPage: React.FC = () => {
       });
 
       const data = await response.json();
-      const checkoutUrl = (import.meta.env.DEV && data.sandbox_init_point) 
+      const isTestMode = import.meta.env.DEV || searchParams.get('test') === 'true';
+      const checkoutUrl = (isTestMode && data.sandbox_init_point) 
         ? data.sandbox_init_point 
         : data.init_point;
 
@@ -170,7 +171,8 @@ const CheckoutPage: React.FC = () => {
       });
 
       const data = await response.json();
-      const redirectUrl = (import.meta.env.DEV && data.sandbox_init_point)
+      const isTestMode = import.meta.env.DEV || searchParams.get('test') === 'true';
+      const redirectUrl = (isTestMode && data.sandbox_init_point)
         ? data.sandbox_init_point
         : (data.init_point || data.sandbox_init_point);
 
