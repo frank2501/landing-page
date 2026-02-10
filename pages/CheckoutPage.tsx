@@ -194,10 +194,11 @@ const CheckoutPage: React.FC = () => {
         ? data.sandbox_init_point
         : (data.init_point || data.sandbox_init_point);
 
-      if (redirectUrl) {
+      if (response.ok && redirectUrl) {
         window.location.href = redirectUrl;
       } else {
-        alert('Error al generar la suscripción. Intenta de nuevo.');
+        const errorData = !response.ok ? await response.json() : null;
+        alert(`Error al generar la suscripción: ${errorData?.error || 'Intenta de nuevo'}`);
       }
     } catch (error) {
       console.error('Error:', error);

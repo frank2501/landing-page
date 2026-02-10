@@ -20,6 +20,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const result = await preapproval.create({
       body: {
         reason: reason,
+        payer_email: payer_email,
         auto_recurring: {
           frequency: 1,
           frequency_type: 'months',
