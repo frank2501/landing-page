@@ -15,6 +15,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: 'Email del pagador es requerido' });
     }
 
+    const preapproval = new PreApproval(client);
     const body: any = {
       reason: reason,
       payer_email: payer_email,
