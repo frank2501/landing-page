@@ -295,7 +295,14 @@ const CheckoutPage: React.FC = () => {
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-10">
-          <h1 className="text-3xl md:text-4xl font-bold mb-2">Finalizar Pago</h1>
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <h1 className="text-3xl md:text-4xl font-bold">Finalizar Pago</h1>
+            {(import.meta.env.DEV || searchParams.get('test') === 'true') && (
+              <span className="px-3 py-1 bg-red-500/10 text-red-500 border border-red-500/20 rounded-full text-[10px] font-black uppercase tracking-widest animate-pulse">
+                Modo Test Activo
+              </span>
+            )}
+          </div>
           <p className="text-gray-400">Hola <span className="text-white font-medium">{sale.clientName}</span>, elegí tu método de pago.</p>
         </div>
 
