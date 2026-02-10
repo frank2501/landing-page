@@ -188,10 +188,10 @@ const DashboardPage: React.FC = () => {
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div>
-            <h1 className="text-4xl md:text-5xl font-extrabold mb-2 bg-gradient-to-r from-white to-gray-500 bg-clip-text text-transparent italic">
-              Dashboard de Pagos
+            <h1 className="text-4xl md:text-5xl font-extrabold mb-2 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent pb-2">
+              Dashboard de <span className="italic">Pagos</span>
             </h1>
-            <p className="text-gray-500 font-medium">Gestioná tus links de ArtechIA con precisión.</p>
+            <p className="text-gray-500 font-medium ml-1">Gestioná tus links de ArtechIA con precisión.</p>
           </div>
           
           <div className="flex items-center gap-3">
@@ -418,16 +418,18 @@ const DashboardPage: React.FC = () => {
                           </div>
                         </div>
                         
-                        <div className="flex sm:flex-col gap-2 w-full sm:w-auto">
+                        <div className="flex flex-col gap-2 w-full sm:w-48">
                           <button
                             onClick={() => togglePayStatus(sale)}
-                            className={`flex-1 sm:flex-none p-3 rounded-2xl border transition-all flex items-center justify-center gap-2 ${
+                            className={`p-3 rounded-2xl border transition-all flex items-center justify-between px-5 ${
                               sale.payStatus === 'paid' 
                                 ? 'bg-green-500/10 border-green-500/20 text-green-400 hover:bg-green-500/20' 
                                 : 'bg-white/5 border-white/5 text-gray-400 hover:bg-white/10 hover:border-white/20'
                             }`}
-                            title={sale.payStatus === 'paid' ? 'Marcar como pendiente' : 'Marcar como pagado'}
                           >
+                            <span className="text-[10px] font-black uppercase tracking-widest">
+                              {sale.payStatus === 'paid' ? 'Pago Recibido' : 'Marcar Pago'}
+                            </span>
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                             </svg>
@@ -436,13 +438,15 @@ const DashboardPage: React.FC = () => {
                           {sale.hasSubscription && (
                             <button
                               onClick={() => toggleSubStatus(sale)}
-                              className={`flex-1 sm:flex-none p-3 rounded-2xl border transition-all flex items-center justify-center gap-2 ${
+                              className={`p-3 rounded-2xl border transition-all flex items-center justify-between px-5 ${
                                 sale.subStatus === 'active' 
                                   ? 'bg-blue-500/10 border-blue-500/20 text-blue-400 hover:bg-blue-500/20' 
                                   : 'bg-white/5 border-white/5 text-gray-400 hover:bg-white/10 hover:border-white/20'
                               }`}
-                              title={sale.subStatus === 'active' ? 'Cancelar suscripción' : 'Activar suscripción manualmente'}
                             >
+                              <span className="text-[10px] font-black uppercase tracking-widest">
+                                {sale.subStatus === 'active' ? 'Sub Activa' : 'Activar Sub'}
+                              </span>
                               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                               </svg>
@@ -451,13 +455,15 @@ const DashboardPage: React.FC = () => {
 
                           <button
                             onClick={() => copyLink(sale.id)}
-                            className={`flex-1 sm:flex-none p-3 rounded-2xl border transition-all flex items-center justify-center gap-2 ${
+                            className={`p-3 rounded-2xl border transition-all flex items-center justify-between px-5 ${
                               copiedId === sale.id 
-                                ? 'bg-orange-500 text-black border-orange-600 scale-95' 
+                                ? 'bg-orange-500 text-black border-orange-600' 
                                 : 'bg-white text-black border-white hover:bg-white/90 shadow-lg shadow-white/5'
                             }`}
-                            title="Copiar link de pago"
                           >
+                            <span className="text-[10px] font-black uppercase tracking-widest leading-none">
+                              {copiedId === sale.id ? '¡Copiado!' : 'Copiar Link'}
+                            </span>
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
                             </svg>
@@ -466,19 +472,19 @@ const DashboardPage: React.FC = () => {
                           <div className="flex gap-2 w-full">
                             <button
                               onClick={() => openEdit(sale)}
-                              className="flex-1 p-3 rounded-2xl border border-white/5 text-gray-500 hover:text-white hover:bg-white/5 transition-all"
+                              className="flex-1 p-3 rounded-2xl border border-white/5 text-gray-500 hover:text-white hover:bg-white/5 transition-all flex items-center justify-center"
                               title="Editar link"
                             >
-                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                               </svg>
                             </button>
                             <button
                               onClick={() => deleteSale(sale.id)}
-                              className="flex-1 p-3 rounded-2xl border border-red-500/10 text-red-500/40 hover:text-red-500 hover:bg-red-500/10 transition-all"
-                              title="Eliminar permanentemente"
+                              className="flex-1 p-3 rounded-2xl border border-red-500/10 text-red-500/40 hover:text-red-500 hover:bg-red-500/10 transition-all flex items-center justify-center"
+                              title="Eliminar"
                             >
-                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                               </svg>
                             </button>
