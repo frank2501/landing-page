@@ -109,6 +109,7 @@ const CheckoutPage: React.FC = () => {
           unit_price: sale.amount,
           quantity: 1,
           id: sale.id,
+          payerEmail: payerEmail
         }),
       });
 
