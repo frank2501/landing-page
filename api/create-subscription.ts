@@ -16,12 +16,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     const preapproval = new PreApproval(client);
-
-    console.log(`[SUBS] Creating preapproval for: ${payer_email}, amount: ${transaction_amount}`);
-    
-    const body = {
+    const body: any = {
       reason: reason,
-      payer_email: payer_email,
       auto_recurring: {
         frequency: 1,
         frequency_type: 'months',
@@ -32,6 +28,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       },
       back_url: `${req.headers.origin}/pago/${id}?subscription=active`,
     };
+
+    // Only add payer_email if we want to force it, 
+    // but in Sandbox with APP_USR- it often causes "Both payer and collector must be real or test users"
+    // if the email doesn't match the logged in user exactly.
+    // if (payer_email) body.payer_email = payer_email; 
 
     console.log('[SUBS] Request body:', JSON.stringify(body, null, 2));
 
