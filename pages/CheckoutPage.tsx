@@ -208,7 +208,8 @@ const CheckoutPage: React.FC = () => {
       } else {
         const errorMsg = data?.details || data?.error || rawText || 'Error desconocido (500)';
         const mpExtra = data?.mp_detail ? `\n\nDetalle técnico: ${JSON.stringify(data.mp_detail)}` : '';
-        alert(`Error al generar la suscripción: ${errorMsg}${mpExtra}`);
+        const logExtra = data?.log ? `\n\nLogs de ejecución:\n${data.log.join('\n')}` : '';
+        alert(`Error al generar la suscripción: ${errorMsg}${mpExtra}${logExtra}`);
       }
     } catch (error) {
       console.error('Error:', error);
