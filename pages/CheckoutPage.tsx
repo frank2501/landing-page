@@ -17,6 +17,9 @@ const CheckoutPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [sale, setSale] = useState<Sale | null>(null);
   const [loading, setLoading] = useState(true);
+  const [payLoading, setPayLoading] = useState(false);
+  const [activeMethod, setActiveMethod] = useState<string | null>('transfer');
+  const [showSubInfo, setShowSubInfo] = useState(false);
 
   useEffect(() => {
     const fetchSale = async () => {
@@ -40,8 +43,6 @@ const CheckoutPage: React.FC = () => {
 
     fetchSale();
   }, [id]);
-
-  const [payLoading, setPayLoading] = useState(false);
 
   const handleMercadoPago = async () => {
     if (!sale) return;
@@ -74,6 +75,10 @@ const CheckoutPage: React.FC = () => {
     }
   };
 
+  const toggleMethod = (method: string) => {
+    setActiveMethod(activeMethod === method ? null : method);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black text-white">
@@ -95,84 +100,186 @@ const CheckoutPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen pt-32 pb-20 px-6 bg-black text-white font-sans">
-      <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-orange-500/10 text-orange-500 mb-6 border border-orange-500/20">
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-          <h1 className="text-3xl md:text-5xl font-bold mb-4">Resumen de Pago</h1>
-          <p className="text-gray-400 text-lg">Hola <span className="text-white font-medium">{sale.clientName}</span>, este es el detalle de tu servicio.</p>
+    <div className="min-h-screen pt-28 pb-20 px-6 bg-black text-white font-sans">
+      <div className="max-w-5xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-10">
+          <h1 className="text-3xl md:text-4xl font-bold mb-2">Finalizar Pago</h1>
+          <p className="text-gray-400">Hola <span className="text-white font-medium">{sale.clientName}</span>, elegí tu método de pago.</p>
         </div>
 
-        <div className="premium-border p-8 rounded-3xl bg-zinc-900/50 backdrop-blur-sm mb-8">
-          <div className="flex justify-between items-center mb-6 border-b border-white/5 pb-6">
-            <span className="text-gray-400">Concepto</span>
-            <span className="font-medium text-lg text-white">{sale.concept}</span>
-          </div>
-          
-          <div className="flex justify-between items-center mb-6 border-b border-white/5 pb-6">
-            <span className="text-gray-400">Monto Único</span>
-            <span className="font-bold text-2xl text-orange-400">${sale.amount.toLocaleString('es-AR')}</span>
-          </div>
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+          {/* LEFT: Payment Methods */}
+          <div className="lg:col-span-3 space-y-3">
+            <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-4">Método de Pago</h2>
 
-          {sale.hasSubscription && (
-             <div className="flex justify-between items-center mb-6 border-b border-white/5 pb-6">
-              <span className="text-gray-400">Suscripción Mensual</span>
-              <span className="font-bold text-xl text-white">${sale.subscriptionAmount?.toLocaleString('es-AR')}/mes</span>
-            </div>
-          )}
+            {/* Transfer */}
+            <div className="rounded-2xl border border-white/10 overflow-hidden transition-all">
+              <button
+                onClick={() => toggleMethod('transfer')}
+                className={`w-full flex items-center justify-between p-5 transition-colors ${
+                  activeMethod === 'transfer' ? 'bg-zinc-900/80' : 'bg-zinc-900/30 hover:bg-zinc-900/50'
+                }`}
+              >
+                <div className="flex items-center gap-4">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                    activeMethod === 'transfer' ? 'bg-green-500/20 text-green-400' : 'bg-zinc-800 text-gray-400'
+                  }`}>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                    </svg>
+                  </div>
+                  <div className="text-left">
+                    <span className="font-bold text-white block">Transferencia Bancaria</span>
+                    <span className="text-xs text-green-400 font-medium">Inmediata</span>
+                  </div>
+                </div>
+                <svg className={`w-5 h-5 text-gray-400 transition-transform ${activeMethod === 'transfer' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
 
-          <div className="pt-2 space-y-4">
-            <button 
-              onClick={handleMercadoPago}
-              disabled={payLoading}
-              className="w-full bg-[#009EE3] hover:bg-[#008ED0] text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-[#009EE3]/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {payLoading ? (
-                <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
-                  Procesando...
-                </>
-              ) : (
-                <>
-                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M15.54 12.01l-1.67-.5c-.86-.26-1.18-.47-1.18-.94 0-.48.51-.77 1.34-.77.94 0 1.5.37 2.14 1.14l1.4-1.4c-.95-1.1-2.06-1.57-3.54-1.57v-2h-2v2c-1.8 0-3.23 1.13-3.23 2.76 0 1.8 1.48 2.37 2.65 2.73 1.05.32 1.33.56 1.33 1.05 0 .58-.69.87-1.53.87-1.03 0-1.74-.48-2.45-1.3l-1.42 1.4c1.1 1.25 2.45 1.76 3.87 1.76v2h2v-2c1.9 0 3.33-1.18 3.33-2.83 0-1.6-1.1-2.4-2.28-2.73zM12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm0 22c-5.52 0-10-4.48-10-10S6.48 2 12 2s10 4.48 10 10-4.48 10-10 10z"/>
-                  </svg>
-                  Pagar con MercadoPago
-                </>
+              {activeMethod === 'transfer' && (
+                <div className="p-5 border-t border-white/5 bg-zinc-900/40 space-y-4">
+                  <div className="bg-zinc-800/60 p-4 rounded-xl space-y-3 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Banco</span>
+                      <span className="font-medium text-white">Santander Río</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Alias</span>
+                      <span className="font-medium text-white select-all cursor-pointer">ARTECHIA.TRANSFER</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">CBU</span>
+                      <span className="font-medium text-white select-all cursor-pointer">0000000001234567890</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-500 text-center">
+                    Una vez realizada la transferencia, enviá el comprobante por <a href="https://wa.me/5491137758970" target="_blank" rel="noopener noreferrer" className="text-orange-400 hover:underline">WhatsApp</a>.
+                  </p>
+                </div>
               )}
-            </button>
-
-            <div className="relative my-6">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-white/10"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-zinc-900 text-gray-400">O transferencia bancaria</span>
-              </div>
             </div>
 
-            <div className="bg-zinc-800/50 p-4 rounded-xl border border-white/5 space-y-2 text-sm text-gray-300">
-               <div className="flex justify-between">
-                 <span>Banco:</span>
-                 <span className="font-medium text-white">Santander Río</span>
-               </div>
-               <div className="flex justify-between">
-                 <span>Alias:</span>
-                 <span className="font-medium text-white select-all">ARTECHIA.TRANSFER</span>
-               </div>
-               <div className="flex justify-between">
-                 <span>CBU:</span>
-                 <span className="font-medium text-white select-all">0000000001234567890</span>
-               </div>
+            {/* MercadoPago */}
+            <div className="rounded-2xl border border-white/10 overflow-hidden transition-all">
+              <button
+                onClick={() => toggleMethod('mp')}
+                className={`w-full flex items-center justify-between p-5 transition-colors ${
+                  activeMethod === 'mp' ? 'bg-zinc-900/80' : 'bg-zinc-900/30 hover:bg-zinc-900/50'
+                }`}
+              >
+                <div className="flex items-center gap-4">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                    activeMethod === 'mp' ? 'bg-[#009EE3]/20 text-[#009EE3]' : 'bg-zinc-800 text-gray-400'
+                  }`}>
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M15.54 12.01l-1.67-.5c-.86-.26-1.18-.47-1.18-.94 0-.48.51-.77 1.34-.77.94 0 1.5.37 2.14 1.14l1.4-1.4c-.95-1.1-2.06-1.57-3.54-1.57v-2h-2v2c-1.8 0-3.23 1.13-3.23 2.76 0 1.8 1.48 2.37 2.65 2.73 1.05.32 1.33.56 1.33 1.05 0 .58-.69.87-1.53.87-1.03 0-1.74-.48-2.45-1.3l-1.42 1.4c1.1 1.25 2.45 1.76 3.87 1.76v2h2v-2c1.9 0 3.33-1.18 3.33-2.83 0-1.6-1.1-2.4-2.28-2.73zM12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm0 22c-5.52 0-10-4.48-10-10S6.48 2 12 2s10 4.48 10 10-4.48 10-10 10z"/>
+                    </svg>
+                  </div>
+                  <div className="text-left">
+                    <span className="font-bold text-white block">Tarjeta de Crédito / Débito</span>
+                    <span className="text-xs text-gray-500">Procesado por MercadoPago</span>
+                  </div>
+                </div>
+                <svg className={`w-5 h-5 text-gray-400 transition-transform ${activeMethod === 'mp' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {activeMethod === 'mp' && (
+                <div className="p-5 border-t border-white/5 bg-zinc-900/40 space-y-4">
+                  <p className="text-sm text-gray-400 text-center">Serás redirigido a MercadoPago para completar el pago de forma segura.</p>
+                  <button
+                    onClick={handleMercadoPago}
+                    disabled={payLoading}
+                    className="w-full bg-[#009EE3] hover:bg-[#008ED0] text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-[#009EE3]/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {payLoading ? (
+                      <>
+                        <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
+                        Procesando...
+                      </>
+                    ) : (
+                      'Pagar con MercadoPago'
+                    )}
+                  </button>
+                </div>
+              )}
             </div>
-            
-            <p className="text-center text-xs text-gray-500 mt-4">
-              Al realizar la transferencia, por favor envíanos el comprobante por WhatsApp.
-            </p>
+          </div>
+
+          {/* RIGHT: Order Summary */}
+          <div className="lg:col-span-2">
+            <div className="premium-border p-6 rounded-2xl bg-zinc-900/50 backdrop-blur-sm sticky top-28">
+              <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-5">Resumen</h2>
+
+              <div className="space-y-4 mb-6">
+                <div className="flex justify-between items-start">
+                  <span className="text-gray-400 text-sm">Servicio</span>
+                  <span className="font-medium text-white text-right max-w-[60%]">{sale.concept}</span>
+                </div>
+              </div>
+
+              <div className="border-t border-white/5 pt-4 space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-400 text-sm">Pago único</span>
+                  <span className="font-bold text-xl text-orange-400">${sale.amount.toLocaleString('es-AR')}</span>
+                </div>
+
+                {sale.hasSubscription && sale.subscriptionAmount && (
+                  <>
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-gray-400 text-sm">Suscripción mensual</span>
+                        <button
+                          onClick={() => setShowSubInfo(!showSubInfo)}
+                          className="w-5 h-5 rounded-full bg-zinc-800 text-gray-400 hover:text-white hover:bg-zinc-700 flex items-center justify-center transition-colors text-xs font-bold"
+                          title="Info sobre suscripción"
+                        >
+                          i
+                        </button>
+                      </div>
+                      <span className="font-bold text-lg text-white">${sale.subscriptionAmount.toLocaleString('es-AR')}/mes</span>
+                    </div>
+
+                    {showSubInfo && (
+                      <div className="bg-zinc-800/60 p-4 rounded-xl text-xs text-gray-300 space-y-2 border border-white/5">
+                        <p className="font-medium text-white text-sm mb-2">Sobre la suscripción</p>
+                        <div className="flex items-start gap-2">
+                          <span className="text-orange-400 mt-0.5">•</span>
+                          <p>Se cobra <strong>mensualmente</strong> a partir del próximo mes.</p>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <span className="text-orange-400 mt-0.5">•</span>
+                          <p>Incluye mantenimiento, soporte y actualizaciones del servicio.</p>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <span className="text-orange-400 mt-0.5">•</span>
+                          <p>Podés <strong>cancelar en cualquier momento</strong> contactándonos por WhatsApp.</p>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <span className="text-orange-400 mt-0.5">•</span>
+                          <p>No tiene permanencia mínima ni penalidades por baja.</p>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+
+              <div className="border-t border-white/5 pt-4 mt-4">
+                <div className="flex justify-between items-center">
+                  <span className="font-medium text-white">Total a pagar hoy</span>
+                  <span className="font-bold text-2xl text-orange-400">${sale.amount.toLocaleString('es-AR')}</span>
+                </div>
+              </div>
+
+              <p className="text-[10px] text-gray-600 text-center mt-6">
+                Pagos procesados de forma segura. Al pagar aceptás los términos del servicio.
+              </p>
+            </div>
           </div>
         </div>
       </div>
