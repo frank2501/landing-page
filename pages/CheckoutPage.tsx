@@ -34,7 +34,8 @@ const CheckoutPage: React.FC = () => {
   const [isInfoComplete, setIsInfoComplete] = useState(false);
   const [showSubPrompt, setShowSubPrompt] = useState(false);
   const [searchParams] = useSearchParams();
-  const [mpTokenType, setMpTokenType] = useState<'TEST' | 'PROD' | null>(null);
+  const [mpTokenType, setMpTokenType] = useState<'TEST' | 'PROD' | 'LIVE_TEST' | null>(null);
+  const [mpTokenHint, setMpTokenHint] = useState<string | null>(null);
 
   // Auto-show subscription prompt after successful payment
   useEffect(() => {
@@ -130,6 +131,7 @@ const CheckoutPage: React.FC = () => {
 
       const data = await response.json();
       if (data.token_type) setMpTokenType(data.token_type);
+      if (data.token_hint) setMpTokenHint(data.token_hint);
       
       const isTestMode = import.meta.env.DEV || searchParams.get('test') === 'true';
       // Use init_point for LIVE_TEST (APP_USR- from test users), sandbox for TEST-
@@ -176,6 +178,7 @@ const CheckoutPage: React.FC = () => {
 
       const data = await response.json();
       if (data.token_type) setMpTokenType(data.token_type);
+      if (data.token_hint) setMpTokenHint(data.token_hint);
       
       const isTestMode = import.meta.env.DEV || searchParams.get('test') === 'true';
       // Use init_point for LIVE_TEST (APP_USR- from test users), sandbox for TEST-
@@ -310,9 +313,16 @@ const CheckoutPage: React.FC = () => {
                   Modo Test Activo
                 </span>
                 {mpTokenType && (
-                  <span className={`text-[9px] font-bold mt-1 ${mpTokenType === 'TEST' ? 'text-green-500' : 'text-red-500 underline'}`}>
-                    Token: {mpTokenType}
-                  </span>
+                  <div className="flex flex-col items-center">
+                    <span className={`text-[9px] font-bold mt-1 ${mpTokenType === 'LIVE_TEST' || mpTokenType === 'TEST' ? 'text-green-500' : 'text-red-500 underline'}`}>
+                      Token: {mpTokenType}
+                    </span>
+                    {mpTokenHint && (
+                      <span className="text-[8px] text-gray-500 font-mono mt-0.5">
+                        {mpTokenHint}
+                      </span>
+                    )}
+                  </div>
                 )}
               </div>
             )}

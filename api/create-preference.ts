@@ -28,13 +28,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           success: `${req.headers.origin}/pago/${id}?status=success`,
         },
         auto_return: 'approved',
+        binary_mode: true,
       },
     });
 
     return res.status(200).json({ 
       init_point: result.init_point,
       sandbox_init_point: (result as any).sandbox_init_point || result.init_point,
-      token_type: process.env.MP_ACCESS_TOKEN?.startsWith('TEST-') ? 'TEST' : 'LIVE_TEST'
+      token_type: process.env.MP_ACCESS_TOKEN?.startsWith('TEST-') ? 'TEST' : 'LIVE_TEST',
+      token_hint: `${process.env.MP_ACCESS_TOKEN?.substring(0, 11)}...${process.env.MP_ACCESS_TOKEN?.slice(-4)}`
     });
   } catch (error) {
     console.error(error);
