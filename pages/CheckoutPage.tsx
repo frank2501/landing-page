@@ -187,13 +187,10 @@ const CheckoutPage: React.FC = () => {
       });
 
       let data: any = null;
-      let rawText = '';
       try {
-        rawText = await response.text();
-        data = JSON.parse(rawText);
+        data = await response.json();
       } catch (e) {
-        console.error("Non-JSON response:", rawText);
-        setVerificationError(`Error del servidor: ${rawText || 'Respuesta vacía'}`);
+        console.error("Non-JSON response");
       }
       
       const isTestMode = import.meta.env.DEV || searchParams.get('test') === 'true';
@@ -203,13 +200,10 @@ const CheckoutPage: React.FC = () => {
 
       if (response.ok && redirectUrl) {
         window.location.href = redirectUrl;
-      } else if (response.ok && data?.test === 'REACHED') {
-        alert(`DEBUG: API reached! Env Token: ${data.env_token}`);
       } else {
-        const errorMsg = data?.details || data?.error || rawText || 'Error desconocido (500)';
+        const errorMsg = data?.details || data?.error || 'Error de servidor (500)';
         const mpExtra = data?.mp_detail ? `\n\nDetalle técnico: ${JSON.stringify(data.mp_detail)}` : '';
-        const logExtra = data?.log ? `\n\nLogs de ejecución:\n${data.log.join('\n')}` : '';
-        alert(`Error al generar la suscripción: ${errorMsg}${mpExtra}${logExtra}`);
+        alert(`Error al generar la suscripción: ${errorMsg}${mpExtra}`);
       }
     } catch (error) {
       console.error('Error:', error);
