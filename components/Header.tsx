@@ -64,6 +64,12 @@ const Header: React.FC = () => {
             Implementaciones
           </button>
           <button 
+            onClick={() => navigate('/demos')} 
+            className="text-sm font-medium text-zinc-400 hover:text-white transition-colors"
+          >
+            Demos
+          </button>
+          <button 
             onClick={() => scrollToSection('solutions')} 
             className="text-sm font-medium text-zinc-400 hover:text-white transition-colors"
           >
@@ -115,6 +121,17 @@ const Header: React.FC = () => {
             >
               <span className="text-3xl font-medium text-white hover:text-orange-500 transition-colors">
                 Implementaciones
+              </span>
+            </button>
+
+            <button 
+              onClick={() => navigate('/demos')} 
+              className={`text-left transform transition-all duration-500 delay-125 ${
+                isMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+              }`}
+            >
+              <span className="text-3xl font-medium text-white hover:text-orange-500 transition-colors">
+                Demos
               </span>
             </button>
 

@@ -49,6 +49,13 @@ const Footer: React.FC = () => {
             >
               Implementaciones
             </Link>
+            <Link 
+              to="/demos" 
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="text-gray-400 hover:text-white transition-colors"
+            >
+              Demos
+            </Link>
           </nav>
           
           {/* Social Icons */}
