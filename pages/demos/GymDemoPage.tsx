@@ -112,23 +112,23 @@ const GymDemoPage: React.FC = () => {
 
       {/* ===== NAVBAR ===== */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0d0d0d]/90 backdrop-blur-lg border-b border-white/5">
-        <div className="max-w-6xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center font-black text-sm tracking-tighter">IF</div>
+        <div className="max-w-6xl mx-auto px-3 md:px-6 py-2 md:py-3 flex items-center justify-between">
+          <div className="flex items-center gap-2 md:gap-3 shrink-0">
+            <div className="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center font-black text-xs md:text-sm tracking-tighter">IF</div>
             <span className="text-lg font-black tracking-tight hidden sm:inline">IRON<span className="text-red-500">FITNESS</span></span>
           </div>
 
           {/* View toggle buttons */}
-          <div className="flex items-center gap-2">
-            <button onClick={() => setView('site')} className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${view === 'site' ? 'bg-red-600 text-white' : 'text-gray-500 hover:text-white hover:bg-white/5'}`}>
-              🌐 Sitio Web
+          <div className="flex items-center gap-1 md:gap-2 overflow-x-auto no-scrollbar">
+            <button onClick={() => setView('site')} className={`px-2 md:px-3 py-1.5 rounded-lg text-[10px] md:text-xs font-semibold transition-all whitespace-nowrap shrink-0 ${view === 'site' ? 'bg-red-600 text-white' : 'text-gray-500 hover:text-white hover:bg-white/5'}`}>
+              🌐 <span className="hidden md:inline">Sitio </span>Web
             </button>
-            <button onClick={() => setView('admin')} className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${view === 'admin' ? 'bg-orange-600 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}>
-              Funciones Disponibles
+            <button onClick={() => setView('admin')} className={`px-2 md:px-4 py-1.5 md:py-2 rounded-lg text-[10px] md:text-sm font-bold transition-all whitespace-nowrap shrink-0 ${view === 'admin' ? 'bg-orange-600 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}>
+              Funciones
             </button>
-            <button onClick={() => setView('live')} className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${view === 'live' ? 'bg-green-600 text-white' : 'text-gray-500 hover:text-white hover:bg-white/5'}`}>
+            <button onClick={() => setView('live')} className={`px-2 md:px-3 py-1.5 rounded-lg text-[10px] md:text-xs font-semibold transition-all flex items-center gap-1 md:gap-1.5 whitespace-nowrap shrink-0 ${view === 'live' ? 'bg-green-600 text-white' : 'text-gray-500 hover:text-white hover:bg-white/5'}`}>
               {view === 'live' && <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />}
-              📡 Ver Versión Interactiva
+              📡 <span className="hidden md:inline">Ver </span>Interactiva
             </button>
             <div className="w-px h-5 bg-white/10 mx-1 hidden sm:block" />
             <button onClick={() => navigate('/demos')} className="text-[10px] text-gray-600 hover:text-gray-400 transition-colors border border-gray-800 px-2 py-1 rounded hidden sm:block">← Volver a Demos</button>
@@ -157,7 +157,7 @@ const GymDemoPage: React.FC = () => {
                   <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
                   <span className="text-[11px] text-red-400 font-semibold uppercase tracking-wider">Nuevo: Pagos 100% online</span>
                 </div>
-                <h1 className="text-5xl md:text-8xl font-black leading-[0.9] tracking-tight mb-6">ENTRENÁ<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-red-400 to-orange-500">SIN LÍMITES</span></h1>
+                <h1 className="text-4xl md:text-8xl font-black leading-[0.9] tracking-tight mb-6">ENTRENÁ<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-red-400 to-orange-500">SIN LÍMITES</span></h1>
                 <p className="text-lg md:text-xl text-gray-400 mb-8 leading-relaxed max-w-lg">Musculación, clases grupales, pileta y más. Elegí tu plan, pagá online y empezá hoy.</p>
                 <div className="flex flex-wrap gap-3">
                   <a href="#planes" className="px-8 py-4 bg-red-600 text-white font-bold rounded-xl hover:bg-red-500 transition-all hover:shadow-xl hover:shadow-red-600/20 active:scale-95 text-sm">Ver Planes</a>
@@ -223,7 +223,7 @@ const GymDemoPage: React.FC = () => {
                 <button className="px-6 py-3 rounded-xl border border-white/10 text-xs font-bold hover:bg-white/5 transition-all">Ver todo el equipo</button>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
                  {[
                    { name: 'Alex R.', role: 'Head Coach', img: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=80&w=500', spec: 'CrossFit' },
                    { name: 'Javier M.', role: 'Musculación', img: 'https://images.unsplash.com/photo-1567013127542-490d757e51fc?auto=format&fit=crop&q=80&w=500', spec: 'Hipertrofia' },
@@ -287,7 +287,7 @@ const GymDemoPage: React.FC = () => {
           <section id="sedes" className="py-20 md:py-28 px-6 scroll-mt-20 bg-[#090909] animate-fade-up">
             <div className="max-w-5xl mx-auto">
               <div className="text-center mb-14"><h2 className="text-3xl md:text-5xl font-black tracking-tight uppercase mb-3">Encontranos<br />en todas partes</h2><p className="text-gray-500 text-base">No importa dónde estés, buscá tu Iron Fitness más cercano.</p></div>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {locations.map((loc, i) => (
                   <div key={loc.name} className={`group relative rounded-2xl overflow-hidden bg-[#141414] border border-white/5 hover:border-red-500/30 transition-all duration-300 animate-fade-up`} style={{ animationDelay: `${i * 100}ms` }}>
                     <div className="h-44 relative overflow-hidden">
@@ -359,7 +359,7 @@ const GymDemoPage: React.FC = () => {
 
           {/* Footer */}
           <footer className="border-t border-white/5 py-12 px-6 bg-[#050505] text-sm md:text-base">
-            <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+            <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10 mb-12">
                <div>
                   <div className="flex items-center gap-2 mb-4"><div className="w-8 h-8 rounded-lg bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center text-[10px] font-black mt-1">IF</div><span className="text-lg font-black tracking-tight">IRON<span className="text-red-500">FITNESS</span></span></div>
                   <p className="text-xs text-gray-500 leading-relaxed mb-4">La cadena de gimnasios líder en tecnología y rendimiento de Argentina.</p>
@@ -418,7 +418,7 @@ const GymDemoPage: React.FC = () => {
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {[
                   { 
                     category: 'ADMINISTRACIÓN',
@@ -520,15 +520,15 @@ const GymDemoPage: React.FC = () => {
           <section className="py-10 px-6">
             <div className="max-w-7xl mx-auto">
               
-              <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-8">
                 {/* Active Members Card */}
-                <div className="bg-[#141414] rounded-3xl p-6 border border-white/5 relative overflow-hidden group">
+                <div className="bg-[#141414] rounded-3xl p-3 md:p-6 border border-white/5 relative overflow-hidden group">
                   <div className="absolute top-0 right-0 p-4 opacity-10 text-9xl font-black text-white group-hover:scale-110 transition-transform">🏃</div>
                   <div className="relative z-10">
-                    <p className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-2">Entrenando Ahora</p>
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-6xl font-black tracking-tighter">{liveActiveMembers}</span>
-                      <span className="text-lg text-green-500 font-bold">+{Math.floor(Math.random() * 3)}</span>
+                    <p className="text-gray-500 text-[9px] md:text-xs font-bold uppercase tracking-widest mb-2">Entrenando Ahora</p>
+                    <div className="flex items-baseline gap-1 md:gap-2">
+                      <span className="text-4xl md:text-6xl font-black tracking-tighter">{liveActiveMembers}</span>
+                      <span className="text-sm md:text-lg text-green-500 font-bold">+{Math.floor(Math.random() * 3)}</span>
                     </div>
                     <div className="mt-4 h-1.5 bg-gray-800 rounded-full overflow-hidden">
                       <div className="h-full bg-red-600 w-[65%] animate-pulse" />
@@ -538,12 +538,12 @@ const GymDemoPage: React.FC = () => {
                 </div>
 
                 {/* Revenue Card */}
-                <div className="bg-[#141414] rounded-3xl p-6 border border-white/5 relative overflow-hidden">
+                <div className="bg-[#141414] rounded-3xl p-3 md:p-6 border border-white/5 relative overflow-hidden">
                    <div className="absolute -right-6 -top-6 w-32 h-32 bg-red-600/10 rounded-full blur-2xl" />
                    <div className="relative z-10">
-                    <p className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-2">Facturación Hoy</p>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-4xl font-black tracking-tight">${(liveTodayRevenue / 1000).toFixed(0)}k</span>
+                    <p className="text-gray-500 text-[9px] md:text-xs font-bold uppercase tracking-widest mb-2">Facturación Hoy</p>
+                    <div className="flex items-center gap-1 md:gap-2 mb-1">
+                      <span className="text-2xl md:text-4xl font-black tracking-tight">${(liveTodayRevenue / 1000).toFixed(0)}k</span>
                     </div>
                     <div className="flex items-center gap-1.5 text-xs text-green-400 bg-green-900/20 px-2 py-1 rounded-lg w-fit">
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
@@ -553,10 +553,10 @@ const GymDemoPage: React.FC = () => {
                 </div>
 
                 {/* Check-ins Card */}
-                <div className="bg-[#141414] rounded-3xl p-6 border border-white/5 flex flex-col justify-between">
+                <div className="bg-[#141414] rounded-3xl p-3 md:p-6 border border-white/5 flex flex-col justify-between">
                   <div>
-                    <p className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-1">Accesos Totales</p>
-                    <p className="text-3xl font-black">{liveCheckins}</p>
+                    <p className="text-gray-500 text-[9px] md:text-xs font-bold uppercase tracking-widest mb-1">Accesos Totales</p>
+                    <p className="text-2xl md:text-3xl font-black">{liveCheckins}</p>
                   </div>
                   <div className="flex items-center gap-1 mt-2">
                     {[...Array(12)].map((_, i) => (
@@ -566,7 +566,7 @@ const GymDemoPage: React.FC = () => {
                 </div>
 
                  {/* Classes Status */}
-                 <div className="bg-gradient-to-br from-red-900/20 to-[#141414] rounded-3xl p-6 border border-red-500/10 flex flex-col justify-center text-center">
+                 <div className="bg-gradient-to-br from-red-900/20 to-[#141414] rounded-3xl p-3 md:p-6 border border-red-500/10 flex flex-col justify-center text-center">
                     <div className="w-12 h-12 bg-red-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-[0_0_15px_rgba(220,38,38,0.5)]">
                       <span className="text-2xl">🔥</span>
                     </div>
@@ -578,7 +578,7 @@ const GymDemoPage: React.FC = () => {
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
                 {/* Live Turnstile Feed */}
-                <div className="lg:col-span-2 bg-[#141414] rounded-3xl border border-white/5 overflow-hidden flex flex-col h-[500px]">
+                <div className="lg:col-span-2 bg-[#141414] rounded-3xl border border-white/5 overflow-hidden flex flex-col h-[400px] md:h-[500px]">
                   <div className="p-6 border-b border-white/5 flex items-center justify-between">
                     <div>
                       <h3 className="font-black text-lg tracking-tight">Molinete de Acceso</h3>
@@ -616,7 +616,7 @@ const GymDemoPage: React.FC = () => {
                 </div>
 
                 {/* Class Monitor */}
-                <div className="bg-[#141414] rounded-3xl border border-white/5 overflow-hidden flex flex-col h-[500px]">
+                <div className="bg-[#141414] rounded-3xl border border-white/5 overflow-hidden flex flex-col h-[400px] md:h-[500px]">
                   <div className="p-6 border-b border-white/5">
                     <h3 className="font-black text-lg tracking-tight">Estado de Clases</h3>
                     <p className="text-xs text-gray-500">Capacidad y reservas</p>

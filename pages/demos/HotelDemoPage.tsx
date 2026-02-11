@@ -146,25 +146,25 @@ const HotelDemoPage: React.FC = () => {
 
       {/* ===== NAVBAR ===== */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-[#FDFBF7]/90 backdrop-blur-lg border-b border-[#E8E2D8]">
-        <div className="max-w-6xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-[#2D5A3D] flex items-center justify-center text-white text-sm font-bold" style={{ fontFamily: 'sans-serif' }}>PL</div>
+        <div className="max-w-6xl mx-auto px-3 md:px-6 py-2 md:py-3 flex items-center justify-between">
+          <div className="flex items-center gap-2 md:gap-3 shrink-0">
+            <div className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-[#2D5A3D] flex items-center justify-center text-white text-xs md:text-sm font-bold" style={{ fontFamily: 'sans-serif' }}>PL</div>
             <span className="text-lg font-bold tracking-wide hidden sm:inline">Posada del Lago</span>
           </div>
 
-          <div className="flex items-center gap-2" style={{ fontFamily: 'sans-serif' }}>
-            <button onClick={() => setView('site')} className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${view === 'site' ? 'bg-[#2D5A3D] text-white' : 'text-[#8B7E6A] hover:text-[#2D2A26] hover:bg-[#F5F1EB]'}`}>
-              🌐 Sitio Web
+          <div className="flex items-center gap-1 md:gap-2 overflow-x-auto no-scrollbar" style={{ fontFamily: 'sans-serif' }}>
+            <button onClick={() => setView('site')} className={`px-2 md:px-3 py-1.5 rounded-lg text-[10px] md:text-xs font-semibold transition-all whitespace-nowrap shrink-0 ${view === 'site' ? 'bg-[#2D5A3D] text-white' : 'text-[#8B7E6A] hover:text-[#2D2A26] hover:bg-[#F5F1EB]'}`}>
+              🌐 <span className="hidden md:inline">Sitio </span>Web
             </button>
             <button
                 onClick={() => setView('admin')}
-                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${view === 'admin' ? 'bg-[#2D5A3D] text-white' : 'text-[#8B7E6A] hover:bg-[#FDFBF7]'}`}
+                className={`px-2 md:px-4 py-1.5 md:py-2 rounded-lg text-[10px] md:text-sm font-bold transition-all whitespace-nowrap shrink-0 ${view === 'admin' ? 'bg-[#2D5A3D] text-white' : 'text-[#8B7E6A] hover:bg-[#FDFBF7]'}`}
               >
-                Funciones Disponibles
+                Funciones
               </button>
-            <button onClick={() => setView('live')} className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${view === 'live' ? 'bg-green-600 text-white' : 'text-[#8B7E6A] hover:text-[#2D2A26] hover:bg-[#F5F1EB]'}`}>
+            <button onClick={() => setView('live')} className={`px-2 md:px-3 py-1.5 rounded-lg text-[10px] md:text-xs font-semibold transition-all flex items-center gap-1 md:gap-1.5 whitespace-nowrap shrink-0 ${view === 'live' ? 'bg-green-600 text-white' : 'text-[#8B7E6A] hover:text-[#2D2A26] hover:bg-[#F5F1EB]'}`}>
               {view === 'live' && <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />}
-              📡 Ver Versión Interactiva
+              📡 <span className="hidden md:inline">Ver </span>Interactiva
             </button>
             <div className="w-px h-5 bg-[#E8E2D8] mx-1 hidden sm:block" />
             <button onClick={() => navigate('/demos')} className="text-[10px] text-[#8B7E6A] hover:text-[#2D5A3D] transition-colors border border-[#D4CFC5] px-2 py-1 rounded hidden sm:block">← Volver a Demos</button>
@@ -179,11 +179,11 @@ const HotelDemoPage: React.FC = () => {
           <section className="relative pt-28 pb-16 md:pt-40 md:pb-28 px-6 bg-gradient-to-b from-[#2D5A3D]/5 to-transparent">
             <div className="max-w-5xl mx-auto text-center">
               <p className="text-[#8B7E6A] text-xs uppercase tracking-[0.4em] mb-4" style={{ fontFamily: 'sans-serif' }}>Bienvenidos a</p>
-              <h1 className="text-5xl md:text-8xl font-bold text-[#2D2A26] leading-[0.95] tracking-tight mb-4">Posada del Lago</h1>
+              <h1 className="text-4xl md:text-8xl font-bold text-[#2D2A26] leading-[0.95] tracking-tight mb-4">Posada del Lago</h1>
               <p className="text-lg md:text-2xl text-[#8B7E6A] mb-3 italic">Donde la naturaleza te abraza.</p>
               <p className="max-w-md mx-auto text-sm text-[#A09888] mb-10 leading-relaxed" style={{ fontFamily: 'sans-serif' }}>Un refugio exclusivo a orillas del lago Nahuel Huapi. Reservá directo, sin intermediarios.</p>
               <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl shadow-black/5 border border-[#E8E2D8] p-2" style={{ fontFamily: 'sans-serif' }}>
-                <div className="flex flex-col md:flex-row gap-2 relative">
+                <div className="flex flex-col md:flex-row gap-2 relative" onClick={(e) => e.stopPropagation()}>
                   <div className="flex-1 px-4 py-3 text-left relative">
                     <label className="text-[9px] text-[#8B7E6A] uppercase tracking-wider font-semibold block mb-1">Check-in</label>
                     <button onClick={() => setOpenCalendar(openCalendar === 'checkin' ? null : 'checkin')} className="w-full text-left text-sm text-[#2D2A26] outline-none flex items-center justify-between">
@@ -248,7 +248,7 @@ const HotelDemoPage: React.FC = () => {
                    <button className="px-6 py-3 rounded-lg border border-[#D4CFC5] text-xs font-semibold text-[#8B7E6A] hover:bg-white transition-all">Ver todos los servicios</button>
                 </div>
                 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
                    {[
                       { icon: '🏊‍♂️', title: 'Piscina Climatizada', desc: 'Con vista al lago.' },
                       { icon: '💆‍♀️', title: 'Spa & Wellness', desc: 'Masajes y sauna seco.' },
@@ -322,7 +322,7 @@ const HotelDemoPage: React.FC = () => {
           <section className="py-16 md:py-24 px-6 bg-[#2D5A3D]"><div className="max-w-2xl mx-auto text-center"><h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight mb-4">Tu próxima escapada te espera</h2><p className="text-[#A3C9B0] text-base mb-8" style={{ fontFamily: 'sans-serif' }}>Reservá directo y obtené el mejor precio garantizado.</p><a href="#habitaciones" className="inline-block px-10 py-4 bg-white text-[#2D5A3D] font-bold rounded-xl hover:bg-[#F5F1EB] transition-all active:scale-95" style={{ fontFamily: 'sans-serif' }}>Ver Habitaciones</a></div></section>
 
           <footer className="border-t border-[#E8E2D8] py-12 px-6 bg-[#FDFBF7]" style={{ fontFamily: 'sans-serif' }}>
-            <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+            <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10 mb-12">
                <div>
                   <div className="flex items-center gap-3 mb-4"><div className="w-8 h-8 rounded-full bg-[#2D5A3D] flex items-center justify-center text-white text-[10px] font-bold">PL</div><span className="text-lg font-bold text-[#2D2A26]" style={{ fontFamily: 'Georgia, serif' }}>Posada del Lago</span></div>
                   <p className="text-xs text-[#8B7E6A] leading-relaxed mb-4">Experiencias únicas en la Patagonia Argentina. Naturaleza, confort y servicio de excelencia.</p>
@@ -381,7 +381,7 @@ const HotelDemoPage: React.FC = () => {
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {[
                   { 
                     category: 'VENTAS DIRECTAS',
@@ -494,14 +494,14 @@ const HotelDemoPage: React.FC = () => {
           <section className="py-10 px-6">
             <div className="max-w-7xl mx-auto">
               
-              <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-8">
                 {/* Occupancy Card */}
-                <div className="bg-white rounded-xl p-6 border border-[#E8E2D8] shadow-sm relative overflow-hidden">
+                <div className="bg-white rounded-xl p-3 md:p-6 border border-[#E8E2D8] shadow-sm relative overflow-hidden">
                    <div className="absolute top-0 right-0 p-4 opacity-5 text-8xl text-[#2D5A3D]">🏨</div>
-                   <p className="text-[#8B7E6A] text-xs font-bold uppercase tracking-widest mb-1">Ocupación Actual</p>
-                   <div className="flex items-baseline gap-2">
-                      <span className="text-5xl font-serif font-bold text-[#2D2A26]">{liveOccupancy}0%</span>
-                      <span className="text-sm text-green-600 font-medium">↑ 5% vs ayer</span>
+                   <p className="text-[#8B7E6A] text-[9px] md:text-xs font-bold uppercase tracking-widest mb-1">Ocupación Actual</p>
+                   <div className="flex items-baseline gap-1 md:gap-2">
+                      <span className="text-3xl md:text-5xl font-serif font-bold text-[#2D2A26]">{liveOccupancy}0%</span>
+                      <span className="text-[10px] md:text-sm text-green-600 font-medium">↑ 5%</span>
                    </div>
                    <div className="w-full bg-[#F5F1EB] rounded-full h-1.5 mt-4">
                       <div className="bg-[#2D5A3D] h-1.5 rounded-full transition-all duration-1000" style={{ width: `${liveOccupancy}0%` }} />
@@ -509,10 +509,10 @@ const HotelDemoPage: React.FC = () => {
                 </div>
 
                 {/* Check-ins Card */}
-                <div className="bg-white rounded-xl p-6 border border-[#E8E2D8] shadow-sm flex flex-col justify-between">
+                <div className="bg-white rounded-xl p-3 md:p-6 border border-[#E8E2D8] shadow-sm flex flex-col justify-between">
                    <div>
-                      <p className="text-[#8B7E6A] text-xs font-bold uppercase tracking-widest mb-1">Check-ins Pendientes</p>
-                      <span className="text-4xl font-serif font-bold text-[#2D2A26]">3</span>
+                      <p className="text-[#8B7E6A] text-[9px] md:text-xs font-bold uppercase tracking-widest mb-1">Check-ins Pendientes</p>
+                      <span className="text-2xl md:text-4xl font-serif font-bold text-[#2D2A26]">3</span>
                    </div>
                    <div className="flex -space-x-2 mt-2">
                       {['M', 'J', 'L'].map((l, i) => (
@@ -523,8 +523,8 @@ const HotelDemoPage: React.FC = () => {
                 </div>
 
                 {/* Housekeeping Card */}
-                <div className="bg-white rounded-xl p-6 border border-[#E8E2D8] shadow-sm">
-                   <p className="text-[#8B7E6A] text-xs font-bold uppercase tracking-widest mb-3">Limpieza</p>
+                <div className="bg-white rounded-xl p-3 md:p-6 border border-[#E8E2D8] shadow-sm">
+                   <p className="text-[#8B7E6A] text-[9px] md:text-xs font-bold uppercase tracking-widest mb-3">Limpieza</p>
                    <div className="space-y-3">
                       <div>
                         <div className="flex justify-between text-xs mb-1"><span className="font-medium text-[#2D2A26]">Hab. 102</span><span className="text-amber-500 font-bold">En proceso</span></div>
@@ -538,20 +538,20 @@ const HotelDemoPage: React.FC = () => {
                 </div>
 
                 {/* Revenue Card */}
-                 <div className="bg-[#2D5A3D] rounded-xl p-6 text-white shadow-lg shadow-[#2D5A3D]/20 relative overflow-hidden">
+                 <div className="bg-[#2D5A3D] rounded-xl p-3 md:p-6 text-white shadow-lg shadow-[#2D5A3D]/20 relative overflow-hidden">
                     <div className="relative z-10">
-                      <p className="text-white/60 text-xs font-bold uppercase tracking-widest mb-1">RevPAR (Hoy)</p>
-                      <span className="text-4xl font-serif font-bold">${(liveTodayRevenue/1000).toFixed(0)}k</span>
+                      <p className="text-white/60 text-[9px] md:text-xs font-bold uppercase tracking-widest mb-1">RevPAR (Hoy)</p>
+                      <span className="text-2xl md:text-4xl font-serif font-bold">${(liveTodayRevenue/1000).toFixed(0)}k</span>
                       <p className="text-xs text-white/80 mt-2">Promedio por habitación disponible</p>
                     </div>
                     <div className="absolute -bottom-6 -right-6 text-9xl text-white/10">💰</div>
                  </div>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
                 
                 {/* Visual Room Grid */}
-                <div className="lg:col-span-2 bg-white rounded-xl border border-[#E8E2D8] p-6 h-[520px] overflow-hidden flex flex-col">
+                <div className="lg:col-span-2 bg-white rounded-xl border border-[#E8E2D8] p-4 md:p-6 h-[400px] md:h-[520px] overflow-hidden flex flex-col">
                    <h3 className="font-serif font-bold text-xl text-[#2D2A26] mb-4">Estado de Habitaciones</h3>
                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3 overflow-y-auto pr-2">
                       {liveRoomStatuses.map((room, i) => (
@@ -580,7 +580,7 @@ const HotelDemoPage: React.FC = () => {
                 </div>
 
                 {/* Guest Requests Feed */}
-                <div className="bg-white rounded-xl border border-[#E8E2D8] flex flex-col h-[520px] overflow-hidden">
+                <div className="bg-white rounded-xl border border-[#E8E2D8] flex flex-col h-[400px] md:h-[520px] overflow-hidden">
                    <div className="p-5 border-b border-[#E8E2D8] bg-[#FDFBF7]">
                       <h3 className="font-serif font-bold text-lg text-[#2D2A26]">Solicitudes de Huéspedes</h3>
                       <p className="text-xs text-[#8B7E6A]">Concierge digital en tiempo real</p>

@@ -138,27 +138,27 @@ const ClinicDemoPage: React.FC = () => {
 
       {/* ===== NAVBAR ===== */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-lg border-b border-[#E5EAF2] shadow-sm shadow-[#1A2332]/[0.02]">
-        <div className="max-w-6xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] flex items-center justify-center">
-              <svg className="w-4.5 h-4.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+        <div className="max-w-6xl mx-auto px-3 md:px-6 py-2 md:py-3 flex items-center justify-between">
+          <div className="flex items-center gap-2 md:gap-3 shrink-0">
+            <div className="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] flex items-center justify-center">
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
             </div>
             <span className="text-lg font-bold hidden sm:inline">Salud<span className="text-[#2563EB]">+</span></span>
           </div>
 
-          <div className="flex items-center gap-2">
-            <button onClick={() => setView('site')} className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${view === 'site' ? 'bg-[#2563EB] text-white' : 'text-[#7C8DB5] hover:text-[#1A2332] hover:bg-[#F0F3F9]'}`}>
-              🌐 Sitio Web
+          <div className="flex items-center gap-1 md:gap-2 overflow-x-auto no-scrollbar">
+            <button onClick={() => setView('site')} className={`px-2 md:px-3 py-1.5 rounded-lg text-[10px] md:text-xs font-semibold transition-all whitespace-nowrap shrink-0 ${view === 'site' ? 'bg-[#2563EB] text-white' : 'text-[#7C8DB5] hover:text-[#1A2332] hover:bg-[#F0F3F9]'}`}>
+              🌐 <span className="hidden md:inline">Sitio </span>Web
             </button>
             <button 
               onClick={() => setView('admin')}
-              className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${view === 'admin' ? 'bg-orange-600 text-white' : 'text-[#64748B] hover:bg-orange-50'}`}
+              className={`px-2 md:px-4 py-1.5 md:py-2 rounded-lg text-[10px] md:text-sm font-bold transition-all whitespace-nowrap shrink-0 ${view === 'admin' ? 'bg-orange-600 text-white' : 'text-[#64748B] hover:bg-orange-50'}`}
             >
-              Funciones Disponibles
+              Funciones
             </button>
-            <button onClick={() => setView('live')} className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${view === 'live' ? 'bg-green-600 text-white' : 'text-[#7C8DB5] hover:text-[#1A2332] hover:bg-[#F0F3F9]'}`}>
+            <button onClick={() => setView('live')} className={`px-2 md:px-3 py-1.5 rounded-lg text-[10px] md:text-xs font-semibold transition-all flex items-center gap-1 md:gap-1.5 whitespace-nowrap shrink-0 ${view === 'live' ? 'bg-green-600 text-white' : 'text-[#7C8DB5] hover:text-[#1A2332] hover:bg-[#F0F3F9]'}`}>
               {view === 'live' && <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />}
-              📡 Ver Versión Interactiva
+              📡 <span className="hidden md:inline">Ver </span>Interactiva
             </button>
             <div className="w-px h-5 bg-[#E5EAF2] mx-1 hidden sm:block" />
             <button onClick={() => navigate('/demos')} className="text-[10px] text-[#7C8DB5] hover:text-[#2563EB] transition-colors border border-[#E5EAF2] px-2 py-1 rounded hidden sm:block">← Volver a Demos</button>
@@ -177,9 +177,9 @@ const ClinicDemoPage: React.FC = () => {
                 Tu salud, en <span className="text-[#2563EB] inline-block relative transition-all duration-500 transform translate-y-0 opacity-100 key={heroTextIndex}">{heroWords[heroTextIndex]}</span>
               </h1>
               <p className="text-lg md:text-xl text-[#7C8DB5] mb-10 max-w-lg mx-auto leading-relaxed">Sacá turno online en segundos. Elegí especialidad, profesional y horario.</p>
-              <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8">
+              <div className="grid grid-cols-2 md:flex md:flex-wrap items-center justify-center gap-3 md:gap-8">
                 {[{ label: 'Pacientes', value: '1,240', icon: '👥' }, { label: 'Turnos / mes', value: '186', icon: '📅' }, { label: 'Especialidades', value: '5', icon: '🩺' }, { label: 'Asistencia', value: '94%', icon: '✅' }].map((stat, i) => (
-                  <div key={i} className="flex items-center gap-3 px-5 py-3 rounded-xl bg-white border border-[#E5EAF2] shadow-sm shadow-[#1A2332]/[0.02]"><span className="text-xl">{stat.icon}</span><div className="text-left"><div className="text-lg md:text-xl font-bold text-[#1A2332]">{stat.value}</div><div className="text-[10px] text-[#7C8DB5]">{stat.label}</div></div></div>
+                  <div key={i} className="flex items-center gap-2 md:gap-3 px-3 md:px-5 py-2.5 md:py-3 rounded-xl bg-white border border-[#E5EAF2] shadow-sm shadow-[#1A2332]/[0.02]"><span className="text-lg md:text-xl">{stat.icon}</span><div className="text-left"><div className="text-base md:text-xl font-bold text-[#1A2332]">{stat.value}</div><div className="text-[10px] text-[#7C8DB5]">{stat.label}</div></div></div>
                 ))}
               </div>
             </div>
@@ -303,7 +303,7 @@ const ClinicDemoPage: React.FC = () => {
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {[
                   { 
                     category: 'GESTIÓN DE TURNOS',
@@ -406,12 +406,12 @@ const ClinicDemoPage: React.FC = () => {
             <div className="max-w-7xl mx-auto">
               
               {/* Top Stats */}
-               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                 <div className="bg-white p-5 rounded-xl border border-[#E2E8F0] shadow-sm flex flex-col justify-between">
+               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6">
+                 <div className="bg-white p-3 md:p-5 rounded-xl border border-[#E2E8F0] shadow-sm flex flex-col justify-between">
                     <div>
-                       <p className="text-[#64748B] text-[10px] font-bold uppercase tracking-wider mb-1">Confirmaciones por IA</p>
-                       <div className="flex items-baseline gap-2">
-                          <p className="text-3xl font-bold text-[#0F172A]">94%</p>
+                       <p className="text-[#64748B] text-[9px] md:text-[10px] font-bold uppercase tracking-wider mb-1">Confirmaciones por IA</p>
+                       <div className="flex items-baseline gap-1 md:gap-2">
+                          <p className="text-2xl md:text-3xl font-bold text-[#0F172A]">94%</p>
                           <span className="text-xs text-green-600 bg-green-50 px-1.5 py-0.5 rounded font-medium">↑ 12%</span>
                        </div>
                     </div>
@@ -419,30 +419,30 @@ const ClinicDemoPage: React.FC = () => {
                        <div className="bg-blue-600 h-full w-[94%]" />
                     </div>
                  </div>
-                 <div className="bg-white p-5 rounded-xl border border-[#E2E8F0] shadow-sm flex flex-col justify-between">
+                 <div className="bg-white p-3 md:p-5 rounded-xl border border-[#E2E8F0] shadow-sm flex flex-col justify-between">
                     <div>
-                       <p className="text-[#64748B] text-[10px] font-bold uppercase tracking-wider mb-1">Turnos Recuperados</p>
-                       <div className="flex items-baseline gap-2">
-                          <p className="text-3xl font-bold text-[#0F172A]">8</p>
+                       <p className="text-[#64748B] text-[9px] md:text-[10px] font-bold uppercase tracking-wider mb-1">Turnos Recuperados</p>
+                       <div className="flex items-baseline gap-1 md:gap-2">
+                          <p className="text-2xl md:text-3xl font-bold text-[#0F172A]">8</p>
                           <span className="text-xs text-[#64748B]">hoy</span>
                        </div>
                     </div>
                     <p className="text-[10px] text-[#64748B] mt-2">Slots cancelados y re-ocupados automáticamente.</p>
                  </div>
-                 <div className="bg-white p-5 rounded-xl border border-[#E2E8F0] shadow-sm flex flex-col justify-between">
+                 <div className="bg-white p-3 md:p-5 rounded-xl border border-[#E2E8F0] shadow-sm flex flex-col justify-between">
                     <div>
-                       <p className="text-[#64748B] text-[10px] font-bold uppercase tracking-wider mb-1">Pre-Checkin Digital</p>
-                       <div className="flex items-baseline gap-2">
-                          <p className="text-3xl font-bold text-[#0F172A]">18/22</p>
+                       <p className="text-[#64748B] text-[9px] md:text-[10px] font-bold uppercase tracking-wider mb-1">Pre-Checkin Digital</p>
+                       <div className="flex items-baseline gap-1 md:gap-2">
+                          <p className="text-2xl md:text-3xl font-bold text-[#0F172A]">18/22</p>
                        </div>
                     </div>
                      <p className="text-[10px] text-[#64748B] mt-2">Pacientes con datos previos a la consulta.</p>
                  </div>
-                 <div className="bg-gradient-to-br from-blue-600 to-blue-700 text-white p-5 rounded-xl border border-blue-800 shadow-sm flex flex-col justify-between relative overflow-hidden">
+                 <div className="bg-gradient-to-br from-blue-600 to-blue-700 text-white p-3 md:p-5 rounded-xl border border-blue-800 shadow-sm flex flex-col justify-between relative overflow-hidden">
                     <div className="relative z-10">
-                       <p className="text-blue-100 text-[10px] font-bold uppercase tracking-wider mb-1">Ahorro Administrativo</p>
-                       <div className="flex items-baseline gap-2">
-                          <p className="text-3xl font-bold">~4hs</p>
+                       <p className="text-blue-100 text-[9px] md:text-[10px] font-bold uppercase tracking-wider mb-1">Ahorro Administrativo</p>
+                       <div className="flex items-baseline gap-1 md:gap-2">
+                          <p className="text-2xl md:text-3xl font-bold">~4hs</p>
                        </div>
                        <p className="text-[10px] text-blue-100 mt-2">Tiempo administrativo ganado hoy.</p>
                     </div>
@@ -450,30 +450,30 @@ const ClinicDemoPage: React.FC = () => {
                  </div>
                </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
                 
                 {/* Left Column: Intelligent Agenda */}
                 <div className="lg:col-span-2 space-y-6">
-                        <div className="bg-white rounded-xl border border-[#E2E8F0] shadow-sm overflow-hidden flex flex-col h-[500px]">
+                        <div className="bg-white rounded-xl border border-[#E2E8F0] shadow-sm overflow-hidden flex flex-col h-[400px] md:h-[500px]">
                        <div className="p-5 border-b border-[#E2E8F0] bg-[#F8FAFC] flex justify-between items-center">
                           <div>
                              <h3 className="font-bold text-[#0F172A]">Agenda Inteligente</h3>
                              <p className="text-xs text-[#64748B]">Gestión de turnos en tiempo real</p>
                           </div>
-                          <div className="flex gap-2">
-                             <span className="px-2 py-1 bg-green-100 text-green-700 text-[10px] font-bold rounded">Autocompletar: ON</span>
-                             <span className="px-2 py-1 bg-blue-100 text-blue-700 text-[10px] font-bold rounded">Lista Espera: ON</span>
-                          </div>
+                           <div className="flex gap-1 md:gap-2">
+                              <span className="px-1.5 md:px-2 py-1 bg-green-100 text-green-700 text-[9px] md:text-[10px] font-bold rounded">Auto: ON</span>
+                              <span className="px-1.5 md:px-2 py-1 bg-blue-100 text-blue-700 text-[9px] md:text-[10px] font-bold rounded">Espera: ON</span>
+                           </div>
                        </div>
                        <div className="flex-1 overflow-y-auto p-0">
                           <div className="relative">
                              {/* Timeline vertical line */}
-                             <div className="absolute left-14 top-0 bottom-0 w-px bg-[#E2E8F0]" />
+                              <div className="absolute left-10 md:left-14 top-0 bottom-0 w-px bg-[#E2E8F0]" />
                              
                              {liveQueue.map((q, i) => (
-                                <div key={i} className="relative pl-24 pr-5 py-4 hover:bg-[#F8FAFC] group transition-colors">
-                                   <div className="absolute left-12 top-5 w-4 h-4 rounded-full border-2 border-white shadow-sm bg-blue-500 z-10" />
-                                   <span className="absolute left-2 top-5 text-[10px] font-mono text-[#64748B] font-bold w-9 text-right">{q.time}</span>
+                                 <div key={i} className="relative pl-16 md:pl-24 pr-3 md:pr-5 py-3 md:py-4 hover:bg-[#F8FAFC] group transition-colors">
+                                    <div className="absolute left-9 md:left-12 top-4 md:top-5 w-3 md:w-4 h-3 md:h-4 rounded-full border-2 border-white shadow-sm bg-blue-500 z-10" />
+                                    <span className="absolute left-1 md:left-2 top-4 md:top-5 text-[9px] md:text-[10px] font-mono text-[#64748B] font-bold w-7 md:w-9 text-right">{q.time}</span>
                                    
                                    <div className="flex justify-between items-start">
                                       <div>
@@ -501,9 +501,9 @@ const ClinicDemoPage: React.FC = () => {
                               ))}
                               {/* Future slots */}
                               {[1,2,3].map((_, i) => (
-                                 <div key={`fut${i}`} className="relative pl-24 pr-5 py-4 opacity-60">
-                                    <div className="absolute left-12 top-5 w-4 h-4 rounded-full border-2 border-white shadow-sm bg-[#CBD5E1] z-10" />
-                                    <span className="absolute left-2 top-5 text-[10px] font-mono text-[#94A3B8] font-bold w-9 text-right">12:{15 + (i*15)}</span>
+                                  <div key={`fut${i}`} className="relative pl-16 md:pl-24 pr-3 md:pr-5 py-3 md:py-4 opacity-60">
+                                     <div className="absolute left-9 md:left-12 top-4 md:top-5 w-3 md:w-4 h-3 md:h-4 rounded-full border-2 border-white shadow-sm bg-[#CBD5E1] z-10" />
+                                     <span className="absolute left-1 md:left-2 top-4 md:top-5 text-[9px] md:text-[10px] font-mono text-[#94A3B8] font-bold w-7 md:w-9 text-right">12:{15 + (i*15)}</span>
                                     <div className="h-4 w-48 bg-[#F1F5F9] rounded animate-pulse" />
                                  </div>
                               ))}
@@ -514,7 +514,7 @@ const ClinicDemoPage: React.FC = () => {
 
                 {/* Right Column: AI Bot Monitor */}
                 <div className="space-y-6">
-                   <div className="bg-[#0F172A] rounded-xl border border-[#334155] shadow-lg flex flex-col h-[500px] overflow-hidden relative">
+                   <div className="bg-[#0F172A] rounded-xl border border-[#334155] shadow-lg flex flex-col h-[400px] md:h-[500px] overflow-hidden relative">
                       <div className="p-4 border-b border-[#334155] bg-[#1E293B] flex justify-between items-center">
                           <div className="flex items-center gap-2">
                              <span className="text-lg">🤖</span>
