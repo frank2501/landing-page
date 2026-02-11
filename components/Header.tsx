@@ -76,7 +76,7 @@ const Header: React.FC = () => {
             Soluciones
           </button>
           <a 
-            href="https://wa.me/5491137758970" 
+            href="https://wa.me/5491137758970?text=Hola%2C%20tengo%20un%20negocio%20y%20quiero%20saber%20c%C3%B3mo%20automatizar%20tareas%20para%20ahorrar%20tiempo%20y%20evitar%20errores." 
             target="_blank" 
             rel="noopener noreferrer" 
             className="px-5 py-2 text-sm font-bold text-black bg-white rounded-full hover:bg-orange-500 hover:text-white transition-all duration-300 transform hover:scale-105 shadow-lg shadow-white/5"
@@ -147,7 +147,7 @@ const Header: React.FC = () => {
             </button>
             
             <a 
-              href="https://wa.me/5491137758970" 
+              href="https://wa.me/5491137758970?text=Hola%2C%20tengo%20un%20negocio%20y%20quiero%20saber%20c%C3%B3mo%20automatizar%20tareas%20para%20ahorrar%20tiempo%20y%20evitar%20errores." 
               target="_blank" 
               rel="noopener noreferrer" 
               className={`inline-block px-5 py-3 text-sm font-bold text-black bg-white rounded-full hover:bg-orange-500 hover:text-white transition-all duration-300 transform hover:scale-105 shadow-lg shadow-white/5 w-fit transform transition-all duration-500 delay-200 ${

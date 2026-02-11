@@ -9,10 +9,56 @@ const reviews = [
   { name: 'Sandra López', time: 'hace 1 año', rating: 5, text: 'Excelente relación calidad-precio. El entorno natural es único y el personal super amable. 10/10', initial: 'S', color: 'bg-purple-600' },
 ];
 
-const calendarDays = Array.from({ length: 28 }, (_, i) => ({
+const calendarDays = Array.from({ length: 30 }, (_, i) => ({
   day: i + 1,
-  status: i < 3 ? 'past' : [4,5,6,12,13,14,20,21].includes(i+1) ? 'booked' : [7,8,15,16,22,23].includes(i+1) ? 'checkin' : 'available',
+  status: i < 3 ? 'past' : [5,6,12,13,14,20,21,27,28].includes(i+1) ? 'booked' : 'available',
+  price: [5,6,12,13].includes(i+1) ? 180 : 120
 }));
+
+const CalendarDropdown: React.FC<{
+  isOpen: boolean;
+  onClose: () => void;
+  onSelect: (date: string) => void;
+  label: string;
+}> = ({ isOpen, onClose, onSelect, label }) => {
+  if (!isOpen) return null;
+  return (
+    <div className="absolute top-full left-0 mt-2 p-4 bg-white rounded-xl shadow-xl border border-[#E8E2D8] z-50 w-72 animate-in fade-in zoom-in-95 duration-200">
+      <div className="flex items-center justify-between mb-3">
+        <span className="text-sm font-bold text-[#2D2A26] font-serif">Febrero 2026</span>
+        <div className="flex gap-1">
+          <button className="p-1 hover:bg-[#F5F1EB] rounded"><svg className="w-4 h-4 text-[#8B7E6A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg></button>
+          <button className="p-1 hover:bg-[#F5F1EB] rounded"><svg className="w-4 h-4 text-[#8B7E6A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg></button>
+        </div>
+      </div>
+      <div className="grid grid-cols-7 gap-1 mb-2 text-center">
+        {['Lu','Ma','Mi','Ju','Vi','Sá','Do'].map(d => <span key={d} className="text-[10px] text-[#8B7E6A] font-bold">{d}</span>)}
+      </div>
+      <div className="grid grid-cols-7 gap-1">
+        {calendarDays.map((d, i) => (
+          <button
+            key={i}
+            disabled={d.status === 'past' || d.status === 'booked'}
+            onClick={() => { onSelect(`2026-02-${d.day.toString().padStart(2, '0')}`); }}
+            className={`
+              relative aspect-square flex items-center justify-center text-xs rounded-md transition-all
+              ${d.status === 'past' ? 'text-gray-300' : ''}
+              ${d.status === 'booked' ? 'bg-red-50 text-red-300 cursor-not-allowed' : ''}
+              ${d.status === 'available' ? 'bg-[#2D5A3D]/5 text-[#2D5A3D] hover:bg-[#2D5A3D] hover:text-white font-medium' : ''}
+            `}
+          >
+            {d.day}
+            {d.status === 'booked' && <span className="absolute bottom-0.5 w-[3px] h-[3px] rounded-full bg-red-300" />}
+          </button>
+        ))}
+      </div>
+      <div className="flex items-center gap-3 mt-3 pt-3 border-t border-[#F5F1EB] text-[10px] text-[#8B7E6A]">
+        <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[#2D5A3D]" />Disponible</div>
+        <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-200" />Ocupado</div>
+      </div>
+    </div>
+  );
+};
 
 // Live simulation data
 const guestNames = ['María Gutiérrez', 'John Smith', 'Tomás Herrera', 'Laura Vidal', 'Pierre Dupont', 'Ana Belén', 'Carlos Ruiz', 'Sophie Martin', 'Roberto Paz', 'Elena Vargas'];
@@ -24,6 +70,7 @@ const HotelDemoPage: React.FC = () => {
   const [view, setView] = useState<ViewMode>('site');
   const [checkIn, setCheckIn] = useState('');
   const [checkOut, setCheckOut] = useState('');
+  const [openCalendar, setOpenCalendar] = useState<'checkin' | 'checkout' | null>(null);
   const [guests, setGuests] = useState('2');
   const [dashTab, setDashTab] = useState<'reservas' | 'calendario'>('reservas');
   const [rooms, setRooms] = useState([
@@ -109,9 +156,12 @@ const HotelDemoPage: React.FC = () => {
             <button onClick={() => setView('site')} className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${view === 'site' ? 'bg-[#2D5A3D] text-white' : 'text-[#8B7E6A] hover:text-[#2D2A26] hover:bg-[#F5F1EB]'}`}>
               🌐 Sitio Web
             </button>
-            <button onClick={() => setView('admin')} className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${view === 'admin' ? 'bg-orange-500 text-white' : 'text-[#8B7E6A] hover:text-[#2D2A26] hover:bg-[#F5F1EB]'}`}>
-              ⚙️ Panel Admin
-            </button>
+            <button
+                onClick={() => setView('admin')}
+                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${view === 'admin' ? 'bg-[#2D5A3D] text-white' : 'text-[#8B7E6A] hover:bg-[#FDFBF7]'}`}
+              >
+                Funciones Disponibles
+              </button>
             <button onClick={() => setView('live')} className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${view === 'live' ? 'bg-green-600 text-white' : 'text-[#8B7E6A] hover:text-[#2D2A26] hover:bg-[#F5F1EB]'}`}>
               {view === 'live' && <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />}
               📡 Ver Versión Interactiva
@@ -133,13 +183,32 @@ const HotelDemoPage: React.FC = () => {
               <p className="text-lg md:text-2xl text-[#8B7E6A] mb-3 italic">Donde la naturaleza te abraza.</p>
               <p className="max-w-md mx-auto text-sm text-[#A09888] mb-10 leading-relaxed" style={{ fontFamily: 'sans-serif' }}>Un refugio exclusivo a orillas del lago Nahuel Huapi. Reservá directo, sin intermediarios.</p>
               <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl shadow-black/5 border border-[#E8E2D8] p-2" style={{ fontFamily: 'sans-serif' }}>
-                <div className="flex flex-col md:flex-row gap-2">
-                  <div className="flex-1 px-4 py-3 text-left"><label className="text-[9px] text-[#8B7E6A] uppercase tracking-wider font-semibold block mb-1">Check-in</label><input type="date" value={checkIn} onChange={(e) => setCheckIn(e.target.value)} className="w-full text-sm text-[#2D2A26] bg-transparent outline-none" /></div>
+                <div className="flex flex-col md:flex-row gap-2 relative">
+                  <div className="flex-1 px-4 py-3 text-left relative">
+                    <label className="text-[9px] text-[#8B7E6A] uppercase tracking-wider font-semibold block mb-1">Check-in</label>
+                    <button onClick={() => setOpenCalendar(openCalendar === 'checkin' ? null : 'checkin')} className="w-full text-left text-sm text-[#2D2A26] outline-none flex items-center justify-between">
+                      {checkIn || 'Seleccionar fecha'} <span className="text-xs">📅</span>
+                    </button>
+                    <CalendarDropdown isOpen={openCalendar === 'checkin'} onClose={() => setOpenCalendar(null)} onSelect={setCheckIn} label="Check-in" />
+                  </div>
                   <div className="hidden md:block w-px bg-[#E8E2D8]" />
-                  <div className="flex-1 px-4 py-3 text-left"><label className="text-[9px] text-[#8B7E6A] uppercase tracking-wider font-semibold block mb-1">Check-out</label><input type="date" value={checkOut} onChange={(e) => setCheckOut(e.target.value)} className="w-full text-sm text-[#2D2A26] bg-transparent outline-none" /></div>
+                  <div className="flex-1 px-4 py-3 text-left relative">
+                    <label className="text-[9px] text-[#8B7E6A] uppercase tracking-wider font-semibold block mb-1">Check-out</label>
+                    <button onClick={() => setOpenCalendar(openCalendar === 'checkout' ? null : 'checkout')} className="w-full text-left text-sm text-[#2D2A26] outline-none flex items-center justify-between">
+                      {checkOut || 'Seleccionar fecha'} <span className="text-xs">📅</span>
+                    </button>
+                    <CalendarDropdown isOpen={openCalendar === 'checkout'} onClose={() => setOpenCalendar(null)} onSelect={setCheckOut} label="Check-out" />
+                  </div>
                   <div className="hidden md:block w-px bg-[#E8E2D8]" />
                   <div className="flex-1 px-4 py-3 text-left"><label className="text-[9px] text-[#8B7E6A] uppercase tracking-wider font-semibold block mb-1">Huéspedes</label><select value={guests} onChange={(e) => setGuests(e.target.value)} className="w-full text-sm text-[#2D2A26] bg-transparent outline-none"><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
-                  <button className="px-8 py-3 bg-[#2D5A3D] text-white rounded-xl text-sm font-semibold hover:bg-[#1e4a2e] transition-all active:scale-95">Buscar</button>
+                  <button className="px-8 py-3 bg-[#2D5A3D] text-white rounded-xl text-sm font-semibold hover:bg-[#1e4a2e] transition-all active:scale-95 flex flex-col items-center justify-center leading-tight">
+                    <span>Buscar</span>
+                    {checkIn && checkOut && (
+                      <span className="text-[9px] font-normal opacity-80">
+                        ({Math.max(1, Math.ceil((new Date(checkOut).getTime() - new Date(checkIn).getTime()) / (1000 * 60 * 60 * 24)))} noches)
+                      </span>
+                    )}
+                  </button>
                 </div>
               </div>
             </div>
@@ -252,19 +321,49 @@ const HotelDemoPage: React.FC = () => {
           {/* CTA + Footer */}
           <section className="py-16 md:py-24 px-6 bg-[#2D5A3D]"><div className="max-w-2xl mx-auto text-center"><h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight mb-4">Tu próxima escapada te espera</h2><p className="text-[#A3C9B0] text-base mb-8" style={{ fontFamily: 'sans-serif' }}>Reservá directo y obtené el mejor precio garantizado.</p><a href="#habitaciones" className="inline-block px-10 py-4 bg-white text-[#2D5A3D] font-bold rounded-xl hover:bg-[#F5F1EB] transition-all active:scale-95" style={{ fontFamily: 'sans-serif' }}>Ver Habitaciones</a></div></section>
 
-          <footer className="border-t border-[#E8E2D8] py-10 px-6 bg-[#FDFBF7]" style={{ fontFamily: 'sans-serif' }}>
-            <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-              <div className="flex items-center gap-3"><div className="w-7 h-7 rounded-full bg-[#2D5A3D] flex items-center justify-center text-white text-[9px] font-bold">PL</div><span className="text-sm font-bold text-[#2D2A26]" style={{ fontFamily: 'Georgia, serif' }}>Posada del Lago</span></div>
-              <div className="flex items-center gap-3">{[
-                <svg key="ig" className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>,
-                <svg key="fb" className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>,
-                <svg key="wa" className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a.96.96 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>,
-              ].map((icon, i) => <a key={i} href="#" className="w-9 h-9 rounded-full bg-[#2D5A3D]/5 border border-[#E8E2D8] flex items-center justify-center text-[#8B7E6A] hover:text-[#2D5A3D] hover:border-[#2D5A3D]/30 transition-all">{icon}</a>)}</div>
-              <div className="text-xs text-[#8B7E6A]">📍 Ruta 40, Villa La Angostura · 📞 294 449-XXXX</div>
+          <footer className="border-t border-[#E8E2D8] py-12 px-6 bg-[#FDFBF7]" style={{ fontFamily: 'sans-serif' }}>
+            <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+               <div>
+                  <div className="flex items-center gap-3 mb-4"><div className="w-8 h-8 rounded-full bg-[#2D5A3D] flex items-center justify-center text-white text-[10px] font-bold">PL</div><span className="text-lg font-bold text-[#2D2A26]" style={{ fontFamily: 'Georgia, serif' }}>Posada del Lago</span></div>
+                  <p className="text-xs text-[#8B7E6A] leading-relaxed mb-4">Experiencias únicas en la Patagonia Argentina. Naturaleza, confort y servicio de excelencia.</p>
+                  <div className="flex gap-3">
+                    {[
+                      <svg key="ig" className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>,
+                      <svg key="fb" className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.871v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>,
+                    ].map((icon, i) => <a key={i} href="#" className="w-8 h-8 rounded-full bg-[#2D5A3D]/5 border border-[#E8E2D8] flex items-center justify-center text-[#8B7E6A] hover:text-[#2D5A3D] hover:border-[#2D5A3D]/30 transition-all">{icon}</a>)}
+                  </div>
+               </div>
+               <div>
+                 <h4 className="font-bold text-[#2D2A26] mb-4">La Posada</h4>
+                 <ul className="space-y-2 text-xs text-[#8B7E6A]">
+                   <li><a href="#" className="hover:text-[#2D5A3D] transition-colors">Habitaciones</a></li>
+                   <li><a href="#" className="hover:text-[#2D5A3D] transition-colors">Gastronomía</a></li>
+                   <li><a href="#" className="hover:text-[#2D5A3D] transition-colors">Experiencias</a></li>
+                   <li><a href="#" className="hover:text-[#2D5A3D] transition-colors">Eventos</a></li>
+                 </ul>
+               </div>
+               <div>
+                 <h4 className="font-bold text-[#2D2A26] mb-4">Información</h4>
+                 <ul className="space-y-2 text-xs text-[#8B7E6A]">
+                   <li><a href="#" className="hover:text-[#2D5A3D] transition-colors">Política de Cancelación</a></li>
+                   <li><a href="#" className="hover:text-[#2D5A3D] transition-colors">Cómo llegar</a></li>
+                   <li><a href="#" className="hover:text-[#2D5A3D] transition-colors">FAQ</a></li>
+                   <li><a href="#" className="hover:text-[#2D5A3D] transition-colors">Contacto</a></li>
+                 </ul>
+               </div>
+               <div>
+                 <h4 className="font-bold text-[#2D2A26] mb-4">Contacto</h4>
+                 <ul className="space-y-2 text-xs text-[#8B7E6A]">
+                   <li>Patagonia Argentina</li>
+                   <li className="font-bold text-[#2D2A26]">Ruta 40, Km 2100</li>
+                   <li>Villa La Angostura</li>
+                   <li className="pt-2">+54 294 449-XXXX</li>
+                 </ul>
+               </div>
             </div>
-            <div className="max-w-5xl mx-auto mt-6 pt-4 border-t border-[#E8E2D8] flex flex-col md:flex-row items-center justify-between gap-2">
-              <p className="text-[10px] text-[#C4BCAE]">© 2026 Posada del Lago. Todos los derechos reservados.</p>
-              <p className="text-[10px] text-[#C4BCAE]">Demo creada por <button onClick={() => navigate('/')} className="text-[#2D5A3D]/50 hover:text-[#2D5A3D] transition-colors">ArtechIA</button></p>
+            <div className="max-w-6xl mx-auto pt-8 border-t border-[#E8E2D8] flex flex-col md:flex-row items-center justify-between gap-4">
+              <p className="text-[10px] text-[#A09888]">© 2026 Posada del Lago. Todos los derechos reservados.</p>
+              <p className="text-[10px] text-[#A09888]">Powered by <button onClick={() => navigate('/')} className="text-[#2D5A3D]/50 hover:text-[#2D5A3D] transition-colors font-bold">ArtechIA</button></p>
             </div>
           </footer>
         </>
@@ -272,34 +371,116 @@ const HotelDemoPage: React.FC = () => {
 
       {/* ===== ADMIN VIEW ===== */}
       {view === 'admin' && (
-        <div className="pt-20 pb-16 bg-[#F5F1EB] min-h-screen" style={{ fontFamily: 'sans-serif' }}>
-          <section className="py-10 md:py-16 px-6">
-            <div className="max-w-5xl mx-auto">
-              <div className="mb-10"><p className="text-orange-600 text-xs font-bold uppercase tracking-widest mb-2">Panel de Gestión</p><h2 className="text-2xl md:text-4xl font-bold tracking-tight" style={{ fontFamily: 'Georgia, serif' }}>Reservas y Calendario</h2></div>
-              <div className="bg-white rounded-2xl border border-[#E8E2D8] overflow-hidden shadow-lg shadow-black/[0.03]">
-                <div className="flex border-b border-[#E8E2D8]"><button onClick={() => setDashTab('reservas')} className={`flex-1 py-4 text-sm font-semibold transition-all ${dashTab === 'reservas' ? 'text-orange-600 border-b-2 border-orange-500 bg-orange-50' : 'text-[#8B7E6A] hover:text-[#2D2A26]'}`}>📋 Reservas</button><button onClick={() => setDashTab('calendario')} className={`flex-1 py-4 text-sm font-semibold transition-all ${dashTab === 'calendario' ? 'text-orange-600 border-b-2 border-orange-500 bg-orange-50' : 'text-[#8B7E6A] hover:text-[#2D2A26]'}`}>📅 Calendario</button></div>
-                {dashTab === 'reservas' && (
-                  <div className="p-5 md:p-6 overflow-x-auto"><table className="w-full text-sm"><thead><tr className="text-[#8B7E6A] text-xs uppercase tracking-wider"><th className="text-left pb-4 font-medium">Huésped</th><th className="text-left pb-4 font-medium">Habitación</th><th className="text-left pb-4 font-medium">Fechas</th><th className="text-left pb-4 font-medium">Origen</th><th className="text-right pb-4 font-medium">Estado</th></tr></thead><tbody className="divide-y divide-[#F5F1EB]">{[{ guest: 'María Gutiérrez', room: 'Suite Junior', dates: '14-17 Feb', origin: 'Directo', status: 'Confirmada', initials: 'MG' }, { guest: 'John Smith', room: 'Superior Vista', dates: '15-20 Feb', origin: 'Booking', status: 'Confirmada', initials: 'JS' }, { guest: 'Tomás Herrera', room: 'Clásica', dates: '18-19 Feb', origin: 'Airbnb', status: 'Pendiente', initials: 'TH' }, { guest: 'Laura Vidal', room: 'Suite Presidencial', dates: '22-27 Feb', origin: 'Directo', status: 'Señada', initials: 'LV' }].map((r, i) => (<tr key={i} className="hover:bg-[#FDFBF7] transition-colors"><td className="py-4"><div className="flex items-center gap-3"><div className="w-9 h-9 rounded-full bg-orange-100 flex items-center justify-center text-[11px] font-bold text-orange-700">{r.initials}</div><span className="font-medium text-[#2D2A26]">{r.guest}</span></div></td><td className="py-4 text-[#6B6259]">{r.room}</td><td className="py-4 text-[#8B7E6A] text-xs font-mono">{r.dates}</td><td className="py-4"><span className={`text-xs px-2 py-0.5 rounded-full font-medium ${r.origin === 'Directo' ? 'bg-[#2D5A3D]/10 text-[#2D5A3D]' : r.origin === 'Booking' ? 'bg-blue-50 text-blue-600' : 'bg-rose-50 text-rose-500'}`}>{r.origin}</span></td><td className="py-4 text-right"><span className={`text-xs font-semibold px-2 py-1 rounded-full ${r.status === 'Confirmada' ? 'bg-green-50 text-green-600' : r.status === 'Pendiente' ? 'bg-amber-50 text-amber-600' : 'bg-purple-50 text-purple-600'}`}>{r.status}</span></td></tr>))}</tbody></table></div>
-                )}
-                {dashTab === 'calendario' && (
-                  <div className="p-5 md:p-6"><div className="text-center mb-4"><h3 className="text-lg font-bold text-[#2D2A26]" style={{ fontFamily: 'Georgia, serif' }}>Febrero 2026</h3></div><div className="grid grid-cols-7 gap-1.5 mb-2">{['Lu','Ma','Mi','Ju','Vi','Sá','Do'].map(d => <div key={d} className="text-center text-[10px] text-[#8B7E6A] font-semibold uppercase py-2">{d}</div>)}</div><div className="grid grid-cols-7 gap-1.5">{calendarDays.map(d => <div key={d.day} className={`aspect-square rounded-lg flex items-center justify-center text-sm font-medium transition-all ${d.status === 'past' ? 'text-[#C4BCAE]' : d.status === 'booked' ? 'bg-red-50 text-red-400 line-through' : d.status === 'checkin' ? 'bg-amber-50 text-amber-600 ring-1 ring-amber-200' : 'bg-[#2D5A3D]/5 text-[#2D5A3D] hover:bg-[#2D5A3D]/10 cursor-pointer'}`}>{d.day}</div>)}</div></div>
-                )}
+        <div className="pt-20 pb-16 bg-[#FDFBF7] min-h-screen">
+          <section className="py-12 md:py-20 px-6">
+            <div className="max-w-6xl mx-auto">
+              <div className="mb-12 text-center text-[#2D2D2D]">
+                <h2 className="text-3xl md:text-5xl font-serif font-bold mb-4">Funciones Disponibles</h2>
+                <p className="text-[#6B6B6B] text-sm md:text-base max-w-2xl mx-auto">
+                   Tecnología intuitiva diseñada para elevar la experiencia de tus huéspedes y optimizar la rentabilidad de tu hotel.
+                </p>
               </div>
-            </div>
-          </section>
 
-          {/* Automations */}
-          <section className="py-10 md:py-16 px-6 border-t border-[#E8E2D8]">
-            <div className="max-w-5xl mx-auto">
-              <div className="mb-10"><p className="text-orange-600 text-xs font-bold uppercase tracking-widest mb-2">Automatizaciones</p><h2 className="text-2xl md:text-4xl font-bold tracking-tight" style={{ fontFamily: 'Georgia, serif' }}>Todo se gestiona solo</h2></div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[
-                  { emoji: '📧', title: 'Email Post-Checkout', desc: 'Email de agradecimiento + pedido de reseña en Google.', preview: <div className="bg-white rounded-xl p-4 border border-[#E8E2D8] text-xs"><div className="text-[#2D5A3D] font-bold mb-1">¡Gracias por tu estadía, María! 🌿</div><p className="text-[#8B7E6A] leading-relaxed">Esperamos que hayas disfrutado. <span className="text-[#2D5A3D] underline">Dejar reseña →</span></p></div> },
-                  { emoji: '✈️', title: 'Info Pre-Llegada', desc: 'WhatsApp 48hs antes del check-in.', preview: <div className="bg-white rounded-xl p-3 border border-green-100 text-xs text-[#4B5E4F] leading-relaxed">¡Hola María! Te esperamos el 14/02. Check-in: 14:00hs. 📍 Ruta 40, Villa La Angostura. ¿Transfer? 🚗</div> },
-                  { emoji: '🧹', title: 'Alertas de Limpieza', desc: 'Notificación al housekeeping tras checkout.', preview: <div className="flex items-center justify-between p-3 rounded-xl bg-white border border-amber-100"><div className="flex items-center gap-3"><div className="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center text-sm">🛏️</div><div><div className="text-xs font-bold text-[#2D2A26]">Suite Jr. - Hab. 301</div><div className="text-[10px] text-[#8B7E6A]">Checkout hoy 11:00</div></div></div><span className="px-2 py-0.5 bg-amber-50 text-amber-600 text-[10px] font-bold rounded-full">Pendiente</span></div> },
-                  { emoji: '🔄', title: 'Sync Multi-Plataforma', desc: 'Booking, Airbnb y Web sincronizadas.', preview: <div className="flex items-center justify-around">{[{n:'Booking',c:'text-blue-600'},{n:'Airbnb',c:'text-rose-500'},{n:'Directo',c:'text-[#2D5A3D]'}].map((p,i) => <div key={i} className="text-center"><div className={`text-sm font-bold ${p.c}`}>{p.n}</div><div className="text-[9px] text-green-600 mt-0.5">● Sync</div></div>)}</div> },
-                ].map((a, idx) => (
-                  <div key={idx} className="bg-white rounded-2xl border border-[#E8E2D8] overflow-hidden hover:shadow-lg hover:shadow-black/5 transition-all"><div className="p-6"><div className="flex items-center gap-3 mb-2"><span className="text-2xl">{a.emoji}</span><h3 className="font-bold text-[#2D2A26]">{a.title}</h3></div><p className="text-sm text-[#8B7E6A] leading-relaxed">{a.desc}</p></div><div className="bg-[#F9F7F3] border-t border-[#E8E2D8] p-4">{a.preview}</div></div>
+                  { 
+                    category: 'VENTAS DIRECTAS',
+                    title: 'Buscador de habitaciones', 
+                    desc: 'Tus clientes pueden ver qué habitaciones están libres al instante y reservar desde la web sin comisiones.',
+                    icon: '🏨',
+                    features: ['Disponibilidad en tiempo real', 'Fotos y precios dinámicos', 'Confirmación inmediata']
+                  },
+                  { 
+                    category: 'FINANZAS',
+                    title: 'Cobros Garantizados', 
+                    desc: 'Aceptamos pagos con tarjeta y plataformas seguras. El dinero va directo a tu cuenta de forma automática.',
+                    icon: '💳',
+                    features: ['Pago con un click', 'Aviso de cobro inmediato', 'Recibo digital automático']
+                  },
+                  { 
+                    category: 'CONECTIVIDAD',
+                    title: 'Sincronización Total', 
+                    desc: 'El sistema se conecta solo con Airbnb y Booking. Si reservan en un sitio, se cierra en los demás automáticamente.',
+                    icon: '🌍',
+                    features: ['Evita reservas dobles', 'Centraliza tus ventas', 'Ahorra horas de trabajo']
+                  },
+                  { 
+                    category: 'EXPERIENCIA HUESPED',
+                    title: 'Información de Llegada', 
+                    desc: 'Envío automático de ubicación, clave de entrada y reglas del hotel por WhatsApp y Mail el día del ingreso.',
+                    icon: '🔑',
+                    features: ['Check-in sin estrés', 'Todo en el celular', 'Atención 5 estrellas']
+                  },
+                  { 
+                    category: 'FIDELIZACIÓN',
+                    title: 'Reseñas Automáticas', 
+                    desc: 'El sistema pide una opinión por mail al momento del Check-out, mejorando tu reputación online.',
+                    icon: '⭐',
+                    features: ['Mejora en TripAdvisor', 'Feedback directo', 'Más confianza']
+                  },
+                  { 
+                    category: 'OPERACIONES',
+                    title: 'Gestión de Limpieza', 
+                    desc: 'Panel especial para el personal de limpieza. Saben exactamente qué habitación está libre para preparar.',
+                    icon: '🧹',
+                    features: ['Aviso de salida', 'Control de stock', 'Orden garantizado']
+                  },
+                  { 
+                    category: 'GESTIÓN',
+                    title: 'Control de Ingresos', 
+                    desc: 'Avisos al celular de quiénes entran y salen cada día para que tengas el control total desde donde estés.',
+                    icon: '📱',
+                    features: ['Panel de control móvil', 'Reporte de ocupación', 'Avisos en tiempo real']
+                  },
+                  { 
+                    category: 'SEGURIDAD',
+                    title: 'Registro de Clientes', 
+                    desc: 'Listado inteligentes de huéspedes frecuentes y control de personas con malos antecedentes.',
+                    icon: '📝',
+                    features: ['Historial completo', 'Seguridad de ingreso', 'Trato preferencial']
+                  },
+                  { 
+                    category: 'RECAUDACIÓN',
+                    title: 'Ofertas y Up-selling', 
+                    desc: 'Ofrecé de forma automática desayunos, traslados o upgrades antes de que el cliente llegue.',
+                    icon: '🎁',
+                    features: ['Ingresos extra', 'Fácil de configurar', 'Experiencia premium']
+                  },
+                  { 
+                    category: 'MARKETING',
+                    title: 'Posicionamiento Google', 
+                    desc: 'Hacemos que tu hotel aparezca primero cuando alguien busca alojamiento en tu zona.',
+                    icon: '🚀',
+                    features: ['Más reservas directas', 'Visibilidad global', 'Ahorro en comisiones']
+                  }
+                ].map((item, idx) => (
+                  <div key={idx} className="bg-white rounded-2xl border border-[#E8E2D8] p-8 hover:shadow-xl hover:shadow-black/5 transition-all group relative overflow-hidden flex flex-col shadow-sm">
+                    <div className="absolute top-0 right-0 p-6 opacity-5 text-4xl group-hover:scale-110 transition-transform">{item.icon}</div>
+                    
+                    <div className="mb-4">
+                      <span className="text-[10px] font-black text-[#2D5A3D] tracking-widest uppercase py-1 px-2 bg-[#2D5A3D]/5 rounded-md">
+                        {item.category}
+                      </span>
+                    </div>
+
+                    <h3 className="text-xl font-bold mb-3 text-[#2D2D2D] font-serif">{item.title}</h3>
+                    <p className="text-sm text-[#6B6B6B] leading-relaxed mb-6 flex-1">{item.desc}</p>
+
+                    <div className="space-y-2 mb-8 border-t border-[#F5F2EE] pt-4">
+                      {item.features.map((f, i) => (
+                        <div key={i} className="flex items-center gap-2 text-[10px] font-bold text-[#8B7E6A]">
+                          <span className="text-[#2D5A3D]">→</span> {f}
+                        </div>
+                      ))}
+                    </div>
+
+                    <button 
+                      onClick={() => window.open(`https://wa.me/5491137758970?text=${encodeURIComponent(`Hola! Me interesa la función de "${item.title}" para mi hotel. ¿Me podrías dar más asesoramiento?`)}`, '_blank')}
+                      className="w-full py-3 rounded-lg text-xs font-bold bg-[#FDFBF7] text-[#2D2D2D] hover:bg-[#2D5A3D] hover:text-white transition-all border border-[#E8E2D8] group-hover:border-[#2D5A3D]/30"
+                    >
+                      Pedir Asesoramiento
+                    </button>
+                  </div>
                 ))}
               </div>
             </div>
@@ -309,10 +490,7 @@ const HotelDemoPage: React.FC = () => {
 
       {/* ===== LIVE INTERACTIVE VIEW ===== */}
       {view === 'live' && (
-        <div className="pt-20 pb-16 bg-[#F5F2EB] text-[#2D2A26] min-h-screen" style={{ fontFamily: "'Inter', sans-serif" }}>
-          
-
-
+        <>
           <section className="py-10 px-6">
             <div className="max-w-7xl mx-auto">
               
@@ -346,7 +524,7 @@ const HotelDemoPage: React.FC = () => {
 
                 {/* Housekeeping Card */}
                 <div className="bg-white rounded-xl p-6 border border-[#E8E2D8] shadow-sm">
-                   <p className="text-[#8B7E6A] text-xs font-bold uppercase tracking-widest mb-3">Housekeeping</p>
+                   <p className="text-[#8B7E6A] text-xs font-bold uppercase tracking-widest mb-3">Limpieza</p>
                    <div className="space-y-3">
                       <div>
                         <div className="flex justify-between text-xs mb-1"><span className="font-medium text-[#2D2A26]">Hab. 102</span><span className="text-amber-500 font-bold">En proceso</span></div>
@@ -439,7 +617,7 @@ const HotelDemoPage: React.FC = () => {
           <style>{`
             @keyframes shimmer { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
           `}</style>
-        </div>
+        </>
       )}
     </div>
   );

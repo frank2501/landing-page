@@ -17,17 +17,17 @@ const reviews = [
 
 const locations = [
   { name: 'PALERMO', address: 'Av. Santa Fe 3200, Palermo, CABA', tag: 'SEDE CENTRAL', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=800' },
-  { name: 'BELGRANO', address: 'Cabildo 1800, Belgrano, CABA', tag: 'NUEVA', image: 'https://images.unsplash.com/photo-1540497077202-7c8a33801524?auto=format&fit=crop&q=80&w=800' },
+  { name: 'BELGRANO', address: 'Cabildo 1800, Belgrano, CABA', tag: 'NUEVA', image: 'https://images.unsplash.com/photo-1593079831268-3381b0db4a77?auto=format&fit=crop&q=80&w=800' },
   { name: 'CABALLITO', address: 'Av. Rivadavia 5100, Caballito, CABA', tag: 'NUEVA', image: 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?auto=format&fit=crop&q=80&w=800' },
   { name: 'QUILMES', address: 'Av. Mitre 600, Quilmes, Buenos Aires', tag: 'PRÓXIMAMENTE', image: 'https://images.unsplash.com/photo-1576678927484-cc907957088c?auto=format&fit=crop&q=80&w=800' },
 ];
 
 const members = [
-  { name: 'Martín López', plan: 'Premium', status: 'Activo', expires: '15/03/2026', initials: 'ML' },
-  { name: 'Lucía Rodríguez', plan: 'Elite', status: 'Activo', expires: '22/03/2026', initials: 'LR' },
-  { name: 'Carlos Gómez', plan: 'Básico', status: 'Por vencer', expires: '12/02/2026', initials: 'CG' },
-  { name: 'Ana Martínez', plan: 'Premium', status: 'Vencido', expires: '01/02/2026', initials: 'AM' },
-  { name: 'Diego Fernández', plan: 'Elite', status: 'Activo', expires: '28/04/2026', initials: 'DF' },
+  { name: 'Martín L.', plan: 'Premium', status: 'Activo', expires: '15/03/2026', initials: 'ML' },
+  { name: 'Lucía R.', plan: 'Elite', status: 'Activo', expires: '22/03/2026', initials: 'LR' },
+  { name: 'Carlos G.', plan: 'Básico', status: 'Por vencer', expires: '12/02/2026', initials: 'CG' },
+  { name: 'Ana M.', plan: 'Premium', status: 'Vencido', expires: '01/02/2026', initials: 'AM' },
+  { name: 'Diego F.', plan: 'Elite', status: 'Activo', expires: '28/04/2026', initials: 'DF' },
 ];
 
 // Live simulation data
@@ -44,6 +44,7 @@ const GymDemoPage: React.FC = () => {
   const navigate = useNavigate();
   const [view, setView] = useState<ViewMode>('site');
   const [dashTab, setDashTab] = useState<'socios' | 'ingresos'>('socios');
+  const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('monthly');
 
   // Live simulation state
   const [liveEvents, setLiveEvents] = useState<Array<{ id: number; type: string; name: string; detail: string; time: string; icon: string }>>([]);
@@ -122,8 +123,8 @@ const GymDemoPage: React.FC = () => {
             <button onClick={() => setView('site')} className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${view === 'site' ? 'bg-red-600 text-white' : 'text-gray-500 hover:text-white hover:bg-white/5'}`}>
               🌐 Sitio Web
             </button>
-            <button onClick={() => setView('admin')} className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${view === 'admin' ? 'bg-orange-500 text-white' : 'text-gray-500 hover:text-white hover:bg-white/5'}`}>
-              ⚙️ Panel Admin
+            <button onClick={() => setView('admin')} className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${view === 'admin' ? 'bg-orange-600 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}>
+              Funciones Disponibles
             </button>
             <button onClick={() => setView('live')} className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${view === 'live' ? 'bg-green-600 text-white' : 'text-gray-500 hover:text-white hover:bg-white/5'}`}>
               {view === 'live' && <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />}
@@ -140,7 +141,15 @@ const GymDemoPage: React.FC = () => {
         <>
           {/* Hero */}
           <section className="relative pt-28 pb-16 md:pt-40 md:pb-28 px-6 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-b from-red-950/20 via-transparent to-transparent" />
+            <div className="absolute inset-0">
+              <img 
+                src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=1500" 
+                alt="Gym Background" 
+                className="w-full h-full object-cover opacity-40"
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-[#0d0d0d]/80 via-[#0d0d0d]/50 to-[#0d0d0d]" />
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-b from-red-950/20 via-transparent to-transparent mix-blend-overlay" />
             <div className="absolute top-20 right-0 w-[600px] h-[600px] bg-red-600/5 rounded-full blur-[150px]" />
             <div className="relative max-w-5xl mx-auto">
               <div className="max-w-2xl">
@@ -163,6 +172,46 @@ const GymDemoPage: React.FC = () => {
             </div>
           </section>
 
+          {/* Schedule Grid */}
+          <section id="horarios" className="py-20 px-6 bg-[#090909] border-b border-white/5 animate-fade-up">
+            <div className="max-w-5xl mx-auto">
+              <div className="text-center mb-10">
+                <p className="text-red-500 text-xs font-bold uppercase tracking-widest mb-2">Cronograma</p>
+                <h2 className="text-3xl md:text-5xl font-black tracking-tight text-white">Actividades Semanales</h2>
+              </div>
+              <div className="overflow-x-auto rounded-2xl border border-white/10 bg-[#141414]">
+                <table className="w-full text-sm text-left">
+                  <thead className="text-gray-400 uppercase text-xs font-bold tracking-wider bg-white/5">
+                    <tr>
+                      <th className="px-6 py-4">Horario</th>
+                      <th className="px-6 py-4">Lunes</th>
+                      <th className="px-6 py-4">Martes</th>
+                      <th className="px-6 py-4">Miércoles</th>
+                      <th className="px-6 py-4">Jueves</th>
+                      <th className="px-6 py-4">Viernes</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5">
+                    {[
+                      { t: '08:00', d: ['CrossFit', 'Yoga', 'CrossFit', 'Yoga', 'CrossFit'] },
+                      { t: '10:00', d: ['Musculación', 'Pilates', 'Musculación', 'Pilates', 'Musculación'] },
+                      { t: '18:00', d: ['Zumba', 'Funcional', 'Zumba', 'Funcional', 'Zumba'] },
+                      { t: '19:30', d: ['Boxeo', 'Spinning', 'Boxeo', 'Spinning', 'Boxeo'] },
+                      { t: '20:30', d: ['CrossFit', 'Yoga', 'CrossFit', 'Yoga', 'Funcional'] },
+                    ].map((row, i) => (
+                      <tr key={i} className="hover:bg-white/5 transition-colors">
+                        <td className="px-6 py-4 font-bold text-white border-r border-white/5 bg-white/[0.02]">{row.t}</td>
+                        {row.d.map((act, j) => (
+                          <td key={j} className={`px-6 py-4 font-medium ${act === 'CrossFit' ? 'text-red-400' : act === 'Yoga' ? 'text-purple-400' : act === 'Funcional' ? 'text-green-400' : 'text-gray-300'}`}>{act}</td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
           {/* Trainers */}
           <section className="py-20 px-6 bg-[#090909] border-b border-white/5 animate-fade-up">
             <div className="max-w-5xl mx-auto">
@@ -176,9 +225,9 @@ const GymDemoPage: React.FC = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                  {[
-                   { name: 'Alex Russo', role: 'Head Coach', img: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=80&w=500', spec: 'CrossFit' },
-                   { name: 'Sarah Connor', role: 'Musculación', img: 'https://images.unsplash.com/photo-1611672585731-fa10603fb9e0?auto=format&fit=crop&q=80&w=500', spec: 'Hipertrofia' },
-                   { name: 'Mike T.', role: 'Boxeo', img: 'https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?auto=format&fit=crop&q=80&w=500', spec: 'Funcional' },
+                   { name: 'Alex R.', role: 'Head Coach', img: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=80&w=500', spec: 'CrossFit' },
+                   { name: 'Javier M.', role: 'Musculación', img: 'https://images.unsplash.com/photo-1567013127542-490d757e51fc?auto=format&fit=crop&q=80&w=500', spec: 'Hipertrofia' },
+                   { name: 'Miguel T.', role: 'Boxeo', img: 'https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?auto=format&fit=crop&q=80&w=500', spec: 'Funcional' },
                    { name: 'Julieta V.', role: 'Yoga & Pilates', img: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&q=80&w=500', spec: 'Flexibilidad' },
                  ].map((t, i) => (
                    <div key={i} className="group relative rounded-2xl overflow-hidden aspect-[3/4] cursor-pointer">
@@ -198,17 +247,38 @@ const GymDemoPage: React.FC = () => {
           {/* Planes */}
           <section id="planes" className="py-20 md:py-28 px-6 scroll-mt-20 animate-fade-up">
             <div className="max-w-5xl mx-auto">
-              <div className="mb-14"><p className="text-red-500 text-xs font-bold uppercase tracking-widest mb-2">Planes Mensuales</p><h2 className="text-3xl md:text-5xl font-black tracking-tight">Elegí tu plan</h2></div>
+              <div className="mb-10 text-center md:text-left md:flex md:items-end md:justify-between">
+                <div>
+                  <p className="text-red-500 text-xs font-bold uppercase tracking-widest mb-2">Planes flexibles</p>
+                  <h2 className="text-3xl md:text-5xl font-black tracking-tight">Elegí tu plan</h2>
+                </div>
+                <div className="mt-4 md:mt-0 bg-[#141414] p-1 rounded-xl border border-white/10 inline-flex">
+                  <button onClick={() => setBillingCycle('monthly')} className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${billingCycle === 'monthly' ? 'bg-white text-black' : 'text-gray-400 hover:text-white'}`}>Mensual</button>
+                  <button onClick={() => setBillingCycle('annual')} className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${billingCycle === 'annual' ? 'bg-red-600 text-white shadow-lg shadow-red-600/20' : 'text-gray-400 hover:text-white'}`}>Anual (2 meses gratis)</button>
+                </div>
+              </div>
+              
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                {plans.map((plan) => (
+                {plans.map((plan) => {
+                  const basePrice = parseInt(plan.price.replace('.', ''));
+                  // In annual view: show monthly equivalent (total / 12)
+                  const totalAnnual = basePrice * 10;
+                  const monthlyEquivalent = Math.round(totalAnnual / 12);
+                  const displayPrice = billingCycle === 'annual' ? monthlyEquivalent.toLocaleString('es-AR') : plan.price;
+                  const period = '/mes'; // Always show /mes for the main price anchor
+                  
+                  return (
                   <div key={plan.name} className={`relative rounded-2xl p-7 transition-all duration-300 ${plan.popular ? 'bg-gradient-to-b from-red-600 to-red-900 ring-1 ring-red-500/50 shadow-2xl shadow-red-600/10 scale-[1.02]' : 'bg-[#141414] border border-white/5 hover:border-white/10'}`}>
                     {plan.popular && <div className="absolute -top-3 right-6 bg-white text-red-600 text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full">Popular</div>}
                     <h3 className={`text-sm font-bold uppercase tracking-wider mb-4 ${plan.popular ? 'text-red-200' : 'text-gray-500'}`}>{plan.name}</h3>
-                    <div className="flex items-baseline gap-1 mb-6"><span className="text-4xl font-black">${plan.price}</span><span className={`text-sm ${plan.popular ? 'text-red-200' : 'text-gray-500'}`}>/mes</span></div>
+                    <div className="flex items-baseline gap-1 mb-6"><span className="text-4xl font-black">${displayPrice}</span><span className={`text-sm ${plan.popular ? 'text-red-200' : 'text-gray-500'}`}>{period}</span></div>
+                    {billingCycle === 'annual' && <div className={`text-xs font-medium mb-6 -mt-4 ${plan.popular ? 'text-red-100/80' : 'text-gray-400'}`}>Facturado anualmente: ${totalAnnual.toLocaleString('es-AR')}</div>}
                     <ul className="space-y-3 mb-8">{plan.features.map((f, i) => (<li key={i} className={`flex items-start gap-2 text-sm ${plan.popular ? 'text-white/80' : 'text-gray-400'}`}><svg className={`w-4 h-4 mt-0.5 shrink-0 ${plan.popular ? 'text-white' : 'text-red-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>{f}</li>))}</ul>
                     <button className={`w-full py-3.5 rounded-xl font-bold text-sm transition-all active:scale-95 ${plan.popular ? 'bg-white text-red-600 hover:bg-gray-100' : 'bg-red-600 text-white hover:bg-red-500'}`}>Elegir Plan</button>
+                    {billingCycle === 'annual' && <p className="text-center text-[10px] opacity-60 mt-3 font-medium">2 meses bonificados</p>}
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </section>
@@ -258,6 +328,26 @@ const GymDemoPage: React.FC = () => {
             </div>
           </section>
 
+          {/* FAQ */}
+          <section className="py-20 px-6 bg-[#090909] border-t border-white/5 animate-fade-up">
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-2xl md:text-3xl font-black text-center mb-10">Preguntas Frecuentes</h2>
+              <div className="space-y-4">
+                {[
+                  { q: '¿Tengo que pagar matrícula?', a: 'No, la inscripción es 100% gratuita. Solo pagás tu plan mensual.' },
+                  { q: '¿Puedo ir a todas las sedes?', a: 'Sí, con el Plan Elite tenés acceso ilimitado a todas nuestras sucursales.' },
+                  { q: '¿Necesito apto físico?', a: 'Sí, es obligatorio presentar el apto físico dentro de los primeros 30 días.' },
+                  { q: '¿Cómo me doy de baja?', a: 'Podés cancelar tu suscripción en cualquier momento desde tu perfil online, sin vueltas.' },
+                ].map((faq, i) => (
+                  <div key={i} className="bg-[#141414] rounded-xl p-6 border border-white/5 hover:border-red-500/20 transition-colors">
+                    <h3 className="font-bold text-white mb-2">{faq.q}</h3>
+                    <p className="text-sm text-gray-400">{faq.a}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
           {/* CTA */}
           <section className="py-20 md:py-28 px-6 bg-gradient-to-b from-[#0d0d0d] to-red-950/10">
             <div className="max-w-2xl mx-auto text-center">
@@ -268,20 +358,49 @@ const GymDemoPage: React.FC = () => {
           </section>
 
           {/* Footer */}
-          <footer className="border-t border-white/5 py-10 px-6 bg-[#090909]">
-            <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-              <div className="flex items-center gap-2"><div className="w-7 h-7 rounded-lg bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center text-[10px] font-black">IF</div><span className="text-sm font-black tracking-tight">IRON<span className="text-red-500">FITNESS</span></span></div>
-              <div className="flex items-center gap-4">{[
-                <svg key="ig" className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>,
-                <svg key="fb" className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>,
-                <svg key="tt" className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>,
-                <svg key="yt" className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>,
-              ].map((icon, i) => <a key={i} href="#" className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:border-red-500/40 transition-all">{icon}</a>)}</div>
-              <div className="flex items-center gap-6 text-xs text-gray-600"><span>📍 3 sedes en Argentina</span><span>📞 11-3775-8970</span></div>
+          <footer className="border-t border-white/5 py-12 px-6 bg-[#050505] text-sm md:text-base">
+            <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+               <div>
+                  <div className="flex items-center gap-2 mb-4"><div className="w-8 h-8 rounded-lg bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center text-[10px] font-black mt-1">IF</div><span className="text-lg font-black tracking-tight">IRON<span className="text-red-500">FITNESS</span></span></div>
+                  <p className="text-xs text-gray-500 leading-relaxed mb-4">La cadena de gimnasios líder en tecnología y rendimiento de Argentina.</p>
+                  <div className="flex gap-3">
+                    {[
+                      <svg key="ig" className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>,
+                      <svg key="fb" className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.871v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>,
+                    ].map((icon, i) => <a key={i} href="#" className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:border-red-500/40 transition-all">{icon}</a>)}
+                  </div>
+               </div>
+               <div>
+                 <h4 className="font-bold text-white mb-4">Empresa</h4>
+                 <ul className="space-y-2 text-xs text-gray-500">
+                   <li><a href="#" className="hover:text-red-400 transition-colors">Sobre Nosotros</a></li>
+                   <li><a href="#" className="hover:text-red-400 transition-colors">Sedes</a></li>
+                   <li><a href="#" className="hover:text-red-400 transition-colors">Trabajá con nosotros</a></li>
+                   <li><a href="#" className="hover:text-red-400 transition-colors">Prensa</a></li>
+                 </ul>
+               </div>
+               <div>
+                 <h4 className="font-bold text-white mb-4">Legales</h4>
+                 <ul className="space-y-2 text-xs text-gray-500">
+                   <li><a href="#" className="hover:text-red-400 transition-colors">Términos y Condiciones</a></li>
+                   <li><a href="#" className="hover:text-red-400 transition-colors">Privacidad</a></li>
+                   <li><a href="#" className="hover:text-red-400 transition-colors">Arrepentimiento</a></li>
+                   <li><a href="#" className="hover:text-red-400 transition-colors">Reglamento interno</a></li>
+                 </ul>
+               </div>
+               <div>
+                 <h4 className="font-bold text-white mb-4">Contacto</h4>
+                 <ul className="space-y-2 text-xs text-gray-500">
+                   <li>Atención al Socio</li>
+                   <li className="font-bold text-white">0800-555-IRON</li>
+                   <li>info@ironfitness.com.ar</li>
+                   <li>Av. Santa Fe 3200, Palermo</li>
+                 </ul>
+               </div>
             </div>
-            <div className="max-w-5xl mx-auto mt-6 pt-4 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-2">
-              <p className="text-[10px] text-gray-700">© 2026 Iron Fitness. Todos los derechos reservados.</p>
-              <p className="text-[10px] text-gray-700">Demo creada por <button onClick={() => navigate('/')} className="text-red-500/50 hover:text-red-400 transition-colors">ArtechIA</button></p>
+            <div className="max-w-6xl mx-auto pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
+              <p className="text-[10px] text-gray-600">© 2026 Iron Fitness Argentina. Todos los derechos reservados.</p>
+              <p className="text-[10px] text-gray-600">Powered by <button onClick={() => navigate('/')} className="text-red-500/50 hover:text-red-400 transition-colors font-bold">ArtechIA</button></p>
             </div>
           </footer>
         </>
@@ -289,46 +408,102 @@ const GymDemoPage: React.FC = () => {
 
       {/* ===== ADMIN VIEW ===== */}
       {view === 'admin' && (
-        <div className="pt-20 pb-16">
-          {/* Dashboard */}
-          <section className="py-10 md:py-16 px-6">
-            <div className="max-w-5xl mx-auto">
-              <div className="mb-10"><p className="text-orange-500 text-xs font-bold uppercase tracking-widest mb-2">Panel Administrativo</p><h2 className="text-2xl md:text-4xl font-black tracking-tight">Gestión de Socios</h2></div>
-              <div className="rounded-2xl bg-[#141414] border border-white/5 overflow-hidden">
-                <div className="flex border-b border-white/5">
-                  <button onClick={() => setDashTab('socios')} className={`flex-1 py-4 text-sm font-bold transition-all ${dashTab === 'socios' ? 'text-orange-500 border-b-2 border-orange-500 bg-orange-500/5' : 'text-gray-500 hover:text-gray-300'}`}>👥 Socios</button>
-                  <button onClick={() => setDashTab('ingresos')} className={`flex-1 py-4 text-sm font-bold transition-all ${dashTab === 'ingresos' ? 'text-orange-500 border-b-2 border-orange-500 bg-orange-500/5' : 'text-gray-500 hover:text-gray-300'}`}>📊 Ingresos</button>
-                </div>
-                {dashTab === 'socios' && (
-                  <div className="p-5 md:p-6 overflow-x-auto">
-                    <table className="w-full text-sm"><thead><tr className="text-gray-500 text-xs uppercase tracking-wider"><th className="text-left pb-4 font-medium">Socio</th><th className="text-left pb-4 font-medium">Plan</th><th className="text-left pb-4 font-medium">Estado</th><th className="text-right pb-4 font-medium">Vencimiento</th></tr></thead>
-                      <tbody className="divide-y divide-white/5">{members.map((m, i) => (
-                        <tr key={i} className="hover:bg-white/[0.02] transition-colors"><td className="py-4"><div className="flex items-center gap-3"><div className="w-9 h-9 rounded-full bg-gradient-to-br from-orange-600 to-orange-800 flex items-center justify-center text-[11px] font-bold">{m.initials}</div><span className="font-medium">{m.name}</span></div></td><td className="py-4"><span className="text-gray-400 bg-white/5 px-2 py-0.5 rounded text-xs">{m.plan}</span></td><td className="py-4"><span className={`text-xs font-semibold px-2 py-1 rounded-full ${m.status === 'Activo' ? 'bg-green-500/10 text-green-400' : m.status === 'Por vencer' ? 'bg-amber-500/10 text-amber-400' : 'bg-red-500/10 text-red-400'}`}>{m.status}</span></td><td className="py-4 text-right text-gray-500 font-mono text-xs">{m.expires}</td></tr>
-                      ))}</tbody></table>
-                  </div>
-                )}
-                {dashTab === 'ingresos' && (
-                  <div className="p-5 md:p-6 space-y-6">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">{[{ label: 'Ingresos Feb', value: '$3.2M', change: '+12%', up: true }, { label: 'Nuevos Socios', value: '18', change: '+5', up: true }, { label: 'Renovaciones', value: '43', change: '89%', up: true }, { label: 'Impagos', value: '4', change: '-2', up: false }].map((s, i) => (<div key={i} className="bg-[#1a1a1a] rounded-xl p-4 border border-white/5"><div className="text-[10px] text-gray-500 uppercase tracking-wider">{s.label}</div><div className="text-xl font-black mt-1">{s.value}</div><div className={`text-xs font-semibold mt-1 ${s.up ? 'text-green-400' : 'text-red-400'}`}>{s.change}</div></div>))}</div>
-                    <div className="bg-[#1a1a1a] rounded-xl p-5 border border-white/5"><div className="text-xs text-gray-500 uppercase tracking-wider mb-5">Ingresos últimos 6 meses</div><div className="flex items-end gap-3 h-36">{[65, 72, 80, 85, 78, 92].map((v, i) => (<div key={i} className="flex-1 flex flex-col items-center gap-2"><div className="w-full rounded-md bg-gradient-to-t from-orange-600/60 to-orange-500 transition-all" style={{ height: `${v}%` }} /><span className="text-[10px] text-gray-600 font-medium">{['Sep', 'Oct', 'Nov', 'Dic', 'Ene', 'Feb'][i]}</span></div>))}</div></div>
-                  </div>
-                )}
+        <div className="pt-20 pb-16 bg-[#090909] text-white">
+          <section className="py-12 md:py-20 px-6">
+            <div className="max-w-6xl mx-auto">
+              <div className="mb-12 text-center text-white">
+                <h2 className="text-3xl md:text-5xl font-black tracking-tight mb-4">Funciones Disponibles</h2>
+                <p className="text-gray-400 text-sm md:text-base max-w-2xl mx-auto">
+                  Soluciones inteligentes diseñadas para escalar tu gimnasio y automatizar los cobros.
+                </p>
               </div>
-            </div>
-          </section>
 
-          {/* Automations */}
-          <section className="py-10 md:py-16 px-6 border-t border-white/5">
-            <div className="max-w-5xl mx-auto">
-              <div className="mb-10"><p className="text-orange-500 text-xs font-bold uppercase tracking-widest mb-2">Automatizaciones</p><h2 className="text-2xl md:text-4xl font-black tracking-tight">Todo funciona solo</h2></div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[
-                  { emoji: '📩', title: 'Aviso de Renovación', desc: 'Cuando el plan está por vencer, el socio recibe un WhatsApp con link de pago directo.', preview: <div className="bg-[#0a0f0a] border-t border-green-900/30 p-4"><div className="flex items-center gap-2 mb-2"><div className="w-5 h-5 rounded-full bg-green-600 flex items-center justify-center"><svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a.96.96 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg></div><span className="text-[10px] text-green-400 font-bold">Iron Fitness</span></div><div className="bg-[#1a2e1a] rounded-xl rounded-tl-none p-3 text-[12px] text-green-100 leading-relaxed">¡Hola Martín! 👋 Tu plan <strong>Premium</strong> vence el 15/03. Renová ahora con <strong>10% OFF</strong> → <span className="text-green-400 underline">pagar</span></div></div> },
-                  { emoji: '🎉', title: 'Promociones Automáticas', desc: 'Envío masivo de promos segmentadas por plan, antigüedad o estado del socio.', preview: <div className="bg-[#111] border-t border-white/5 p-4"><div className="bg-gradient-to-r from-amber-600/10 to-red-600/10 rounded-xl p-4 border border-amber-500/10"><div className="text-xs font-bold text-amber-300 mb-1">🔥 Promo exclusiva</div><p className="text-[11px] text-gray-300">¡Traé un amigo y ambos entrenan <strong className="text-white">GRATIS</strong> una semana!</p><div className="mt-2 inline-block px-3 py-1 rounded-full bg-amber-600 text-white text-[10px] font-bold">Compartir</div></div></div> },
-                  { emoji: '💳', title: 'Pago Online', desc: 'El socio paga desde el celular y su plan se activa al instante.', preview: <div className="bg-[#111] border-t border-white/5 p-4"><div className="flex items-center justify-between p-3 rounded-xl bg-[#1a1a1a] border border-white/5"><div className="flex items-center gap-3"><div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"/></svg></div><div><div className="text-sm font-bold">$18.500</div><div className="text-[10px] text-gray-500">Plan Premium · Lucía R.</div></div></div><div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-500/10"><div className="w-1.5 h-1.5 rounded-full bg-green-500"/><span className="text-[10px] text-green-400 font-bold">Acreditado</span></div></div></div> },
-                  { emoji: '📊', title: 'Reportes Mensuales', desc: 'Dashboard con ingresos, renovaciones y proyecciones.', preview: <div className="bg-[#111] border-t border-white/5 p-4"><div className="grid grid-cols-3 gap-2">{[{ l: 'Socios', v: '247', c: 'text-white' }, { l: 'Renovación', v: '89%', c: 'text-green-400' }, { l: 'Ingresos', v: '$3.2M', c: 'text-orange-400' }].map((s, i) => <div key={i} className="bg-[#1a1a1a] rounded-lg p-3 text-center border border-white/5"><div className={`text-lg font-black ${s.c}`}>{s.v}</div><div className="text-[9px] text-gray-500 uppercase tracking-wider mt-0.5">{s.l}</div></div>)}</div></div> },
-                ].map((a, idx) => (
-                  <div key={idx} className="bg-[#141414] rounded-2xl border border-white/5 overflow-hidden hover:border-orange-500/20 transition-all"><div className="p-6"><div className="flex items-center gap-3 mb-2"><span className="text-2xl">{a.emoji}</span><h3 className="font-bold">{a.title}</h3></div><p className="text-sm text-gray-400 leading-relaxed">{a.desc}</p></div>{a.preview}</div>
+                  { 
+                    category: 'ADMINISTRACIÓN',
+                    title: 'Base de datos de socios', 
+                    desc: 'Todos los datos de tus socios organizados. Quiénes son, qué plan tienen y cuándo empezaron.',
+                    icon: '👥',
+                    features: ['Ficha digital completa', 'Foto de perfil', 'Historial de pagos']
+                  },
+                  { 
+                    category: 'FINANZAS',
+                    title: 'Cobros Multi-plataforma', 
+                    desc: 'Aceptá pagos con tarjeta, Mercado Pago o transferencias. El sistema concilia todo por vos.',
+                    icon: '💳',
+                    features: ['Link de pago directo', 'Cobro al instante', 'Cero manejo de efectivo']
+                  },
+                  { 
+                    category: 'RECAUDACIÓN',
+                    title: 'Débito Automático', 
+                    desc: 'El sistema les cobra a los socios todos los meses automáticamente. Garantizá tus ingresos sin demoras.',
+                    icon: '🔄',
+                    features: ['Cobro recurrente', 'Sin errores humanos', 'Máxima puntualidad']
+                  },
+                  { 
+                    category: 'MARKETING',
+                    title: 'Fidelización y Ofertas', 
+                    desc: 'Creá promociones especiales y cupones de descuento para atraer gente nueva o premiar a tus alumnos.',
+                    icon: '🎁',
+                    features: ['Campañas fáciles', 'Vencimientos automáticos', 'Incremento de ventas']
+                  },
+                  { 
+                    category: 'AUTOMATIZACIÓN',
+                    title: 'Recordatorios WhatsApp', 
+                    desc: 'Mensajes automáticos avisando que la cuota está por vencer para que nadie se olvide de pagar.',
+                    icon: '💬',
+                    features: ['Atención personalizada', 'Aviso 48hs antes', 'Más orden administrativo']
+                  },
+                  { 
+                    category: 'RETENCIÓN',
+                    title: 'Renovación de Matrícula', 
+                    desc: 'Detectamos quiénes están por dejar de venir y les enviamos una oferta para que renueven su plan.',
+                    icon: '🔔',
+                    features: ['Evita la deserción', 'Proactividad total', 'Recupero de alumnos']
+                  },
+                  { 
+                    category: 'CONTROL',
+                    title: 'Gestión de Accesos', 
+                    desc: 'Registrá quién entra al gimnasio en tiempo real. Obtené reportes de horas pico y asistencia.',
+                    icon: '🦾',
+                    features: ['Control por código/QR', 'Reporte de flujo', 'Seguridad total']
+                  },
+                  { 
+                    category: 'VISIBILIDAD',
+                    title: 'Posicionamiento Google', 
+                    desc: 'Hacemos que tu gimnasio sea el primero que aparezca cuando alguien busca entrenar cerca.',
+                    icon: '🚀',
+                    features: ['Clientes nuevos cada semana', 'Mapa local activo', 'Presencia profesional']
+                  }
+                ].map((item, idx) => (
+                  <div key={idx} className="bg-[#0A0A0A] rounded-2xl border border-white/5 p-8 transition-all group relative overflow-hidden flex flex-col hover:border-orange-500/30 shadow-2xl">
+                    <div className="absolute top-0 right-0 p-6 opacity-3 text-4xl group-hover:scale-110 transition-transform">{item.icon}</div>
+                    
+                    <div className="mb-4">
+                      <span className="text-[10px] font-black text-orange-500 tracking-widest uppercase py-1 px-2 bg-orange-500/10 rounded-md">
+                        {item.category}
+                      </span>
+                    </div>
+
+                    <h3 className="text-xl font-bold mb-3 text-white">{item.title}</h3>
+                    <p className="text-sm text-gray-400 leading-relaxed mb-6 flex-1">{item.desc}</p>
+
+                    <div className="space-y-2 mb-8 border-t border-white/5 pt-4">
+                      {item.features.map((f, i) => (
+                        <div key={i} className="flex items-center gap-2 text-[10px] font-bold text-gray-500">
+                          <span className="text-orange-500">→</span> {f}
+                        </div>
+                      ))}
+                    </div>
+
+                    <button 
+                      onClick={() => window.open(`https://wa.me/5491137758970?text=${encodeURIComponent(`Hola! Me interesa la función de "${item.title}" para mi gimnasio. ¿Me podrías dar más asesoramiento?`)}`, '_blank')}
+                      className="w-full py-3 rounded-lg text-xs font-bold bg-white/5 text-gray-300 hover:bg-orange-500 hover:text-white transition-all border border-white/10 group-hover:border-orange-500/50"
+                    >
+                      Pedir Asesoramiento
+                    </button>
+                  </div>
                 ))}
               </div>
             </div>

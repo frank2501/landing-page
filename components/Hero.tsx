@@ -1,7 +1,10 @@
 import React from 'react';
 import DashboardMockup from './DashboardMockup';
+import { useNavigate } from 'react-router-dom';
 
 const Hero: React.FC = () => {
+  const navigate = useNavigate();
+
   const handleWhatsApp = () => {
     window.open('https://wa.me/5491137758970?text=Hola%2C%20tengo%20un%20negocio%20y%20quiero%20saber%20c%C3%B3mo%20automatizar%20tareas%20para%20ahorrar%20tiempo%20y%20evitar%20errores.', '_blank');
   };
@@ -46,6 +49,12 @@ const Hero: React.FC = () => {
             className="w-full sm:w-auto px-8 py-3 md:px-10 md:py-4 bg-zinc-900/80 backdrop-blur-sm border border-white/10 text-white font-medium rounded-2xl hover:border-orange-500/50 transition-all text-sm md:text-lg"
           >
             Ver soluciones
+          </button>
+          <button 
+            onClick={() => navigate('/demos')}
+            className="w-full sm:w-auto px-8 py-3 md:px-10 md:py-4 bg-transparent border border-orange-500/30 text-orange-400 font-medium rounded-2xl hover:bg-orange-500/10 transition-all text-sm md:text-lg"
+          >
+            Ver Demos
           </button>
         </div>
 

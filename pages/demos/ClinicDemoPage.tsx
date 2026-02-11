@@ -6,10 +6,10 @@ type ViewMode = 'site' | 'admin' | 'live';
 const specialties = ['Clínica Médica', 'Pediatría', 'Cardiología', 'Dermatología', 'Traumatología'];
 
 const doctors = [
-  { name: 'Dra. Valentina Ruiz', specialty: 'Clínica Médica', avatar: 'VR' },
-  { name: 'Dr. Sebastián Torres', specialty: 'Cardiología', avatar: 'ST' },
-  { name: 'Dra. Camila Herrera', specialty: 'Pediatría', avatar: 'CH' },
-  { name: 'Dr. Nicolás Paz', specialty: 'Dermatología', avatar: 'NP' },
+  { name: 'Dra. Valentina Ruiz', specialty: 'Clínica Médica', image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=500' },
+  { name: 'Dr. Sebastián Torres', specialty: 'Cardiología', image: 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=500' },
+  { name: 'Dra. Camila Herrera', specialty: 'Pediatría', image: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&q=80&w=500' },
+  { name: 'Dr. Nicolás Paz', specialty: 'Dermatología', image: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=500' },
 ];
 
 const timeSlots = [
@@ -73,7 +73,6 @@ const ClinicDemoPage: React.FC = () => {
     const doctor = doctorNames[Math.floor(Math.random() * doctorNames.length)];
     const spec = specNames[Math.floor(Math.random() * specNames.length)];
     
-    // Weighted random event generation
     const rand = Math.random();
     let type = 'booking';
     
@@ -151,8 +150,11 @@ const ClinicDemoPage: React.FC = () => {
             <button onClick={() => setView('site')} className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${view === 'site' ? 'bg-[#2563EB] text-white' : 'text-[#7C8DB5] hover:text-[#1A2332] hover:bg-[#F0F3F9]'}`}>
               🌐 Sitio Web
             </button>
-            <button onClick={() => setView('admin')} className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${view === 'admin' ? 'bg-orange-500 text-white' : 'text-[#7C8DB5] hover:text-[#1A2332] hover:bg-[#F0F3F9]'}`}>
-              ⚙️ Panel Admin
+            <button 
+              onClick={() => setView('admin')}
+              className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${view === 'admin' ? 'bg-orange-600 text-white' : 'text-[#64748B] hover:bg-orange-50'}`}
+            >
+              Funciones Disponibles
             </button>
             <button onClick={() => setView('live')} className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${view === 'live' ? 'bg-green-600 text-white' : 'text-[#7C8DB5] hover:text-[#1A2332] hover:bg-[#F0F3F9]'}`}>
               {view === 'live' && <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />}
@@ -185,13 +187,15 @@ const ClinicDemoPage: React.FC = () => {
 
           {/* Obras Sociales */}
           <section className="py-10 border-b border-[#E5EAF2] bg-white overflow-hidden animate-fade-up">
-             <div className="max-w-6xl mx-auto px-6">
+             <div className="max-w-6xl mx-auto px-6 overflow-hidden relative">
                 <p className="text-center text-xs font-bold text-[#7C8DB5] uppercase tracking-widest mb-6">Trabajamos con todas las obras sociales</p>
-                <div className="flex items-center justify-between gap-8 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
-                   {['OSDE', 'Swiss Medical', 'Galeno', 'Medicus', 'OMINT', 'Sancor Salud'].map((os, i) => (
-                      <div key={i} className="text-xl md:text-2xl font-black text-[#1A2332] whitespace-nowrap">{os}</div>
+                <div className="flex gap-16 animate-infinite-scroll whitespace-nowrap opacity-50 grayscale hover:grayscale-0 transition-all duration-500 w-max hover:pause">
+                   {[...['OSDE', 'Swiss Medical', 'Galeno', 'Medicus', 'OMINT', 'Sancor Salud'], ...['OSDE', 'Swiss Medical', 'Galeno', 'Medicus', 'OMINT', 'Sancor Salud']].map((os, i) => (
+                      <div key={i} className="text-xl md:text-2xl font-black text-[#1A2332]">{os}</div>
                    ))}
                 </div>
+                <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white to-transparent" />
+                <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-white to-transparent" />
              </div>
           </section>
 
@@ -203,7 +207,7 @@ const ClinicDemoPage: React.FC = () => {
                 <div className="p-6 md:p-8 space-y-8">
                   <div><div className="flex items-center gap-3 mb-4"><div className="w-7 h-7 rounded-full bg-[#2563EB] text-white flex items-center justify-center text-xs font-bold">1</div><span className="text-sm font-bold text-[#1A2332]">Elegí la especialidad</span></div><div className="flex flex-wrap gap-2">{specialties.map(s => <button key={s} onClick={() => { setSelectedSpecialty(s); setSelectedDoctor(0); setSelectedSlot(null); }} className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${selectedSpecialty === s ? 'bg-[#2563EB] text-white shadow-md shadow-[#2563EB]/20' : 'bg-[#F7F9FC] text-[#4A5B7A] border border-[#E5EAF2] hover:border-[#2563EB]/30'}`}>{s}</button>)}</div></div>
                   <hr className="border-[#F0F3F9]" />
-                  <div><div className="flex items-center gap-3 mb-4"><div className="w-7 h-7 rounded-full bg-[#2563EB] text-white flex items-center justify-center text-xs font-bold">2</div><span className="text-sm font-bold text-[#1A2332]">Elegí el profesional</span></div><div className="flex flex-wrap gap-3">{filteredDoctors.length > 0 ? filteredDoctors.map((d, idx) => <button key={d.name} onClick={() => { setSelectedDoctor(idx); setSelectedSlot(null); }} className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${selectedDoctor === idx ? 'bg-[#EFF4FF] border-2 border-[#2563EB]/30 shadow-sm' : 'bg-[#F7F9FC] border-2 border-transparent hover:border-[#E5EAF2]'}`}><div className={`w-11 h-11 rounded-full flex items-center justify-center text-sm font-bold ${selectedDoctor === idx ? 'bg-[#2563EB] text-white' : 'bg-[#E5EAF2] text-[#7C8DB5]'}`}>{d.avatar}</div><div className="text-left"><div className="text-sm font-bold text-[#1A2332]">{d.name}</div><div className="text-[11px] text-[#7C8DB5]">{d.specialty}</div></div></button>) : <p className="text-sm text-[#7C8DB5]">No hay profesionales para esta especialidad en la demo.</p>}</div></div>
+                  <div><div className="flex items-center gap-3 mb-4"><div className="w-7 h-7 rounded-full bg-[#2563EB] text-white flex items-center justify-center text-xs font-bold">2</div><span className="text-sm font-bold text-[#1A2332]">Elegí el profesional</span></div><div className="flex flex-wrap gap-3">{filteredDoctors.length > 0 ? filteredDoctors.map((d, idx) => <button key={d.name} onClick={() => { setSelectedDoctor(idx); setSelectedSlot(null); }} className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${selectedDoctor === idx ? 'bg-[#EFF4FF] border-2 border-[#2563EB]/30 shadow-sm' : 'bg-[#F7F9FC] border-2 border-transparent hover:border-[#E5EAF2]'}`}><img src={d.image} alt={d.name} className="w-11 h-11 rounded-full object-cover" /><div className="text-left"><div className="text-sm font-bold text-[#1A2332]">{d.name}</div><div className="text-[11px] text-[#7C8DB5]">{d.specialty}</div></div></button>) : <p className="text-sm text-[#7C8DB5]">No hay profesionales para esta especialidad en la demo.</p>}</div></div>
                   <hr className="border-[#F0F3F9]" />
                   <div><div className="flex items-center gap-3 mb-4"><div className="w-7 h-7 rounded-full bg-[#2563EB] text-white flex items-center justify-center text-xs font-bold">3</div><span className="text-sm font-bold text-[#1A2332]">Elegí el horario</span><span className="text-xs text-[#7C8DB5] bg-[#F7F9FC] px-2 py-0.5 rounded-full">14 Feb 2026</span></div><div className="grid grid-cols-4 md:grid-cols-7 gap-2">{timeSlots.map((slot, idx) => <button key={idx} disabled={!slot.available} onClick={() => setSelectedSlot(idx)} className={`py-2.5 rounded-lg text-sm font-medium transition-all ${!slot.available ? 'bg-[#F7F9FC] text-[#C4CCDB] cursor-not-allowed line-through' : selectedSlot === idx ? 'bg-[#2563EB] text-white shadow-md shadow-[#2563EB]/20' : 'bg-[#F7F9FC] text-[#4A5B7A] border border-[#E5EAF2] hover:border-[#2563EB]/30'}`}>{slot.time}</button>)}</div></div>
                   <button className={`w-full py-4 rounded-xl font-bold text-sm transition-all ${selectedSlot !== null ? 'bg-[#2563EB] text-white hover:bg-[#1D4ED8] shadow-lg shadow-[#2563EB]/20 active:scale-[0.98]' : 'bg-[#F0F3F9] text-[#A0AEC0] cursor-not-allowed'}`}>{selectedSlot !== null ? `✓ Confirmar Turno — ${timeSlots[selectedSlot].time} hs` : 'Seleccioná un horario disponible'}</button>
@@ -215,7 +219,7 @@ const ClinicDemoPage: React.FC = () => {
           {/* Equipo */}
           <section id="equipo" className="py-16 md:py-24 px-6 bg-white scroll-mt-20 animate-fade-up">
             <div className="max-w-5xl mx-auto"><div className="text-center mb-10"><p className="text-[#2563EB] text-xs font-bold uppercase tracking-widest mb-2">Nuestro Equipo</p><h2 className="text-3xl md:text-5xl font-bold tracking-tight">Profesionales de excelencia</h2></div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">{doctors.map((d, i) => <div key={i} className="bg-white rounded-2xl p-6 border border-[#E5EAF2] text-center hover:shadow-lg hover:shadow-[#2563EB]/5 transition-all"><div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-[#2563EB]/10 to-blue-100 flex items-center justify-center text-xl font-bold text-[#2563EB] mb-3">{d.avatar}</div><h3 className="font-bold text-sm text-[#1A2332] mb-0.5">{d.name}</h3><p className="text-[11px] text-[#7C8DB5]">{d.specialty}</p></div>)}</div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">{doctors.map((d, i) => <div key={i} className="bg-white rounded-2xl p-6 border border-[#E5EAF2] text-center hover:shadow-lg hover:shadow-[#2563EB]/5 transition-all"><img src={d.image} alt={d.name} className="w-20 h-20 mx-auto rounded-full object-cover mb-3" /><h3 className="font-bold text-sm text-[#1A2332] mb-0.5">{d.name}</h3><p className="text-[11px] text-[#7C8DB5]">{d.specialty}</p></div>)}</div>
             </div>
           </section>
 
@@ -234,7 +238,7 @@ const ClinicDemoPage: React.FC = () => {
                    {[
                       { cat: 'Nutrición', title: 'Alimentación saludable en invierno', date: '10 Feb 2026', img: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&q=80&w=500' },
                       { cat: 'Cardiología', title: '5 hábitos para cuidar tu corazón', date: '08 Feb 2026', img: 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&q=80&w=500' },
-                      { cat: 'Pediatría', title: 'Vacunación: Calendario 2026', date: '05 Feb 2026', img: 'https://images.unsplash.com/photo-1632053001335-e6a8d804245b?auto=format&fit=crop&q=80&w=500' }
+                      { cat: 'Pediatría', title: 'Vacunación: Calendario 2026', date: '05 Feb 2026', img: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=500' }
                    ].map((post, i) => (
                       <div key={i} className="group cursor-pointer">
                          <div className="rounded-2xl overflow-hidden aspect-video mb-4 relative">
@@ -247,6 +251,26 @@ const ClinicDemoPage: React.FC = () => {
                    ))}
                 </div>
              </div>
+          </section>
+
+          {/* FAQ */}
+          <section className="py-16 px-6 bg-white border-t border-[#E5EAF2] animate-fade-up">
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-2xl md:text-3xl font-bold text-[#1A2332] text-center mb-10">Preguntas Frecuentes</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[
+                  { q: '¿Atienden por obra social?', a: 'Sí, trabajamos con las principales obras sociales y prepagas del país. Consultá la lista arriba.' },
+                  { q: '¿Cómo cancelo un turno?', a: 'Podés cancelar o reprogramar tu turno desde el botón "Mis Turnos" en el menú o respondiendo al WhatsApp de confirmación.' },
+                  { q: '¿Hacen aptos físicos?', a: 'Sí, realizamos aptos físicos escolares y deportivos. Se entregan en el día.' },
+                  { q: '¿Tienen guardia 24hs?', a: 'Contamos con guardia clínica y pediátrica de 08:00 a 20:00hs. Urgencias fuera de horario derivamos a centros asociados.' },
+                ].map((faq, i) => (
+                   <div key={i} className="p-5 rounded-xl border border-[#E5EAF2] bg-[#F7F9FC]">
+                      <h3 className="font-bold text-[#1A2332] mb-2 text-sm">{faq.q}</h3>
+                      <p className="text-xs text-[#7C8DB5] leading-relaxed">{faq.a}</p>
+                   </div>
+                ))}
+              </div>
+            </div>
           </section>
 
           {/* CTA + Footer */}
@@ -269,29 +293,103 @@ const ClinicDemoPage: React.FC = () => {
 
       {/* ===== ADMIN VIEW ===== */}
       {view === 'admin' && (
-        <div className="pt-20 pb-16 bg-[#EFF4FF] min-h-screen">
-          <section className="py-10 md:py-16 px-6">
-            <div className="max-w-5xl mx-auto">
-              <div className="mb-10"><p className="text-orange-600 text-xs font-bold uppercase tracking-widest mb-2">Panel de Gestión</p><h2 className="text-2xl md:text-4xl font-bold tracking-tight">Pacientes y Agenda</h2></div>
-              <div className="bg-white rounded-2xl border border-[#E5EAF2] shadow-lg shadow-[#1A2332]/[0.03] overflow-hidden max-w-4xl mx-auto">
-                <div className="flex border-b border-[#E5EAF2]"><button onClick={() => setDashTab('pacientes')} className={`flex-1 py-4 text-sm font-semibold transition-all ${dashTab === 'pacientes' ? 'text-orange-600 border-b-2 border-orange-500 bg-orange-50' : 'text-[#7C8DB5] hover:text-[#1A2332]'}`}>👥 Pacientes</button><button onClick={() => setDashTab('agenda')} className={`flex-1 py-4 text-sm font-semibold transition-all ${dashTab === 'agenda' ? 'text-orange-600 border-b-2 border-orange-500 bg-orange-50' : 'text-[#7C8DB5] hover:text-[#1A2332]'}`}>📅 Agenda del Día</button></div>
-                {dashTab === 'pacientes' && (<div className="p-5 md:p-6 overflow-x-auto"><table className="w-full text-sm"><thead><tr className="text-[#7C8DB5] text-xs uppercase tracking-wider"><th className="text-left pb-4 font-medium">Paciente</th><th className="text-left pb-4 font-medium">Edad</th><th className="text-left pb-4 font-medium">Última Visita</th><th className="text-left pb-4 font-medium">Próximo Turno</th><th className="text-right pb-4 font-medium">Estado</th></tr></thead><tbody className="divide-y divide-[#F0F3F9]">{patients.map((p, idx) => <tr key={idx} className="hover:bg-[#F7F9FC] transition-colors"><td className="py-4"><div className="flex items-center gap-3"><div className="w-9 h-9 rounded-full bg-orange-100 flex items-center justify-center text-[11px] font-bold text-orange-700">{p.initials}</div><span className="font-medium text-[#1A2332]">{p.name}</span></div></td><td className="py-4 text-[#7C8DB5]">{p.age}</td><td className="py-4 text-[#7C8DB5] font-mono text-xs">{p.lastVisit}</td><td className="py-4 text-[#7C8DB5] font-mono text-xs">{p.nextTurn}</td><td className="py-4 text-right"><span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${p.status === 'Activo' ? 'bg-green-50 text-green-600' : 'bg-[#F0F3F9] text-[#7C8DB5]'}`}>{p.status}</span></td></tr>)}</tbody></table></div>)}
-                {dashTab === 'agenda' && (<div className="p-5 md:p-6 space-y-3"><div className="flex items-center justify-between mb-2"><span className="text-xs text-[#7C8DB5] font-medium">Hoy — 14 de Febrero, 2026</span><span className="text-[10px] bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-semibold">5 turnos</span></div>{[{ time: '08:00', patient: 'Carolina Méndez', doctor: 'Dra. Ruiz', type: 'Control', status: 'Atendido' }, { time: '09:00', patient: 'Ricardo Suárez', doctor: 'Dr. Torres', type: 'Consulta', status: 'En espera' }, { time: '09:30', patient: 'Lucía Paredes', doctor: 'Dra. Herrera', type: 'Pediatría', status: 'Próximo' }, { time: '10:00', patient: 'Martín Álvarez', doctor: 'Dr. Paz', type: 'Dermatología', status: 'Próximo' }, { time: '11:00', patient: 'Ana Bermúdez', doctor: 'Dra. Ruiz', type: 'Estudios', status: 'Próximo' }].map((t, i) => <div key={i} className={`flex items-center gap-4 p-4 rounded-xl border-2 transition-all ${t.status === 'Atendido' ? 'bg-[#F7F9FC] border-[#E5EAF2] opacity-50' : t.status === 'En espera' ? 'bg-orange-50 border-orange-200' : 'bg-white border-[#E5EAF2]'}`}><div className="text-sm font-mono text-[#7C8DB5] w-14 shrink-0 font-medium">{t.time}</div><div className="flex-1 min-w-0"><div className="text-sm font-bold text-[#1A2332] truncate">{t.patient}</div><div className="text-[11px] text-[#7C8DB5]">{t.doctor} · {t.type}</div></div><span className={`text-[11px] px-3 py-1 rounded-full font-semibold shrink-0 ${t.status === 'Atendido' ? 'bg-[#E5EAF2] text-[#7C8DB5]' : t.status === 'En espera' ? 'bg-orange-500 text-white' : 'bg-[#F0F3F9] text-[#4A5B7A]'}`}>{t.status}</span></div>)}</div>)}
+        <div className="pt-20 pb-16 bg-[#F8FAFC] min-h-screen">
+          <section className="py-12 md:py-20 px-6">
+            <div className="max-w-6xl mx-auto">
+              <div className="mb-12 text-center text-[#1E293B]">
+                <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">Funciones Disponibles</h2>
+                <p className="text-[#64748B] text-sm md:text-base max-w-2xl mx-auto">
+                  Soluciones profesionales diseñadas para automatizar tu consultorio y mejorar la experiencia de tus pacientes.
+                </p>
               </div>
-            </div>
-          </section>
 
-          {/* Automations */}
-          <section className="py-10 md:py-16 px-6 border-t border-[#E5EAF2]">
-            <div className="max-w-5xl mx-auto">
-              <div className="mb-10"><p className="text-orange-600 text-xs font-bold uppercase tracking-widest mb-2">Automatizaciones</p><h2 className="text-2xl md:text-4xl font-bold tracking-tight">El consultorio trabaja solo</h2></div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[
-                  { emoji: '📩', title: 'Recordatorio de Turno', desc: 'WhatsApp automático 24hs antes.', preview: <div className="bg-[#F0F9F2] border-t border-green-100 p-4"><div className="bg-white rounded-xl p-3 border border-green-100 text-xs text-[#4B5E4F] leading-relaxed">Hola Carolina 👋 Recordamos tu turno:<br/>🩺 <strong>Dra. Ruiz</strong> · 14/02 10:00 hs<br/>¿Confirmás? SI o NO.</div></div> },
-                  { emoji: '📋', title: 'Ficha Digital', desc: 'Antecedentes, alergias y recetas.', preview: <div className="bg-[#F7F9FC] border-t border-[#E5EAF2] p-4"><div className="grid grid-cols-2 gap-2">{[{ l: 'Alergias', v: 'Penicilina', c: 'text-red-500 bg-red-50' }, { l: 'Grupo', v: 'A+', c: 'text-blue-600 bg-blue-50' }, { l: 'Obra Social', v: 'OSDE 310', c: 'text-green-600 bg-green-50' }, { l: 'Última', v: '05/02/26', c: 'text-[#7C8DB5] bg-[#F0F3F9]' }].map((f, i) => <div key={i} className="flex items-center justify-between p-2 rounded-lg bg-white border border-[#E5EAF2]"><span className="text-[10px] text-[#7C8DB5]">{f.l}</span><span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${f.c}`}>{f.v}</span></div>)}</div></div> },
-                  { emoji: '🔔', title: 'Turno por Cancelación', desc: 'Notificación a lista de espera.', preview: <div className="bg-[#FFFBF5] border-t border-amber-100 p-4"><div className="bg-white rounded-xl p-4 border border-amber-200"><div className="text-xs text-amber-700 font-bold mb-1">⚡ ¡Turno disponible!</div><p className="text-xs text-[#7C8DB5]">Con <strong className="text-[#1A2332]">Dr. Torres</strong> el 13/02 10:00.</p><div className="flex gap-2 mt-3"><button className="px-3 py-1.5 rounded-lg bg-orange-500 text-white text-[11px] font-bold">Reservar</button><button className="px-3 py-1.5 rounded-lg bg-[#F0F3F9] text-[#7C8DB5] text-[11px]">No</button></div></div></div> },
-                  { emoji: '📊', title: 'Reportes de Turnos', desc: 'Asistencia, cancelaciones y demanda.', preview: <div className="bg-[#F7F9FC] border-t border-[#E5EAF2] p-4"><div className="grid grid-cols-3 gap-2">{[{ l: 'Feb', v: '186', c: 'text-green-600 bg-green-50' }, { l: 'Cancel.', v: '12', c: 'text-amber-600 bg-amber-50' }, { l: 'No asist.', v: '5', c: 'text-red-500 bg-red-50' }].map((s, i) => <div key={i} className={`p-2 rounded-lg text-center ${s.c}`}><div className="text-lg font-bold">{s.v}</div><div className="text-[9px] uppercase tracking-wider font-medium">{s.l}</div></div>)}</div></div> },
-                ].map((a, idx) => <div key={idx} className="bg-white rounded-2xl border border-[#E5EAF2] overflow-hidden hover:shadow-lg hover:shadow-[#2563EB]/5 transition-all"><div className="p-6"><div className="flex items-center gap-3 mb-2"><span className="text-2xl">{a.emoji}</span><h3 className="font-bold text-[#1A2332]">{a.title}</h3></div><p className="text-sm text-[#7C8DB5] leading-relaxed">{a.desc}</p></div>{a.preview}</div>)}
+                  { 
+                    category: 'GESTIÓN DE TURNOS',
+                    title: 'Reserva de turnos online', 
+                    desc: 'Tus pacientes pueden elegir el día y la hora desde su celular, sin necesidad de llamar por teléfono.',
+                    icon: '📅',
+                    features: ['Disponible las 24hs', 'Muestra huecos libres', 'Fácil de usar']
+                  },
+                  { 
+                    category: 'ORGANIZACIÓN',
+                    title: 'Calendario inteligente', 
+                    desc: 'Tu agenda se organiza sola. Podés ver todos los turnos del día y los médicos disponibles al instante.',
+                    icon: '🕒',
+                    features: ['Vista por profesional', 'Sin errores de horario', 'Sincronizado en tiempo real']
+                  },
+                  { 
+                    category: 'FINANZAS',
+                    title: 'Cobros y Pagos Web', 
+                    desc: 'Aceptá tarjetas y Mercado Pago de forma automática. El sistema registra cada ingreso sin que tengas que hacer nada.',
+                    icon: '💳',
+                    features: ['Cobro de señas', 'Sin manejo de efectivo', 'Reporte de ventas diario']
+                  },
+                  { 
+                    category: 'DIGITALIZACIÓN',
+                    title: 'Historias Médicas Digitales', 
+                    desc: 'Toda la información de tus pacientes guardada de forma segura. Accedé a sus fichas con un solo click.',
+                    icon: '📋',
+                    features: ['Ficha personal segura', 'Historial completo', 'Resultados en PDF']
+                  },
+                  { 
+                    category: 'AUTOMATIZACIÓN',
+                    title: 'Recordatorios por WhatsApp', 
+                    desc: 'El sistema envía recordatorios automáticos antes de cada turno para que ningún paciente se olvide.',
+                    icon: '💬',
+                    features: ['Ahorra tiempo administrativo', 'Reduce ausencias', 'Aviso 24hs antes']
+                  },
+                  { 
+                    category: 'AUTOGESTIÓN',
+                    title: 'Confirmación Automática', 
+                    desc: 'Los pacientes confirman o cancelan su asistencia desde el mismo mensaje de WhatsApp, liberando el turno si es necesario.',
+                    icon: '⚡',
+                    features: ['Confirmación inmediata', 'Sin llamadas', 'Agenda siempre llena']
+                  },
+                  { 
+                    category: 'SERVICIO AL CLIENTE',
+                    title: 'Reprogramación Fácil', 
+                    desc: 'Si alguien no puede venir, el sistema le permite elegir una nueva fecha por internet de forma autónoma.',
+                    icon: '🔄',
+                    features: ['Evita cancelaciones finales', 'Mejor servicio', 'Mantiene la productividad']
+                  },
+                  { 
+                    category: 'CRECIMIENTO',
+                    title: 'Posicionamiento en Google', 
+                    desc: 'Hacemos que tu clínica aparezca en los primeros puestos cuando alguien busca médicos en tu ciudad.',
+                    icon: '🚀',
+                    features: ['Atrae nuevos pacientes', 'Prestigio digital', 'Visibilidad local']
+                  }
+                ].map((item, idx) => (
+                  <div key={idx} className="bg-white rounded-2xl border border-[#E8E2D8] p-8 hover:shadow-xl hover:shadow-black/5 transition-all group relative overflow-hidden flex flex-col shadow-sm">
+                    <div className="absolute top-0 right-0 p-6 opacity-5 text-4xl group-hover:scale-110 transition-transform">{item.icon}</div>
+                    
+                    <div className="mb-4">
+                      <span className="text-[10px] font-black text-[#2D5A3D] tracking-widest uppercase py-1 px-2 bg-[#2D5A3D]/5 rounded-md">
+                        {item.category}
+                      </span>
+                    </div>
+
+                    <h3 className="text-xl font-bold mb-3 text-[#2D2D2D] font-serif">{item.title}</h3>
+                    <p className="text-sm text-[#6B6B6B] leading-relaxed mb-6 flex-1">{item.desc}</p>
+
+                    <div className="space-y-2 mb-8 border-t border-[#F5F2EE] pt-4">
+                      {item.features.map((f, i) => (
+                        <div key={i} className="flex items-center gap-2 text-[10px] font-bold text-[#8B7E6A]">
+                          <span className="text-[#2D5A3D]">→</span> {f}
+                        </div>
+                      ))}
+                    </div>
+
+                    <button 
+                      onClick={() => window.open(`https://wa.me/5491137758970?text=${encodeURIComponent(`Hola! Me interesa la función de "${item.title}" para mi consultorio. ¿Me podrías dar más asesoramiento?`)}`, '_blank')}
+                      className="w-full py-3 rounded-lg text-xs font-bold bg-[#FDFBF7] text-[#2D2D2D] hover:bg-[#2D5A3D] hover:text-white transition-all border border-[#E8E2D8] group-hover:border-[#2D5A3D]/30"
+                    >
+                      Pedir Asesoramiento
+                    </button>
+                  </div>
+                ))}
               </div>
             </div>
           </section>
@@ -338,7 +436,7 @@ const ClinicDemoPage: React.FC = () => {
                           <p className="text-3xl font-bold text-[#0F172A]">18/22</p>
                        </div>
                     </div>
-                     <p className="text-[10px] text-[#64748B] mt-2">Pacientes con datos completos antes de llegar.</p>
+                     <p className="text-[10px] text-[#64748B] mt-2">Pacientes con datos previos a la consulta.</p>
                  </div>
                  <div className="bg-gradient-to-br from-blue-600 to-blue-700 text-white p-5 rounded-xl border border-blue-800 shadow-sm flex flex-col justify-between relative overflow-hidden">
                     <div className="relative z-10">
@@ -346,7 +444,7 @@ const ClinicDemoPage: React.FC = () => {
                        <div className="flex items-baseline gap-2">
                           <p className="text-3xl font-bold">~4hs</p>
                        </div>
-                       <p className="text-[10px] text-blue-100 mt-2">Tiempo ahorrado hoy en llamados.</p>
+                       <p className="text-[10px] text-blue-100 mt-2">Tiempo administrativo ganado hoy.</p>
                     </div>
                     <div className="absolute -right-4 -bottom-4 text-8xl opacity-10">🤖</div>
                  </div>
@@ -356,7 +454,7 @@ const ClinicDemoPage: React.FC = () => {
                 
                 {/* Left Column: Intelligent Agenda */}
                 <div className="lg:col-span-2 space-y-6">
-                    <div className="bg-white rounded-xl border border-[#E2E8F0] shadow-sm overflow-hidden flex flex-col h-[500px]">
+                        <div className="bg-white rounded-xl border border-[#E2E8F0] shadow-sm overflow-hidden flex flex-col h-[500px]">
                        <div className="p-5 border-b border-[#E2E8F0] bg-[#F8FAFC] flex justify-between items-center">
                           <div>
                              <h3 className="font-bold text-[#0F172A]">Agenda Inteligente</h3>
@@ -370,12 +468,12 @@ const ClinicDemoPage: React.FC = () => {
                        <div className="flex-1 overflow-y-auto p-0">
                           <div className="relative">
                              {/* Timeline vertical line */}
-                             <div className="absolute left-8 top-0 bottom-0 w-px bg-[#E2E8F0]" />
+                             <div className="absolute left-14 top-0 bottom-0 w-px bg-[#E2E8F0]" />
                              
                              {liveQueue.map((q, i) => (
-                                <div key={i} className="relative pl-16 pr-5 py-4 hover:bg-[#F8FAFC] group transition-colors">
-                                   <div className="absolute left-6 top-5 w-4 h-4 rounded-full border-2 border-white shadow-sm bg-blue-500 z-10" />
-                                   <span className="absolute left-2 top-5 text-[10px] font-mono text-[#64748B] font-bold">{q.time}</span>
+                                <div key={i} className="relative pl-24 pr-5 py-4 hover:bg-[#F8FAFC] group transition-colors">
+                                   <div className="absolute left-12 top-5 w-4 h-4 rounded-full border-2 border-white shadow-sm bg-blue-500 z-10" />
+                                   <span className="absolute left-2 top-5 text-[10px] font-mono text-[#64748B] font-bold w-9 text-right">{q.time}</span>
                                    
                                    <div className="flex justify-between items-start">
                                       <div>
@@ -387,30 +485,31 @@ const ClinicDemoPage: React.FC = () => {
                                          <p className="text-xs text-[#64748B]">{q.spec} con {q.doctor}</p>
                                       </div>
                                       <div className="text-right">
-                                         {Math.random() > 0.5 ? (
-                                            <div className="flex items-center gap-1 justify-end text-[10px] text-green-600 font-bold bg-green-50 px-2 py-1 rounded-full">
-                                               <span>✓ Confirmado x WhatsApp</span>
-                                            </div>
-                                         ) : (
-                                            <div className="flex items-center gap-1 justify-end text-[10px] text-blue-600 font-bold bg-blue-50 px-2 py-1 rounded-full">
-                                               <span>⚡ Ocupó turno cancelado</span>
-                                            </div>
-                                         )}
-                                      </div>
-                                   </div>
-                                </div>
-                             ))}
-                             {/* Future slots */}
-                             {[1,2,3].map((_, i) => (
-                                <div key={`fut${i}`} className="relative pl-16 pr-5 py-4 opacity-60">
-                                   <div className="absolute left-6 top-5 w-4 h-4 rounded-full border-2 border-white shadow-sm bg-[#CBD5E1] z-10" />
-                                   <span className="absolute left-2 top-5 text-[10px] font-mono text-[#94A3B8] font-bold">12:{15 + (i*15)}</span>
-                                   <div className="h-4 w-48 bg-[#F1F5F9] rounded animate-pulse" />
-                                </div>
-                             ))}
-                          </div>
-                       </div>
-                    </div>
+                                         {q.type === 'ai_confirm' ? (
+                                             <div className="flex items-center gap-1 justify-end text-[10px] text-green-600 font-bold bg-green-50 px-2 py-1 rounded-full">
+                                                <span className="animate-pulse">●</span>
+                                                <span>✓ Confirmado x IA</span>
+                                             </div>
+                                          ) : (
+                                             <div className="flex items-center gap-1 justify-end text-[10px] text-blue-600 font-bold bg-blue-50 px-2 py-1 rounded-full">
+                                                <span>⚡ Ocupó turno (IA)</span>
+                                             </div>
+                                          )}
+                                       </div>
+                                    </div>
+                                 </div>
+                              ))}
+                              {/* Future slots */}
+                              {[1,2,3].map((_, i) => (
+                                 <div key={`fut${i}`} className="relative pl-24 pr-5 py-4 opacity-60">
+                                    <div className="absolute left-12 top-5 w-4 h-4 rounded-full border-2 border-white shadow-sm bg-[#CBD5E1] z-10" />
+                                    <span className="absolute left-2 top-5 text-[10px] font-mono text-[#94A3B8] font-bold w-9 text-right">12:{15 + (i*15)}</span>
+                                    <div className="h-4 w-48 bg-[#F1F5F9] rounded animate-pulse" />
+                                 </div>
+                              ))}
+                           </div>
+                        </div>
+                     </div>
                 </div>
 
                 {/* Right Column: AI Bot Monitor */}
@@ -421,7 +520,7 @@ const ClinicDemoPage: React.FC = () => {
                              <span className="text-lg">🤖</span>
                              <div>
                                 <h3 className="font-bold text-white text-sm">Bot de Turnos</h3>
-                                <p className="text-[10px] text-blue-400">Activo • Procesando mensajes</p>
+                                <p className="text-[10px] text-blue-400">IA Activa • Procesando mensajes</p>
                              </div>
                           </div>
                           <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_#22c55e]" />
@@ -437,21 +536,21 @@ const ClinicDemoPage: React.FC = () => {
                              </div>
                              <span className="text-[9px] text-gray-500 self-end mr-1">Enviado 10:45</span>
                           </div>
-
+ 
                           <div className="flex flex-col gap-1 animate-[slideIn_0.5s_ease-out]">
                              <div className="self-start bg-[#334155]/50 border border-[#475569]/50 text-gray-300 px-3 py-2 rounded-r-lg rounded-tl-lg max-w-[85%]">
                                 Si, confirmo. Gracias.
                              </div>
                              <span className="text-[9px] text-gray-500 self-start ml-1">Recibido 10:52</span>
                           </div>
-
+ 
                            <div className="flex flex-col gap-1 animate-[slideIn_0.7s_ease-out]">
                              <div className="self-end bg-green-600/20 border border-green-500/30 text-green-200 px-3 py-2 rounded-l-lg rounded-tr-lg max-w-[85%]">
                                 ¡Turno Confirmado! ✅ <br/> Recordá traer tu credencial de OSDE.
                              </div>
                              <span className="text-[9px] text-gray-500 self-end mr-1">Enviado 10:52</span>
                           </div>
-
+ 
                           {liveEvents.filter(e => e.type === 'booking' || e.type === 'cancel').map((e, i) => (
                              <div key={i} className="flex flex-col gap-1 animate-[slideIn_0.3s_ease-out]">
                                 <div className="self-start bg-[#334155]/50 border border-[#475569]/50 text-gray-300 px-3 py-2 rounded-r-lg rounded-tl-lg max-w-[85%]">
@@ -466,10 +565,11 @@ const ClinicDemoPage: React.FC = () => {
                        
                        <div className="p-3 bg-[#1E293B] border-t border-[#334155] text-[10px] text-gray-400 flex justify-between">
                           <span>Conexión WhatsApp API: Estable</span>
-                          <span>9ms latencia</span>
+                          <span>9ms latencia (IA)</span>
                        </div>
                    </div>
                 </div>
+
 
               </div>
             </div>
@@ -477,6 +577,7 @@ const ClinicDemoPage: React.FC = () => {
 
           <style>{`
              @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+             .hover\\:pause:hover { animation-play-state: paused; }
           `}</style>
         </div>
       )}
