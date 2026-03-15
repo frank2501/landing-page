@@ -1,23 +1,35 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../lib/AuthContext';
 
 const LoginPage: React.FC = () => {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    setLoading(true);
     
-    // Verificación usando variable de entorno (seguro para repos públicos)
-    const envPassword = import.meta.env.VITE_ADMIN_PASSWORD;
-    
-    if (password === envPassword) {
-      sessionStorage.setItem('artech_auth', 'true');
+    try {
+      await login(email, password);
       navigate('/dashboard');
-    } else {
-      setError('Contraseña incorrecta');
+    } catch (err: any) {
+      const code = err?.code;
+      if (code === 'auth/invalid-credential' || code === 'auth/wrong-password' || code === 'auth/user-not-found') {
+        setError('Email o contraseña incorrectos');
+      } else if (code === 'auth/too-many-requests') {
+        setError('Demasiados intentos. Esperá unos minutos.');
+      } else {
+        setError('Error al iniciar sesión. Intentá de nuevo.');
+      }
       setPassword('');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -31,18 +43,31 @@ const LoginPage: React.FC = () => {
             </svg>
           </div>
           <h1 className="text-2xl font-bold">Acceso Admin</h1>
-          <p className="text-gray-400 text-sm">Ingresa tu clave para gestionar pagos</p>
+          <p className="text-gray-400 text-sm">Ingresá tus credenciales para gestionar pagos</p>
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-6">
+        <form onSubmit={handleLogin} className="space-y-4">
           <div>
+            <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2 ml-1">Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 focus:border-orange-500 outline-none transition-colors"
+              placeholder="admin@artechia.com"
+              required
+              autoFocus
+            />
+          </div>
+          <div>
+            <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2 ml-1">Contraseña</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 focus:border-orange-500 outline-none transition-colors text-center tracking-widest"
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 focus:border-orange-500 outline-none transition-colors"
               placeholder="••••••••"
-              autoFocus
+              required
             />
           </div>
 
@@ -54,9 +79,17 @@ const LoginPage: React.FC = () => {
 
           <button
             type="submit"
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-xl transition-colors shadow-lg shadow-orange-500/20"
+            disabled={loading}
+            className="w-full bg-orange-500 hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition-colors shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2"
           >
-            Ingresar
+            {loading ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></div>
+                Ingresando...
+              </>
+            ) : (
+              'Ingresar'
+            )}
           </button>
         </form>
       </div>

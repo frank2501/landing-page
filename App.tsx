@@ -20,6 +20,7 @@ import CheckoutPage from './pages/CheckoutPage';
 
 import LoginPage from './pages/LoginPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import { AuthProvider } from './lib/AuthContext';
 
 const demoSubPages = ['/demos/gimnasios', '/demos/hoteles', '/demos/consultorios'];
 
@@ -32,30 +33,32 @@ function ConditionalHeader() {
 const App: React.FC = () => {
   return (
     <>
-      <BrowserRouter>
-        <ScrollToTop />
-        <ConditionalHeader />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/implementaciones" element={<BlogPage />} />
-          <Route path="/implementaciones/:slug" element={<ArticlePage />} />
+      <AuthProvider>
+        <BrowserRouter>
+          <ScrollToTop />
+          <ConditionalHeader />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/implementaciones" element={<BlogPage />} />
+            <Route path="/implementaciones/:slug" element={<ArticlePage />} />
 
-          <Route path="/demos" element={<DemosPage />} />
-          <Route path="/demos/gimnasios" element={<GymDemoPage />} />
-          <Route path="/demos/hoteles" element={<HotelDemoPage />} />
-          <Route path="/demos/consultorios" element={<ClinicDemoPage />} />
-          
-          <Route path="/login" element={<LoginPage />} />
-          
-          <Route element={<ProtectedRoute />}>
-             <Route path="/dashboard" element={<DashboardPage />} />
-          </Route>
+            <Route path="/demos" element={<DemosPage />} />
+            <Route path="/demos/gimnasios" element={<GymDemoPage />} />
+            <Route path="/demos/hoteles" element={<HotelDemoPage />} />
+            <Route path="/demos/consultorios" element={<ClinicDemoPage />} />
+            
+            <Route path="/login" element={<LoginPage />} />
+            
+            <Route element={<ProtectedRoute />}>
+               <Route path="/dashboard" element={<DashboardPage />} />
+            </Route>
 
-          <Route path="/pago/:id" element={<CheckoutPage />} />
-          <Route path="/404" element={<NotFoundPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </BrowserRouter>
+            <Route path="/pago/:id" element={<CheckoutPage />} />
+            <Route path="/404" element={<NotFoundPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
       <Analytics />
       <SpeedInsights />
     </>
@@ -63,3 +66,4 @@ const App: React.FC = () => {
 };
 
 export default App;
+
