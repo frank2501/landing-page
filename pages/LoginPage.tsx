@@ -25,7 +25,7 @@ const LoginPage: React.FC = () => {
       } else if (code === 'auth/too-many-requests') {
         setError('Demasiados intentos. Esperá unos minutos.');
       } else {
-        setError('Error al iniciar sesión. Intentá de nuevo.');
+        setError(`Error al iniciar sesión (${code || 'unknown'}). Intentá de nuevo.`);
       }
       setPassword('');
     } finally {
