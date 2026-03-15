@@ -459,15 +459,15 @@ const CheckoutPage: React.FC = () => {
                       <div className="bg-zinc-800/60 p-4 rounded-xl space-y-3 text-sm">
                         <div className="flex justify-between">
                           <span className="text-gray-400">Banco</span>
-                          <span className="font-medium text-white">Santander Río</span>
+                          <span className="font-medium text-white">Mercado Pago</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-400">Alias</span>
-                          <span className="font-medium text-white select-all cursor-pointer">ARTECHIA.TRANSFER</span>
+                          <span className="font-medium text-white select-all cursor-pointer">franmaiorano</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-gray-400">CBU</span>
-                          <span className="font-medium text-white select-all cursor-pointer">0000000001234567890</span>
+                          <span className="text-gray-400">CVU</span>
+                          <span className="font-medium text-white select-all cursor-pointer">0000003100009153197874</span>
                         </div>
                       </div>
                       <p className="text-xs text-gray-500 text-center">
